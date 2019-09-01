@@ -1,6 +1,6 @@
 package atomspace.storage;
 
-public class ASAtom  {
+public class ASAtom {
 
     public final long id;
     public final String type;
@@ -23,5 +23,10 @@ public class ASAtom  {
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
     }
 }

@@ -7,12 +7,20 @@ import atomspace.storage.AtomspaceStorage;
 public class AtomspaceMemoryStorageNodeTest {
 
     @Test
+    public void testNotNull() {
+
+        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        Assert.assertNotNull(
+                as.get("Node", "value"));
+    }
+
+    @Test
     public void testEquals() {
 
         AtomspaceStorage as = new AtomspaceMemoryStorage();
         Assert.assertEquals(
-                as.getOrCreateNode("Concept", "item-1"),
-                as.getOrCreateNode("Concept", "item-1"));
+                as.get("Node", "value"),
+                as.get("Node", "value"));
     }
 
     @Test
@@ -20,8 +28,8 @@ public class AtomspaceMemoryStorageNodeTest {
 
         AtomspaceStorage as = new AtomspaceMemoryStorage();
         Assert.assertEquals(
-                as.getOrCreateNode("Concept", "item-1").hashCode(),
-                as.getOrCreateNode("Concept", "item-1").hashCode());
+                as.get("Node", "value").hashCode(),
+                as.get("Node", "value").hashCode());
 
     }
 
@@ -30,8 +38,8 @@ public class AtomspaceMemoryStorageNodeTest {
 
         AtomspaceStorage as = new AtomspaceMemoryStorage();
         Assert.assertEquals(
-                as.getOrCreateNode("Concept", "value"),
-                as.getOrCreateNode("Concept", "value"));
+                as.get("Node", "value"),
+                as.get("Node", "value"));
     }
 
     @Test
@@ -39,7 +47,7 @@ public class AtomspaceMemoryStorageNodeTest {
 
         AtomspaceStorage as = new AtomspaceMemoryStorage();
         Assert.assertEquals(
-                "Concept('value')",
-                as.getOrCreateNode("Concept", "value").toString());
+                "Node('value')",
+                as.get("Node", "value").toString());
     }
 }

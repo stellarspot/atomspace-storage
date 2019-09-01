@@ -1,31 +1,67 @@
 package atomspace.storage.memory;
 
+import atomspace.storage.ASAtom;
+import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
 import atomspace.storage.AtomspaceStorage;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AtomspaceMemoryStorage implements AtomspaceStorage {
 
     private static long UNIQUE_ID = 0;
-    private final Map<String, Long> nodeIds = new HashMap<>();
-    private final Map<Long, ASNode> nodes = new HashMap<>();
+    private final Map<String, Long> ids = new HashMap<>();
+    private final Map<Long, ASAtom> atoms = new HashMap<>();
 
     @Override
-    public ASNode getOrCreateNode(String type, String value) {
-        String key = String.format("%s:%s", type, value);
-        Long id = nodeIds.computeIfAbsent(key, (k) -> {
-            Long i = nextId();
-            ASNode node = new ASNode(i, type, value);
-            nodeIds.put(k, i);
-            nodes.put(i, node);
-            return i;
-        });
-        return nodes.get(id);
+    public ASAtom get(String type, String value) {
+
+        String key = getNodeKey(type, value);
+        Long id = ids.get(key);
+
+        if (id == null) {
+            id = nextId();
+            ASNode node = new ASNode(id, type, value);
+            this.ids.put(key, id);
+            this.atoms.put(id, node);
+            return node;
+        }
+
+        return this.atoms.get(id);
+    }
+
+
+    @Override
+    public ASAtom get(String type, ASAtom... atoms) {
+
+        String key = getListKey(type, atoms);
+        Long id = ids.get(key);
+
+        if (id == null) {
+            id = nextId();
+            ASLink link = new ASLink(id, type, atoms);
+            this.ids.put(key, id);
+            this.atoms.put(id, link);
+            return link;
+        }
+
+        return this.atoms.get(id);
     }
 
     private long nextId() {
         return UNIQUE_ID++;
+    }
+
+    private static String getNodeKey(String type, String value) {
+        return String.format("%s:%s", type, value);
+    }
+
+    private static String getListKey(String type, ASAtom... atoms) {
+        StringBuilder b = new StringBuilder();
+        b.append(type);
+        Arrays.stream(atoms).forEach(atom -> b.append(":").append(atom.id));
+        return b.toString();
     }
 }
