@@ -7,6 +7,7 @@ import atomspace.storage.AtomspaceStorage;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class AtomspaceMemoryStorage implements AtomspaceStorage {
@@ -48,6 +49,11 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
         }
 
         return this.atoms.get(id);
+    }
+
+    @Override
+    public Iterator<ASAtom> getAtoms() {
+        return atoms.values().iterator();
     }
 
     private long nextId() {
