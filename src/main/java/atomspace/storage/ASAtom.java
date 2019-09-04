@@ -1,32 +1,8 @@
 package atomspace.storage;
 
-public class ASAtom {
+public interface ASAtom {
 
-    public final long id;
-    public final String type;
+    long getId();
 
-    public ASAtom(long id, String type) {
-        this.id = id;
-        this.type = type;
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj instanceof ASAtom) {
-            ASAtom that = (ASAtom) obj;
-            return this.id == that.id;
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Long.hashCode(id);
-    }
+    String getType();
 }

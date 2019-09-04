@@ -24,7 +24,7 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
 
         if (id == null) {
             id = nextId();
-            ASNode node = new ASNode(id, type, value);
+            ASNode node = new ASMemoryNode(id, type, value);
             this.ids.put(key, id);
             this.atoms.put(id, node);
             return node;
@@ -42,7 +42,7 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
 
         if (id == null) {
             id = nextId();
-            ASLink link = new ASLink(id, type, atoms);
+            ASLink link = new ASMemoryLink(id, type, atoms);
             this.ids.put(key, id);
             this.atoms.put(id, link);
             return link;
@@ -67,7 +67,7 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
     private static String getListKey(String type, ASAtom... atoms) {
         StringBuilder b = new StringBuilder();
         b.append(type);
-        Arrays.stream(atoms).forEach(atom -> b.append(":").append(atom.id));
+        Arrays.stream(atoms).forEach(atom -> b.append(":").append(atom.getId()));
         return b.toString();
     }
 }
