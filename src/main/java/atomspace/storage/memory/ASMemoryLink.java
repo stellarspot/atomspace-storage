@@ -9,18 +9,11 @@ import java.util.*;
 
 public class ASMemoryLink extends ASMemoryAtom implements ASLink {
 
-    final ASIncomingSet incomingSet;
     final ASOutgoingList outgoingList;
 
     public ASMemoryLink(long id, String type, ASAtom... atoms) {
         super(id, type);
-        this.incomingSet = new ASMemoryincomingSet();
         this.outgoingList = new ASMemoryOutgoingList(atoms);
-    }
-
-    @Override
-    public ASIncomingSet getIncomingSet() {
-        return incomingSet;
     }
 
     @Override
@@ -43,43 +36,6 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
 
         builder.append(")");
         return builder.toString();
-    }
-
-    static class ASMemoryincomingSet implements ASIncomingSet {
-
-        private final Map<String, Map<Integer, Set<ASLink>>> typeAndPositionMap = new HashMap<>();
-
-        @Override
-        public void add(ASLink link, int position) {
-
-            Map<Integer, Set<ASLink>> positionsMap =
-                    typeAndPositionMap.computeIfAbsent(link.getType(), (key) -> new HashMap<>());
-
-            Set<ASLink> links = positionsMap.computeIfAbsent(position, (key) -> new HashSet<>());
-            links.add(link);
-        }
-
-        @Override
-        public void remove(ASLink link, int position) {
-        }
-
-        @Override
-        public Iterator<ASLink> getIncomingSet(String type, int position) {
-
-            Map<Integer, Set<ASLink>> positionsMap = typeAndPositionMap.get(type);
-
-            if (positionsMap == null) {
-                return Collections.emptyIterator();
-            }
-
-            Set<ASLink> links = positionsMap.get(position);
-
-            if (links == null) {
-                return Collections.emptyIterator();
-            }
-
-            return links.iterator();
-        }
     }
 
     static class ASMemoryOutgoingList implements ASOutgoingList {

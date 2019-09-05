@@ -5,4 +5,6 @@ public interface ASAtom {
     long getId();
 
     String getType();
+
+    ASIncomingSet getIncomingSet();
 }

@@ -45,6 +45,11 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
             ASLink link = new ASMemoryLink(id, type, atoms);
             this.ids.put(key, id);
             this.atoms.put(id, link);
+
+            for (int i = 0; i < atoms.length; i++) {
+                atoms[i].getIncomingSet().add(link, i);
+            }
+
             return link;
         }
 
