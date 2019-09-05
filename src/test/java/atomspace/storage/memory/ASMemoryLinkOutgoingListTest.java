@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import java.util.Random;
 
-public class ASMemoryLinkOutgoingSetTest {
+public class ASMemoryLinkOutgoingListTest {
 
     @Test
-    public void testEmptyOutgoingSet() {
+    public void testEmptyOutgoingList() {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASLink link = (ASLink) as.get("Link");
@@ -22,7 +22,7 @@ public class ASMemoryLinkOutgoingSetTest {
     }
 
     @Test
-    public void testOutgoingSet1() {
+    public void testOutgoingList1() {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASAtom node = as.get("Node", "value");
@@ -34,7 +34,7 @@ public class ASMemoryLinkOutgoingSetTest {
     }
 
     @Test
-    public void testOutgoingSet2() {
+    public void testOutgoingList2() {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASAtom node1 = as.get("Node1", "value1");
@@ -48,7 +48,7 @@ public class ASMemoryLinkOutgoingSetTest {
     }
 
     @Test
-    public void testOutgoingSetN() {
+    public void testOutgoingListN() {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         final int max_values = 100;
