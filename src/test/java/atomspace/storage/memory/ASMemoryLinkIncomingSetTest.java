@@ -1,5 +1,6 @@
 package atomspace.storage.memory;
 
+import atomspace.ASTestUtils;
 import atomspace.storage.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,18 +29,17 @@ public class ASMemoryLinkIncomingSetTest {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASAtom node = as.get("Node", "value");
-        ASAtom link = as.get("Link", node);
+        ASLink link = (ASLink) as.get("Link", node);
 
+        ASIncomingSet nodeIncomingSet = node.getIncomingSet();
 
-        ASIncomingSet incomingSet = node.getIncomingSet();
+        Iterator<ASLink> iter1 = nodeIncomingSet.getIncomingSet("Node", 0);
+        ASTestUtils.assertIteratorEquals(iter1);
 
-        Iterator<ASLink> iter1 = incomingSet.getIncomingSet("Node", 0);
-        Assert.assertFalse(iter1.hasNext());
+        Iterator<ASLink> iter2 = nodeIncomingSet.getIncomingSet("Link", 0);
+        ASTestUtils.assertIteratorEquals(iter2, link);
 
-        Iterator<ASLink> iter2 = incomingSet.getIncomingSet("Link", 0);
-        Assert.assertTrue(iter2.hasNext());
-
-        Iterator<ASLink> iter3 = incomingSet.getIncomingSet("Link", 1);
-        Assert.assertFalse(iter3.hasNext());
+        Iterator<ASLink> iter3 = nodeIncomingSet.getIncomingSet("Link", 1);
+        ASTestUtils.assertIteratorEquals(iter3);
     }
 }
