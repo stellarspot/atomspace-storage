@@ -4,7 +4,7 @@ import atomspace.storage.AtomspaceStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class AtomspaceMemoryStorageLinkTest {
+public class ASMemoryLinkTest {
 
     @Test
     public void testNotNull() {
