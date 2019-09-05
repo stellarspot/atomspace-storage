@@ -17,9 +17,7 @@ public class ASMemoryLinkIncomingSetTest {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASAtom node = as.get("Node", "value");
-        ASIncomingSet incomingSet = node.getIncomingSet();
-        Iterator<ASLink> iter = incomingSet.getIncomingSet("Node", 0);
-        Assert.assertFalse(iter.hasNext());
+        assertIncomingSet(node, "Node", 0);
     }
 
     // Link(Node("value"))
@@ -32,14 +30,79 @@ public class ASMemoryLinkIncomingSetTest {
         ASLink link = (ASLink) as.get("Link", node);
 
         ASIncomingSet nodeIncomingSet = node.getIncomingSet();
+        assertIncomingSet(nodeIncomingSet, "Node", 0);
+        assertIncomingSet(nodeIncomingSet, "Link", 0, link);
+        assertIncomingSet(nodeIncomingSet, "Link", 1);
+    }
 
-        Iterator<ASLink> iter1 = nodeIncomingSet.getIncomingSet("Node", 0);
-        ASTestUtils.assertIteratorEquals(iter1);
 
-        Iterator<ASLink> iter2 = nodeIncomingSet.getIncomingSet("Link", 0);
-        ASTestUtils.assertIteratorEquals(iter2, link);
+    // Link(Node("value"), Node("value"))
+    @Test
+    public void testIncomingSet11() {
 
-        Iterator<ASLink> iter3 = nodeIncomingSet.getIncomingSet("Link", 1);
-        ASTestUtils.assertIteratorEquals(iter3);
+        AtomspaceStorage as = new AtomspaceMemoryStorage();
+
+        ASAtom node = as.get("Node", "value");
+        ASLink link = (ASLink) as.get("Link", node, node);
+
+        ASIncomingSet nodeIncomingSet = node.getIncomingSet();
+        assertIncomingSet(nodeIncomingSet, "Link", 0, link);
+        assertIncomingSet(nodeIncomingSet, "Link", 1, link);
+    }
+
+
+    // Link(Node1("value"), Node2("value"))
+    @Test
+    public void testIncomingSet12() {
+
+        AtomspaceStorage as = new AtomspaceMemoryStorage();
+
+        ASAtom node1 = as.get("Node1", "value");
+        ASAtom node2 = as.get("Node2", "value");
+        ASLink link = (ASLink) as.get("Link", node1, node2);
+
+        // node1
+        ASIncomingSet nodeIncomingSet1 = node1.getIncomingSet();
+
+        assertIncomingSet(nodeIncomingSet1, "Link", 0, link);
+        assertIncomingSet(nodeIncomingSet1, "Link", 1);
+
+        // node2
+        ASIncomingSet nodeIncomingSet2 = node2.getIncomingSet();
+
+        assertIncomingSet(nodeIncomingSet2, "Link", 0);
+        assertIncomingSet(nodeIncomingSet2, "Link", 1, link);
+    }
+
+
+    // Link1(Node("value")), Link2(Node("value"))
+    @Test
+    public void testIncomingSetLinks12() {
+
+        AtomspaceStorage as = new AtomspaceMemoryStorage();
+
+        ASAtom node = as.get("Node", "value");
+        ASLink link1 = (ASLink) as.get("Link1", node);
+        ASLink link2 = (ASLink) as.get("Link2", node);
+
+        ASIncomingSet incomingSet = node.getIncomingSet();
+
+        assertIncomingSet(incomingSet, "Link1", 0, link1);
+        assertIncomingSet(incomingSet, "Link2", 0, link2);
+    }
+
+    private static void assertIncomingSet(ASAtom atom,
+                                          String type,
+                                          int position,
+                                          ASLink... links) {
+        assertIncomingSet(atom.getIncomingSet(), type, position, links);
+    }
+
+    private static void assertIncomingSet(ASIncomingSet incomingSet,
+                                          String type,
+                                          int position,
+                                          ASLink... links) {
+        Iterator<ASLink> iter = incomingSet.getIncomingSet(type, position);
+        ASTestUtils.assertIteratorEquals(iter, links);
     }
 }
