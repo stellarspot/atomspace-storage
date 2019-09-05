@@ -1,9 +1,9 @@
-package atomspace.query;
+package atomspace.storage.memory.query;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.query.basic.BasicQueryEngine;
+import atomspace.storage.memory.query.basic.ASBasicQueryEngine;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,25 +16,20 @@ public class BasicQueryEngineTest {
     public void test() {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
-        as.get("PredicateLink",
-                as.get("SubjectNode", "subject1"),
-                as.get("ObjectNode", "object1"));
+        ASAtom atom = as.get("PredicateLink",
+                as.get("SubjectNode", "subject"),
+                as.get("ObjectNode", "object"));
 
-        as.get("PredicateLink",
-                as.get("SubjectNode", "subject2"),
-                as.get("ObjectNode", "object2"));
+        ASAtom query = as.get("PredicateLink",
+                as.get("SubjectNode", "subject"),
+                as.get("VariableNode", "$WHAT"));
 
         Iterator<ASAtom> iter = as.getAtoms();
         while (iter.hasNext()) {
             System.out.printf("atom: %s%n", iter.next());
         }
 
-        ASAtom query = as.get("PredicateLink",
-                as.get("SubjectNode", "subject"),
-                as.get("VariableNode", "$WHAT"));
-
-
-        QueryEngine queryEngine = new BasicQueryEngine();
+        ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         Iterator<ASAtom> res = queryEngine.query(query);
 

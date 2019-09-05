@@ -1,10 +1,10 @@
-package atomspace.query;
+package atomspace.storage.memory.query;
 
 import atomspace.storage.ASAtom;
 
 import java.util.Iterator;
 
-public interface QueryEngine {
+public interface ASQueryEngine {
 
     Iterator<ASAtom> query(ASAtom atom);
 }
