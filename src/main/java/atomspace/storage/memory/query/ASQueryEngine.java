@@ -3,8 +3,9 @@ package atomspace.storage.memory.query;
 import atomspace.storage.ASAtom;
 
 import java.util.Iterator;
+import java.util.Map;
 
 public interface ASQueryEngine {
 
-    Iterator<ASAtom> query(ASAtom atom);
+    Iterator<Map<String, ASAtom>> match(ASAtom atom);
 }
