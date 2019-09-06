@@ -1,5 +1,7 @@
 package atomspace.storage.memory.query.basic;
 
+import atomspace.storage.ASIncomingSet;
+import atomspace.storage.ASOutgoingList;
 import atomspace.storage.memory.query.ASQueryEngine;
 import atomspace.storage.ASAtom;
 
@@ -12,7 +14,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     @Override
     public Iterator<ASAtom> query(ASAtom atom) {
 
-        ASBasicQueryTreeNode root = new ASBasicQueryTreeNode(atom, null);
+        ASBasicQueryTreeNode root = new ASBasicQueryTreeNode(null, atom, -2);
 
         return null;
     }

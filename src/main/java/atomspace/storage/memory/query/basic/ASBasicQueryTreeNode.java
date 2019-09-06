@@ -9,27 +9,25 @@ import atomspace.storage.ASOutgoingList;
 class ASBasicQueryTreeNode {
 
     final ASAtom atom;
+    final int incomingSetPosition;
     final ASBasicQueryTreeNode parent;
-    boolean parentVisited = false;
-    final boolean[] childrenVisited;
     final ASBasicQueryTreeNode[] childreen;
 
-    public ASBasicQueryTreeNode(ASAtom atom, ASBasicQueryTreeNode parent) {
-        this.atom = atom;
+    public ASBasicQueryTreeNode(ASBasicQueryTreeNode parent, ASAtom atom, int incomingSetPosition) {
         this.parent = parent;
+        this.atom = atom;
+        this.incomingSetPosition = incomingSetPosition;
 
         if (atom instanceof ASNode) {
-            this.childrenVisited = new boolean[0];
             this.childreen = new ASBasicQueryTreeNode[0];
         } else {
             ASLink link = (ASLink) atom;
             ASOutgoingList outgoingList = link.getOutgoingList();
             int n = outgoingList.getSize();
-            this.childrenVisited = new boolean[n];
             this.childreen = new ASBasicQueryTreeNode[n];
 
             for (int i = 0; i < n; i++) {
-                this.childreen[i] = new ASBasicQueryTreeNode(outgoingList.getAtom(i), this);
+                this.childreen[i] = new ASBasicQueryTreeNode(this, outgoingList.getAtom(i), i);
             }
         }
     }
