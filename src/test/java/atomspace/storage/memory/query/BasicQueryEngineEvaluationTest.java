@@ -34,4 +34,33 @@ public class BasicQueryEngineEvaluationTest {
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
                 new Object[][]{{"$OBJECT", as.get("ConceptNode", "object")}});
     }
+
+    @Test
+    public void test2() {
+        AtomspaceStorage as = new AtomspaceMemoryStorage();
+
+        ASAtom link1 = as.get("EvaluationLink",
+                as.get("PredicateNode", "predicate"),
+                as.get("ListLink",
+                        as.get("ConceptNode", "subject"),
+                        as.get("ConceptNode", "object1")));
+
+        ASAtom link2 = as.get("EvaluationLink",
+                as.get("PredicateNode", "predicate"),
+                as.get("ListLink",
+                        as.get("ConceptNode", "subject"),
+                        as.get("ConceptNode", "object2")));
+
+        ASAtom query = as.get("EvaluationLink",
+                as.get("PredicateNode", "predicate"),
+                as.get("ListLink",
+                        as.get("ConceptNode", "subject"),
+                        as.get("VariableNode", "$OBJECT")));
+
+        ASQueryEngine queryEngine = new ASBasicQueryEngine();
+
+        ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object1")}},
+                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object2")}});
+    }
 }
