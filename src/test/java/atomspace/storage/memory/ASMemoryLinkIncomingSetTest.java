@@ -17,7 +17,7 @@ public class ASMemoryLinkIncomingSetTest {
         AtomspaceStorage as = new AtomspaceMemoryStorage();
 
         ASAtom node = as.get("Node", "value");
-        assertIncomingSet(node, "Node", 0);
+        assertIncomingSet(node, "Node", 0, 0);
     }
 
     // Link(Node("value"))
@@ -30,9 +30,9 @@ public class ASMemoryLinkIncomingSetTest {
         ASLink link = (ASLink) as.get("Link", node);
 
         ASIncomingSet nodeIncomingSet = node.getIncomingSet();
-        assertIncomingSet(nodeIncomingSet, "Node", 0);
-        assertIncomingSet(nodeIncomingSet, "Link", 0, link);
-        assertIncomingSet(nodeIncomingSet, "Link", 1);
+        assertIncomingSet(nodeIncomingSet, "Node", 0, 0);
+        assertIncomingSet(nodeIncomingSet, "Link", 1, 0, link);
+        assertIncomingSet(nodeIncomingSet, "Link", 0, 1);
     }
 
 
@@ -46,8 +46,8 @@ public class ASMemoryLinkIncomingSetTest {
         ASLink link = (ASLink) as.get("Link", node, node);
 
         ASIncomingSet nodeIncomingSet = node.getIncomingSet();
-        assertIncomingSet(nodeIncomingSet, "Link", 0, link);
-        assertIncomingSet(nodeIncomingSet, "Link", 1, link);
+        assertIncomingSet(nodeIncomingSet, "Link", 1, 0, link);
+        assertIncomingSet(nodeIncomingSet, "Link", 1, 1, link);
     }
 
 
@@ -64,14 +64,14 @@ public class ASMemoryLinkIncomingSetTest {
         // node1
         ASIncomingSet nodeIncomingSet1 = node1.getIncomingSet();
 
-        assertIncomingSet(nodeIncomingSet1, "Link", 0, link);
-        assertIncomingSet(nodeIncomingSet1, "Link", 1);
+        assertIncomingSet(nodeIncomingSet1, "Link", 1, 0, link);
+        assertIncomingSet(nodeIncomingSet1, "Link", 0, 1);
 
         // node2
         ASIncomingSet nodeIncomingSet2 = node2.getIncomingSet();
 
-        assertIncomingSet(nodeIncomingSet2, "Link", 0);
-        assertIncomingSet(nodeIncomingSet2, "Link", 1, link);
+        assertIncomingSet(nodeIncomingSet2, "Link", 0, 0);
+        assertIncomingSet(nodeIncomingSet2, "Link", 1, 1, link);
     }
 
 
@@ -87,21 +87,24 @@ public class ASMemoryLinkIncomingSetTest {
 
         ASIncomingSet incomingSet = node.getIncomingSet();
 
-        assertIncomingSet(incomingSet, "Link1", 0, link1);
-        assertIncomingSet(incomingSet, "Link2", 0, link2);
+        assertIncomingSet(incomingSet, "Link1", 1, 0, link1);
+        assertIncomingSet(incomingSet, "Link2", 1, 0, link2);
     }
 
     private static void assertIncomingSet(ASAtom atom,
                                           String type,
+                                          int size,
                                           int position,
                                           ASLink... links) {
-        assertIncomingSet(atom.getIncomingSet(), type, position, links);
+        assertIncomingSet(atom.getIncomingSet(), type, size, position, links);
     }
 
     private static void assertIncomingSet(ASIncomingSet incomingSet,
                                           String type,
+                                          int size,
                                           int position,
                                           ASLink... links) {
+        Assert.assertEquals(size, incomingSet.getIncomingSetSize(type, position));
         Iterator<ASLink> iter = incomingSet.getIncomingSet(type, position);
         ASTestUtils.assertIteratorEquals(iter, links);
     }

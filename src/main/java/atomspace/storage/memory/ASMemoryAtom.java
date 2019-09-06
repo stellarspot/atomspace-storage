@@ -72,21 +72,33 @@ public abstract class ASMemoryAtom implements ASAtom {
         }
 
         @Override
+        public int getIncomingSetSize(String type, int position) {
+
+            Set<ASLink> incomingLinks = getIncomingLinks(type, position);
+            return (incomingLinks == null) ? 0 : incomingLinks.size();
+        }
+
+        @Override
         public Iterator<ASLink> getIncomingSet(String type, int position) {
 
+            Set<ASLink> incomingLinks = getIncomingLinks(type, position);
+            return (incomingLinks == null) ? Collections.emptyIterator() : incomingLinks.iterator();
+        }
+
+        private Set<ASLink> getIncomingLinks(String type, int position) {
             Map<Integer, Set<ASLink>> positionsMap = typeAndPositionMap.get(type);
 
             if (positionsMap == null) {
-                return Collections.emptyIterator();
+                return null;
             }
 
             Set<ASLink> links = positionsMap.get(position);
 
             if (links == null) {
-                return Collections.emptyIterator();
+                return null;
             }
 
-            return links.iterator();
+            return links;
         }
     }
 }

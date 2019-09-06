@@ -8,5 +8,7 @@ public interface ASIncomingSet {
 
     void remove(ASLink link, int position);
 
+    int getIncomingSetSize(String type, int position);
+
     Iterator<ASLink> getIncomingSet(String type, int position);
 }
