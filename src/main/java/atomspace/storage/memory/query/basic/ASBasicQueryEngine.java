@@ -89,12 +89,25 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             return null;
         }
 
-        QueryTreeNode currentNode = node;
-        int currentCost = getCost(node.atom, parentType, position);
 
-        for (int i = 0; i < node.children.length; i++) {
-            NodeWithCost child = findStartNode(node.children[i], type, i);
-            if (child != null && child.cost <= currentCost) {
+        QueryTreeNode[] children = node.children;
+
+        if (children.length == 0) {
+            int cost = getCost(node.atom, parentType, position);
+            return new NodeWithCost(node, cost);
+        }
+
+        QueryTreeNode currentNode = null;
+        int currentCost = 0;
+
+        for (int i = 0; i < children.length; i++) {
+            NodeWithCost child = findStartNode(children[i], type, i);
+
+            if (child == null) {
+                continue;
+            }
+
+            if (currentNode == null || child.cost <= currentCost) {
                 currentNode = child.node;
                 currentCost = child.cost;
             }
