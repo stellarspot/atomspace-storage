@@ -94,8 +94,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
     NodeWithCost findStartNode(QueryTreeNode node, String parentType, int position) {
 
-        String type = node.atom.getType();
-        if (isVariable(type)) {
+        if (node.isVariable) {
             return null;
         }
 
@@ -108,6 +107,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         }
 
         QueryTreeNode currentNode = null;
+        String type = node.atom.getType();
         int currentCost = 0;
 
         for (int i = 0; i < children.length; i++) {
@@ -131,12 +131,12 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         ASAtom rightAtom = match.rightAtom;
         ASAtom leftAtom = match.leftTreeNode.atom;
 
-        // matchSubTree right variable
+        // match right variable
         if (isVariable(rightAtom.getType())) {
             return false;
         }
 
-        // matchSubTree left variable
+        // match left variable
         if (match.leftTreeNode.isVariable) {
 
             String name = ((ASNode) leftAtom).getValue();
@@ -150,12 +150,12 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             return value.equals(rightAtom);
         }
 
-        // matchSubTree nodes
+        // match node
         if (match.leftTreeNode.isLeaf()) {
             return leftAtom.equals(rightAtom);
         }
 
-        // matchSubTree links
+        // match link
         if (!leftAtom.getType().equals(rightAtom.getType())) {
             return false;
         }

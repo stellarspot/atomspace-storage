@@ -51,9 +51,6 @@ public class BasicQueryEngineTest {
 
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-        Map<String, ASAtom> variables1 = new HashMap<>();
-        variables1.put("$WHAT", as.get("ObjectNode", "object1"));
-
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
                 new Object[][]{{"$WHAT", as.get("ObjectNode", "object1")}},
                 new Object[][]{{"$WHAT", as.get("ObjectNode", "object2")}});
