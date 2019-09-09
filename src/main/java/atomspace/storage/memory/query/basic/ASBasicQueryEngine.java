@@ -32,7 +32,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             }
 
             // match root
-            if (match.leftTreeNode.parent == null) {
+            if (match.leftTreeNode.isRoot()) {
                 results.add(match.variables);
                 continue;
             }
@@ -127,7 +127,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         }
 
         // matchSubTree left variable
-        if (isVariable(leftAtom.getType())) {
+        if (match.leftTreeNode.isVariable) {
 
             String name = ((ASNode) leftAtom).getValue();
             ASAtom value = match.variables.get(name);
@@ -140,10 +140,8 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             return value.equals(rightAtom);
         }
 
-        QueryTreeNode[] children = match.leftTreeNode.children;
-
         // matchSubTree nodes
-        if (children.length == 0) {
+        if (match.leftTreeNode.isLeaf()) {
             return leftAtom.equals(rightAtom);
         }
 
@@ -153,6 +151,8 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         }
 
         ASOutgoingList outgoingList = ((ASLink) rightAtom).getOutgoingList();
+
+        QueryTreeNode[] children = match.leftTreeNode.children;
 
         for (int i = 0; i < children.length; i++) {
 
@@ -214,6 +214,9 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         final int parentPosition;
         final QueryTreeNode parent;
         final QueryTreeNode[] children;
+        final boolean isVariable;
+
+        private static final QueryTreeNode[] EMPTY_CHILDREN = new QueryTreeNode[0];
 
         public QueryTreeNode(QueryTreeNode parent, ASAtom atom, int parentPosition) {
             this.parent = parent;
@@ -221,8 +224,10 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             this.parentPosition = parentPosition;
 
             if (atom instanceof ASNode) {
-                this.children = new QueryTreeNode[0];
+                this.isVariable = isVariable(atom.getType());
+                this.children = EMPTY_CHILDREN;
             } else {
+                this.isVariable = false;
                 ASLink link = (ASLink) atom;
                 ASOutgoingList outgoingList = link.getOutgoingList();
                 int n = outgoingList.getSize();
@@ -232,6 +237,14 @@ public class ASBasicQueryEngine implements ASQueryEngine {
                     this.children[i] = new QueryTreeNode(this, outgoingList.getAtom(i), i);
                 }
             }
+        }
+
+        public boolean isRoot() {
+            return parent == null;
+        }
+
+        public boolean isLeaf() {
+            return children == EMPTY_CHILDREN;
         }
     }
 }
