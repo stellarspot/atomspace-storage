@@ -83,6 +83,12 @@ public class BasicQueryEngineEvaluationTest {
                         as.get("ConceptNode", "subject3"),
                         as.get("ConceptNode", "object3")));
 
+        ASAtom link4 = as.get("EvaluationLink",
+                as.get("PredicateNode", "predicate1"),
+                as.get("ListLink",
+                        as.get("ConceptNode", "subject"),
+                        as.get("ConceptNode", "object")));
+
         ASAtom query = as.get("EvaluationLink",
                 as.get("PredicateNode", "predicate"),
                 as.get("ListLink",
