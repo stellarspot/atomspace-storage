@@ -64,7 +64,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
             while (iter.hasNext()) {
                 ASLink link = iter.next();
-                QueryMatcherNode parentMatch = new QueryMatcherNode(ROOT_DIRECTION, parent, link, match.copyVariables());
+                QueryMatcherNode parentMatch = new QueryMatcherNode(parentPosition, parent, link, match.copyVariables());
                 queries.add(parentMatch);
             }
         }
