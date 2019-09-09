@@ -5,7 +5,12 @@ import atomspace.storage.memory.query.ASQueryEngine;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ASBasicQueryEngine implements ASQueryEngine {
+
+    private static Logger LOG = LoggerFactory.getLogger(ASBasicQueryEngine.class);
 
     public static final String TYPE_NODE_VARIABLE = "VariableNode";
 
@@ -15,8 +20,11 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     @Override
     public Iterator<Map<String, ASAtom>> match(ASAtom atom) {
 
+        LOG.trace("query {}", atom);
+
         QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(root);
+        LOG.trace("start node {}", startNode.atom);
 
         Queue<QueryMatcherNode> queries = new ArrayDeque<>();
         queries.add(new QueryMatcherNode(UNDEFINED_DIRECTION, startNode, startNode.atom, new HashMap<>()));
@@ -25,6 +33,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
         while (!queries.isEmpty()) {
             QueryMatcherNode match = queries.poll();
+            LOG.trace("node to match {}", match.rightAtom);
 
             // match subtree
             if (!matchSubTree(match)) {
@@ -33,6 +42,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
             // match root
             if (match.leftTreeNode.isRoot()) {
+                LOG.trace("node accepted {}", match.rightAtom);
                 results.add(match.variables);
                 continue;
             }
