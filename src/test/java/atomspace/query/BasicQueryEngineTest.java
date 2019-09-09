@@ -1,11 +1,10 @@
-package atomspace.storage.memory.query;
+package atomspace.query;
 
 import atomspace.ASTestUtils;
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.storage.memory.query.basic.ASBasicQueryEngine;
-import org.junit.Assert;
+import atomspace.query.basic.ASBasicQueryEngine;
 import org.junit.Test;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package atomspace.storage.memory.query;
+package atomspace.query;
 
 import atomspace.storage.ASAtom;
 

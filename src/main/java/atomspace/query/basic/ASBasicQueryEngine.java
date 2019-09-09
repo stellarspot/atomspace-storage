@@ -1,7 +1,7 @@
-package atomspace.storage.memory.query.basic;
+package atomspace.query.basic;
 
+import atomspace.query.ASQueryEngine;
 import atomspace.storage.*;
-import atomspace.storage.memory.query.ASQueryEngine;
 
 import java.util.*;
 
