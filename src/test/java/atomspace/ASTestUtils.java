@@ -19,7 +19,7 @@ public class ASTestUtils {
         Assert.assertEquals(expected, actual);
     }
 
-    public static <K, V> void assertIteratorOfMapsEqual(Iterator<Map<K, V>> iter, Object[][]... variables) {
+    public static <K, V> void assertIteratorOfMapsEqual(Iterator<Map<K, V>> iter, KeyWithValue<K, V>[]... elements) {
 
         Set<Map<K, V>> actual = new HashSet<>();
 
@@ -28,16 +28,42 @@ public class ASTestUtils {
         }
 
         Set<Map<K, V>> expected = new HashSet<>();
-        for (Object[][] variableMap : variables) {
+
+        for (KeyWithValue<K, V>[] kvs : elements) {
             Map<K, V> map = new HashMap<>();
-            for (Object[] variable : variableMap) {
-                K key = (K) variable[0];
-                V value = (V) variable[1];
-                map.put(key, value);
+            for (KeyWithValue<K, V> kv : kvs) {
+                map.put(kv.key, kv.value);
             }
             expected.add(map);
         }
 
         Assert.assertEquals(expected, actual);
+    }
+
+    public static class KeyWithValue<K, V> {
+
+        public final K key;
+        public final V value;
+
+        public KeyWithValue(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o instanceof KeyWithValue) {
+                KeyWithValue<K, V> that = (KeyWithValue<K, V>) o;
+                return Objects.equals(key, that.key) &&
+                        Objects.equals(value, that.value);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, value);
+        }
     }
 }

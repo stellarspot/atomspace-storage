@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static atomspace.ASTestUtils.KeyWithValue;
+
 public class BasicQueryEngineTest {
 
     @Test
@@ -26,7 +28,7 @@ public class BasicQueryEngineTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$WHAT", as.get("ObjectNode", "object")}});
+                new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object"))});
     }
 
     @Test
@@ -52,7 +54,7 @@ public class BasicQueryEngineTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$WHAT", as.get("ObjectNode", "object1")}},
-                new Object[][]{{"$WHAT", as.get("ObjectNode", "object2")}});
+                new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object1"))},
+                new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object2"))});
     }
 }

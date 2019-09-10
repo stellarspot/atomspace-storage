@@ -8,6 +8,8 @@ import atomspace.storage.memory.AtomspaceMemoryStorage;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static atomspace.ASTestUtils.KeyWithValue;
+
 public class BasicQueryEngineRepeatedVariablesTest {
 
     @Test
@@ -28,7 +30,7 @@ public class BasicQueryEngineRepeatedVariablesTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$VALUE", as.get("Node", "value")}});
+                new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "value"))});
     }
 
     @Test
@@ -61,7 +63,7 @@ public class BasicQueryEngineRepeatedVariablesTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$VALUE", as.get("Node", "A")}},
-                new Object[][]{{"$VALUE", as.get("Node", "B")}});
+                new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "A"))},
+                new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "B"))});
     }
 }

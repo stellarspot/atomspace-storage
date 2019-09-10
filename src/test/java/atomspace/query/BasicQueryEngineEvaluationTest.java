@@ -7,6 +7,8 @@ import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.query.basic.ASBasicQueryEngine;
 import org.junit.Test;
 
+import static atomspace.ASTestUtils.KeyWithValue;
+
 public class BasicQueryEngineEvaluationTest {
 
     @Test
@@ -29,7 +31,7 @@ public class BasicQueryEngineEvaluationTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object")}});
+                new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object"))});
     }
 
     @Test
@@ -57,8 +59,8 @@ public class BasicQueryEngineEvaluationTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object1")}},
-                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object2")}});
+                new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
+                new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
     }
 
     @Test
@@ -98,7 +100,7 @@ public class BasicQueryEngineEvaluationTest {
         ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
         ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
-                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object1")}},
-                new Object[][]{{"$OBJECT", as.get("ConceptNode", "object2")}});
+                new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
+                new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
     }
 }
