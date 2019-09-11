@@ -5,32 +5,26 @@ import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
 import atomspace.storage.AtomspaceStorage;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class AtomspaceMemoryStorage implements AtomspaceStorage {
 
     private static long UNIQUE_ID = 0;
-    private final Map<String, Long> ids = new HashMap<>();
-    private final Map<Long, ASAtom> atoms = new HashMap<>();
+    private final Map<String, ASNode> nodesInverseIndex = new HashMap<>();
+    private final Map<String, ASLink> linksInverseIndex = new HashMap<>();
 
     @Override
     public ASAtom get(String type, String value) {
 
         String key = getNodeKey(type, value);
-        Long id = ids.get(key);
+        ASNode node = nodesInverseIndex.get(key);
 
-        if (id == null) {
-            id = nextId();
-            ASNode node = new ASMemoryNode(id, type, value);
-            this.ids.put(key, id);
-            this.atoms.put(id, node);
-            return node;
+        if (node == null) {
+            node = new ASMemoryNode(nextId(), type, value);
+            this.nodesInverseIndex.put(key, node);
         }
 
-        return this.atoms.get(id);
+        return node;
     }
 
 
@@ -38,27 +32,22 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
     public ASAtom get(String type, ASAtom... atoms) {
 
         String key = getListKey(type, atoms);
-        Long id = ids.get(key);
+        ASLink link = linksInverseIndex.get(key);
 
-        if (id == null) {
-            id = nextId();
-            ASLink link = new ASMemoryLink(id, type, atoms);
-            this.ids.put(key, id);
-            this.atoms.put(id, link);
-
-            for (int i = 0; i < atoms.length; i++) {
-                atoms[i].getIncomingSet().add(link, i);
-            }
-
-            return link;
+        if (link == null) {
+            link = new ASMemoryLink(nextId(), type, atoms);
+            this.linksInverseIndex.put(key, link);
         }
 
-        return this.atoms.get(id);
+        return link;
     }
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-        return atoms.values().iterator();
+        List<ASAtom> atoms = new ArrayList<>(nodesInverseIndex.size() + linksInverseIndex.size());
+        atoms.addAll(nodesInverseIndex.values());
+        atoms.addAll(linksInverseIndex.values());
+        return atoms.iterator();
     }
 
     private long nextId() {

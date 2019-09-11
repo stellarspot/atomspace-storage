@@ -1,11 +1,10 @@
 package atomspace.storage.memory;
 
 import atomspace.storage.ASAtom;
-import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
 
-import java.util.*;
+import java.util.Objects;
 
 public class ASMemoryLink extends ASMemoryAtom implements ASLink {
 
@@ -14,6 +13,10 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
     public ASMemoryLink(long id, String type, ASAtom... atoms) {
         super(id, type);
         this.outgoingList = new ASMemoryOutgoingList(atoms);
+
+        for (int i = 0; i < atoms.length; i++) {
+            atoms[i].getIncomingSet().add(this, i);
+        }
     }
 
     @Override
