@@ -1,6 +1,6 @@
 package atomspace.storage;
 
-public interface AtomspaceStorage {
+public interface AtomspaceStorage extends AutoCloseable {
 
     AtomspaceStorageTransaction getTx();
 }

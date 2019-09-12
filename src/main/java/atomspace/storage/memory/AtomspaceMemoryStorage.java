@@ -10,4 +10,8 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
     public AtomspaceStorageTransaction getTx() {
         return tx;
     }
+
+    @Override
+    public void close() {
+    }
 }

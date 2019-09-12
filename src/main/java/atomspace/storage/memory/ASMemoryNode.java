@@ -18,6 +18,6 @@ public class ASMemoryNode extends ASMemoryAtom implements ASNode {
 
     @Override
     public String toString() {
-        return String.format("%s('%s')", type, value);
+        return toString(this);
     }
 }
