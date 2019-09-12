@@ -7,6 +7,6 @@ public class ASMemoryNodeTest extends ASAbstractNodeTest {
 
     @Override
     public AtomspaceStorage getStorage() {
-        return new AtomspaceMemoryStorage();
+        return ASMemoryTestUtils.getTestStorage();
     }
 }
