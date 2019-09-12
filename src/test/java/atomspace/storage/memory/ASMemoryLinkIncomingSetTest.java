@@ -14,7 +14,7 @@ public class ASMemoryLinkIncomingSetTest {
     @Test
     public void testEmptyIncomingSet() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node = as.get("Node", "value");
         assertIncomingSet(node, "Node", 0, 0);
@@ -24,7 +24,7 @@ public class ASMemoryLinkIncomingSetTest {
     @Test
     public void testIncomingSet1() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node = as.get("Node", "value");
         ASLink link = (ASLink) as.get("Link", node);
@@ -40,7 +40,7 @@ public class ASMemoryLinkIncomingSetTest {
     @Test
     public void testIncomingSet11() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node = as.get("Node", "value");
         ASLink link = (ASLink) as.get("Link", node, node);
@@ -55,7 +55,7 @@ public class ASMemoryLinkIncomingSetTest {
     @Test
     public void testIncomingSet12() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node1 = as.get("Node1", "value");
         ASAtom node2 = as.get("Node2", "value");
@@ -79,7 +79,7 @@ public class ASMemoryLinkIncomingSetTest {
     @Test
     public void testIncomingSetLinks12() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node = as.get("Node", "value");
         ASLink link1 = (ASLink) as.get("Link1", node);

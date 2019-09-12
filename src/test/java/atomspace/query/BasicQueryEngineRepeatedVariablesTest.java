@@ -4,6 +4,7 @@ import atomspace.ASTestUtils;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
+import atomspace.storage.AtomspaceStorageTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class BasicQueryEngineRepeatedVariablesTest {
     @Ignore
     // Scan whole atomspace
     public void test1() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom atom1 = as.get("Link",
                 as.get("Node", "value"),
@@ -35,7 +36,7 @@ public class BasicQueryEngineRepeatedVariablesTest {
 
     @Test
     public void test2() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom atom1 = as.get("Link",
                 as.get("Node", "A"),

@@ -2,24 +2,30 @@ package atomspace.storage.memory
 
 import atomspace.storage.ASAtom
 import atomspace.storage.AtomspaceStorage
+import atomspace.storage.AtomspaceStorageTransaction
 
 class SampleAtomSpaceRunner(val atomspace: AtomspaceStorage) {
 
+    var tx: AtomspaceStorageTransaction? = null
+
     fun run(block: SampleAtomSpaceRunner.() -> Unit) {
+        tx = atomspace.tx
         this.block()
+        tx?.commit()
+        tx?.close()
     }
 
     fun PersonNode(value: String): ASAtom =
-            atomspace.get("PersonNode", value)
+            tx?.get("PersonNode", value)!!
 
     fun ItemNode(value: String): ASAtom =
-            atomspace.get("ItemNode", value)
+            tx?.get("ItemNode", value)!!
 
     fun LikesLink(person: ASAtom, item: ASAtom): ASAtom =
-            atomspace.get("LikesLink", person, item)
+            tx?.get("LikesLink", person, item)!!
 
     fun dump() {
-        for (atom in atomspace.atoms) {
+        for (atom in tx?.atoms!!) {
             println(atom)
         }
     }

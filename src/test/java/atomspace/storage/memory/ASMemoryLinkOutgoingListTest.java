@@ -1,9 +1,6 @@
 package atomspace.storage.memory;
 
-import atomspace.storage.ASAtom;
-import atomspace.storage.ASLink;
-import atomspace.storage.ASOutgoingList;
-import atomspace.storage.AtomspaceStorage;
+import atomspace.storage.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +10,7 @@ public class ASMemoryLinkOutgoingListTest {
 
     @Test
     public void testEmptyOutgoingList() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASLink link = (ASLink) as.get("Link");
         ASOutgoingList outgoingList = link.getOutgoingList();
@@ -23,7 +20,7 @@ public class ASMemoryLinkOutgoingListTest {
 
     @Test
     public void testOutgoingList1() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node = as.get("Node", "value");
         ASLink link = (ASLink) as.get("Link", node);
@@ -35,7 +32,7 @@ public class ASMemoryLinkOutgoingListTest {
 
     @Test
     public void testOutgoingList2() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom node1 = as.get("Node1", "value1");
         ASAtom node2 = as.get("Node2", "value2");
@@ -49,7 +46,7 @@ public class ASMemoryLinkOutgoingListTest {
 
     @Test
     public void testOutgoingListN() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         final int max_values = 100;
         int n = new Random().nextInt(max_values);

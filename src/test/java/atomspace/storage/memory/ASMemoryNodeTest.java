@@ -1,5 +1,6 @@
 package atomspace.storage.memory;
 
+import atomspace.storage.AtomspaceStorageTransaction;
 import org.junit.Test;
 import org.junit.Assert;
 import atomspace.storage.AtomspaceStorage;
@@ -9,7 +10,7 @@ public class ASMemoryNodeTest {
     @Test
     public void testNotNull() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
         Assert.assertNotNull(
                 as.get("Node", "value"));
     }
@@ -17,7 +18,7 @@ public class ASMemoryNodeTest {
     @Test
     public void testEquals() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
         Assert.assertEquals(
                 as.get("Node", "value"),
                 as.get("Node", "value"));
@@ -26,7 +27,7 @@ public class ASMemoryNodeTest {
     @Test
     public void testHashcode() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
         Assert.assertEquals(
                 as.get("Node", "value").hashCode(),
                 as.get("Node", "value").hashCode());
@@ -36,7 +37,7 @@ public class ASMemoryNodeTest {
     @Test
     public void testSame() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
         Assert.assertEquals(
                 as.get("Node", "value"),
                 as.get("Node", "value"));
@@ -45,7 +46,7 @@ public class ASMemoryNodeTest {
     @Test
     public void testToString() {
 
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
         Assert.assertEquals(
                 "Node('value')",
                 as.get("Node", "value").toString());

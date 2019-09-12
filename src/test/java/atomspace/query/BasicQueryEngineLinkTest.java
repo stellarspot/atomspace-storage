@@ -4,6 +4,7 @@ import atomspace.ASTestUtils;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
+import atomspace.storage.AtomspaceStorageTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class BasicQueryEngineLinkTest {
 
     @Test
     public void test1() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom link = as.get("EvaluationLink",
                 as.get("PredicateNode", "predicate"),
@@ -37,7 +38,7 @@ public class BasicQueryEngineLinkTest {
 
     @Test
     public void test2() {
-        AtomspaceStorage as = new AtomspaceMemoryStorage();
+        AtomspaceStorageTransaction as = new AtomspaceMemoryStorage().getTx();
 
         ASAtom link1 = as.get("EvaluationLink",
                 as.get("PredicateNode", "predicate1"),
