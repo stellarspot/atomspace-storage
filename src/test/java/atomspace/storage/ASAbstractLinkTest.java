@@ -42,19 +42,6 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     }
 
     @Test
-    public void testSame() throws Exception {
-
-        testAtomspaceStorage(as ->
-                Assert.assertSame(
-                        as.get("Link",
-                                as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")),
-                        as.get("Link",
-                                as.get("Node1", "value1"),
-                                as.get("Node2", "value-2"))));
-    }
-
-    @Test
     public void testToString() throws Exception {
 
         testAtomspaceStorage(as ->

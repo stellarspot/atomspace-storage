@@ -26,19 +26,7 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
 
     @Override
     public String toString() {
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(type).append("(");
-
-        for (int i = 0; i < outgoingList.getSize(); i++) {
-            if (i != 0) {
-                builder.append(",");
-            }
-            builder.append(outgoingList.getAtom(i));
-        }
-
-        builder.append(")");
-        return builder.toString();
+        return toString(this);
     }
 
     static class ASMemoryOutgoingList implements ASOutgoingList {

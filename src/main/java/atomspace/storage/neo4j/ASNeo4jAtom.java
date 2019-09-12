@@ -45,4 +45,17 @@ public abstract class ASNeo4jAtom implements ASAtom {
     public int hashCode() {
         return Long.hashCode(getId());
     }
+
+    public static ASNeo4jAtom getAtom(Node node) {
+        String kind = node.getProperty("kind").toString();
+
+        switch (kind) {
+            case "Node":
+                return new ASNeo4jNode(node);
+            case "Link":
+                return new ASNeo4jLink(node);
+            default:
+                throw new RuntimeException(String.format("Unknown node kind: %s", kind));
+        }
+    }
 }

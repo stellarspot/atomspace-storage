@@ -14,7 +14,7 @@ public abstract class ASAbstractTest {
         }
     }
 
-    interface AtomspaceStorageTest {
+    protected interface AtomspaceStorageTest {
 
         void run(AtomspaceStorageTransaction tx) throws Exception;
     }

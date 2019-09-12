@@ -31,15 +31,6 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     }
 
     @Test
-    public void testSame() throws Exception {
-
-        testAtomspaceStorage(as ->
-                Assert.assertEquals(
-                        as.get("Node", "value"),
-                        as.get("Node", "value")));
-    }
-
-    @Test
     public void testToString() throws Exception {
 
         testAtomspaceStorage(as ->

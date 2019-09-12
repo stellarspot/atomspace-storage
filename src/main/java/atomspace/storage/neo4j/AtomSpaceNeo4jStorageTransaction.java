@@ -7,7 +7,6 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransaction {
@@ -29,6 +28,7 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
         if (node == null) {
             node = graph.createNode();
             node.addLabel(nodeLabel);
+            node.setProperty("kind", "Node");
             node.setProperty("value", value);
         }
 
@@ -37,7 +37,19 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
 
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
-        return null;
+
+        Label linkLabel = Label.label(type);
+        long[] ids = getIds(atoms);
+        Node node = graph.findNode(linkLabel, "ids", ids);
+
+        if (node == null) {
+            node = graph.createNode();
+            node.addLabel(linkLabel);
+            node.setProperty("kind", "Link");
+            node.setProperty("ids", ids);
+        }
+
+        return new ASNeo4jLink(node);
     }
 
     @Override
@@ -53,5 +65,15 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
     @Override
     public void close() {
         tx.close();
+    }
+
+
+    private static long[] getIds(ASAtom... atoms) {
+        long[] ids = new long[atoms.length];
+
+        for (int i = 0; i < atoms.length; i++) {
+            ids[i] = atoms[i].getId();
+        }
+        return ids;
     }
 }
