@@ -67,22 +67,22 @@ public abstract class ASNeo4jAtom implements ASAtom {
 
     static class ASNeo4jIncomingSet implements ASIncomingSet {
         @Override
-        public void add(ASLink link, int position) {
+        public void add(ASLink link, int size, int position) {
 
         }
 
         @Override
-        public void remove(ASLink link, int position) {
+        public void remove(ASLink link, int size, int position) {
 
         }
 
         @Override
-        public int getIncomingSetSize(String type, int position) {
+        public int getIncomingSetSize(String type, int size, int position) {
             return 0;
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int position) {
+        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
             return null;
         }
     }
