@@ -36,6 +36,11 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
         if (link == null) {
             link = new ASMemoryLink(nextId(), type, atoms);
             this.linksInverseIndex.put(key, link);
+
+            int size = atoms.length;
+            for (int i = 0; i < atoms.length; i++) {
+                atoms[i].getIncomingSet().add(link, size, i);
+            }
         }
 
         return link;

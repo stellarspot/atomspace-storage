@@ -27,7 +27,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
 
     @Override
     public String getType() {
-        return node.getLabels().iterator().next().name();
+        return node.getProperty("type").toString();
     }
 
     @Override

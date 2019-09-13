@@ -11,11 +11,6 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
     public ASMemoryLink(long id, String type, ASAtom... atoms) {
         super(id, type);
         this.outgoingList = new ASMemoryOutgoingList(atoms);
-
-        int size = atoms.length;
-        for (int i = 0; i < atoms.length; i++) {
-            atoms[i].getIncomingSet().add(this, size, i);
-        }
     }
 
     @Override
