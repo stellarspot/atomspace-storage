@@ -3,9 +3,11 @@ package atomspace.storage.neo4j;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
-import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public abstract class ASNeo4jAtom implements ASAtom {
 
@@ -65,25 +67,49 @@ public abstract class ASNeo4jAtom implements ASAtom {
         }
     }
 
-    static class ASNeo4jIncomingSet implements ASIncomingSet {
+    class ASNeo4jIncomingSet implements ASIncomingSet {
+
         @Override
         public void add(ASLink link, int size, int position) {
-
+            Node parent = ((ASNeo4jAtom) link).node;
+            String key = getKey(link.getType(), size, position);
+            node.createRelationshipTo(parent, RelationshipType.withName(key));
         }
 
         @Override
         public void remove(ASLink link, int size, int position) {
-
         }
 
         @Override
         public int getIncomingSetSize(String type, int size, int position) {
-            return 0;
+
+            // TBD: use the count store
+            int s = 0;
+            for (Relationship _ : getSet(type, size, position)) {
+                s++;
+            }
+            return s;
         }
 
         @Override
         public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
-            return null;
+
+            List<ASLink> links = new ArrayList<>();
+            for (Relationship r : getSet(type, size, position)) {
+                Node parent = r.getEndNode();
+                links.add(new ASNeo4jLink(parent));
+            }
+
+            return links.iterator();
+        }
+
+        private Iterable<Relationship> getSet(String type, int size, int position) {
+            String key = getKey(type, size, position);
+            return node.getRelationships(RelationshipType.withName(key), Direction.OUTGOING);
+        }
+
+        private String getKey(String type, int size, int position) {
+            return String.format("%s_%d_%d", type, size, position);
         }
     }
 }

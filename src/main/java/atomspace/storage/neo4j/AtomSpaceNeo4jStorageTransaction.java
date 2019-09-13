@@ -1,6 +1,7 @@
 package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
+import atomspace.storage.ASIncomingSet;
 import atomspace.storage.AtomspaceStorageTransaction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -29,6 +30,7 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
             node = graph.createNode();
             node.addLabel(nodeLabel);
             node.setProperty("kind", "Node");
+            node.setProperty("type", type);
             node.setProperty("value", value);
         }
 
@@ -43,10 +45,20 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
         Node node = graph.findNode(linkLabel, "ids", ids);
 
         if (node == null) {
+
             node = graph.createNode();
             node.addLabel(linkLabel);
             node.setProperty("kind", "Link");
+            node.setProperty("type", type);
             node.setProperty("ids", ids);
+
+            ASNeo4jLink link = new ASNeo4jLink(node);
+            int size = atoms.length;
+            for (int i = 0; i < size; i++) {
+                atoms[i].getIncomingSet().add(link, size, i);
+            }
+
+            return link;
         }
 
         return new ASNeo4jLink(node);

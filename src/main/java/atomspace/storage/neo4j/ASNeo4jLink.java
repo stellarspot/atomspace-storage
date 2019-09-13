@@ -13,12 +13,6 @@ public class ASNeo4jLink extends ASNeo4jAtom implements ASLink {
     public ASNeo4jLink(Node node) {
         super(node);
         this.outgoingList = new ASNeo4jOutgoingList(node);
-
-        int size = outgoingList.getSize();
-        for (int i = 0; i < size; i++) {
-            ASAtom atom = outgoingList.getAtom(i);
-            atom.getIncomingSet().add(this, size, i);
-        }
     }
 
     @Override
