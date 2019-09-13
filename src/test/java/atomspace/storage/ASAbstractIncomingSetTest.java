@@ -19,6 +19,8 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
             ASAtom node = as.get("Node", "value");
             assertIncomingSet(node, "Node", 0, 0);
+            assertIncomingSet(node, "Node", 1, 0);
+            assertIncomingSet(node, "Node", 1, 1);
         });
     }
 
@@ -34,7 +36,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
             assertIncomingSet(nodeIncomingSet, "Node", 0, 0);
             assertIncomingSet(nodeIncomingSet, "Link", 1, 0, link);
-            assertIncomingSet(nodeIncomingSet, "Link", 0, 1);
+            assertIncomingSet(nodeIncomingSet, "Link", 1, 1);
         });
     }
 
@@ -49,8 +51,12 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node, node);
 
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 0, link);
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 1, link);
+            assertIncomingSet(nodeIncomingSet, "Link", 0, 0);
+            assertIncomingSet(nodeIncomingSet, "Link", 0, 1);
+            assertIncomingSet(nodeIncomingSet, "Link", 1, 0);
+            assertIncomingSet(nodeIncomingSet, "Link", 1, 1);
+            assertIncomingSet(nodeIncomingSet, "Link", 2, 0, link);
+            assertIncomingSet(nodeIncomingSet, "Link", 2, 1, link);
         });
     }
 
@@ -68,14 +74,14 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             // node1
             ASIncomingSet nodeIncomingSet1 = node1.getIncomingSet();
 
-            assertIncomingSet(nodeIncomingSet1, "Link", 1, 0, link);
-            assertIncomingSet(nodeIncomingSet1, "Link", 0, 1);
+            assertIncomingSet(nodeIncomingSet1, "Link", 2, 0, link);
+            assertIncomingSet(nodeIncomingSet1, "Link", 2, 1);
 
             // node2
             ASIncomingSet nodeIncomingSet2 = node2.getIncomingSet();
 
-            assertIncomingSet(nodeIncomingSet2, "Link", 0, 0);
-            assertIncomingSet(nodeIncomingSet2, "Link", 1, 1, link);
+            assertIncomingSet(nodeIncomingSet2, "Link", 2, 0);
+            assertIncomingSet(nodeIncomingSet2, "Link", 2, 1, link);
         });
     }
 
