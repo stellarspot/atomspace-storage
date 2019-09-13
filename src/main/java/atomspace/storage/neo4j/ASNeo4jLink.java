@@ -8,11 +8,16 @@ import org.neo4j.graphdb.Node;
 
 public class ASNeo4jLink extends ASNeo4jAtom implements ASLink {
 
-    final ASOutgoingList outgoingList;
+    final ASNeo4jOutgoingList outgoingList;
 
     public ASNeo4jLink(Node node) {
         super(node);
         this.outgoingList = new ASNeo4jOutgoingList(node);
+
+        for (int i = 0; i < outgoingList.getSize(); i++) {
+            ASAtom atom = outgoingList.getAtom(i);
+            atom.getIncomingSet().add(this, i);
+        }
     }
 
     @Override

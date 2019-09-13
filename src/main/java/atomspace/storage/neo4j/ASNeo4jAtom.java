@@ -2,14 +2,20 @@ package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
+import atomspace.storage.ASLink;
 import org.neo4j.graphdb.Node;
+
+import java.util.Iterator;
 
 public abstract class ASNeo4jAtom implements ASAtom {
 
     final Node node;
+    final ASIncomingSet incomingSet;
+
 
     public ASNeo4jAtom(Node node) {
         this.node = node;
+        this.incomingSet = new ASNeo4jIncomingSet();
     }
 
     @Override
@@ -24,7 +30,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
 
     @Override
     public ASIncomingSet getIncomingSet() {
-        return null;
+        return incomingSet;
     }
 
     @Override
@@ -56,6 +62,28 @@ public abstract class ASNeo4jAtom implements ASAtom {
                 return new ASNeo4jLink(node);
             default:
                 throw new RuntimeException(String.format("Unknown node kind: %s", kind));
+        }
+    }
+
+    static class ASNeo4jIncomingSet implements ASIncomingSet {
+        @Override
+        public void add(ASLink link, int position) {
+
+        }
+
+        @Override
+        public void remove(ASLink link, int position) {
+
+        }
+
+        @Override
+        public int getIncomingSetSize(String type, int position) {
+            return 0;
+        }
+
+        @Override
+        public Iterator<ASLink> getIncomingSet(String type, int position) {
+            return null;
         }
     }
 }
