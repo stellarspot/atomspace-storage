@@ -4,7 +4,7 @@ import atomspace.storage.AtomspaceStorage;
 
 public interface PerformanceModel {
 
-    void createAtoms(AtomspaceStorage atomspace);
+    void createAtoms(AtomspaceStorage atomspace) throws Exception;
 
-    void queryAtoms(AtomspaceStorage atomspace);
+    void queryAtoms(AtomspaceStorage atomspace) throws Exception;
 }
