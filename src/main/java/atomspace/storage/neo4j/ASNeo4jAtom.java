@@ -85,7 +85,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
 
             // TBD: use the count store
             int s = 0;
-            for (Relationship _ : getSet(type, size, position)) {
+            for (Relationship r : getSet(type, size, position)) {
                 s++;
             }
             return s;
