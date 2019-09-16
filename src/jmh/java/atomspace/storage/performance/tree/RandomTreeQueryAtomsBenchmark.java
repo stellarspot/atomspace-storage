@@ -1,5 +1,7 @@
 package atomspace.storage.performance.tree;
 
+import atomspace.query.ASQueryEngine;
+import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.storage.performance.AtomspaceStoragePerformanceUtils;
@@ -16,35 +18,39 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-public class RandomTreeCreateAtomsBenchmark {
+public class RandomTreeQueryAtomsBenchmark {
 
 
     private static final PerformanceModelConfiguration config = RandomTreeBenchmarkConstants.DEFAULT_CONFIG;
     private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
     private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
+    private static final int averageVariables = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_VARIABLES;
+    private static final int statements = 10_000;
 
-    @Param({"250", "500", "750", "1000"})
-    int statements = -1;
+    @Param({"2500", "5000", "7500", "10000"})
+    int queries = -1;
 
     PerformanceModel model;
+    ASQueryEngine queryEngine;
     AtomspaceMemoryStorage atomspaceMemory;
     AtomSpaceNeo4jStorage atomspaceNeo4j;
 
     @Setup
     public void setUp() {
-        PerformanceModelParameters params = new PerformanceModelParameters(statements, -1);
-        model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, -1);
+        PerformanceModelParameters params = new PerformanceModelParameters(statements, queries);
+        model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, averageVariables);
+        queryEngine = new ASBasicQueryEngine();
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
         atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
     }
 
-    @Benchmark
-    public void createMemory() throws Exception {
-        model.createAtoms(atomspaceMemory);
+//    @Benchmark
+    public void queryMemory() throws Exception {
+        model.queryAtoms(atomspaceMemory, queryEngine);
     }
 
-    @Benchmark
-    public void createNeo4j() throws Exception {
-        model.createAtoms(atomspaceNeo4j);
+//    @Benchmark
+    public void queryNeo4j() throws Exception {
+        model.queryAtoms(atomspaceNeo4j, queryEngine);
     }
 }

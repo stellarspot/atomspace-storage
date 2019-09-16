@@ -24,6 +24,11 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
         QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(root);
+
+        if (startNode == null) {
+            return Collections.emptyIterator();
+        }
+
         LOG.trace("start node {}", startNode.atom);
 
         Queue<QueryMatcherNode> queries = new ArrayDeque<>();
@@ -91,7 +96,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             }
         }
 
-        return current.node;
+        return current == null ? null : current.node;
     }
 
     NodeWithCost findStartNode(QueryTreeNode node, String parentType, int parentSize, int position) {
@@ -126,7 +131,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             }
         }
 
-        return new NodeWithCost(currentNode, currentCost);
+        return currentNode == null ? null : new NodeWithCost(currentNode, currentCost);
     }
 
     boolean matchSubTree(QueryMatcherNode match) {
