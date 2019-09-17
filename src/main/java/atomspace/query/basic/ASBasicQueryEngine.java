@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class ASBasicQueryEngine implements ASQueryEngine {
 
+    private static final int MAX_COST = Integer.MAX_VALUE;
     private static Logger LOG = LoggerFactory.getLogger(ASBasicQueryEngine.class);
 
     public static final String TYPE_NODE_VARIABLE = "VariableNode";
@@ -25,7 +26,8 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(root);
 
-        if (startNode == null) {
+        // Only support queries with not variable nodes in it
+        if (!startNode.isLeaf() || startNode.isVariable) {
             return Collections.emptyIterator();
         }
 
@@ -80,58 +82,48 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
     QueryTreeNode findStartNode(QueryTreeNode root) {
 
-        NodeWithCost current = null;
+        NodeWithCost current = new NodeWithCost(root, MAX_COST);
 
         String type = root.atom.getType();
         int size = root.size;
         for (int i = 0; i < root.children.length; i++) {
             NodeWithCost child = findStartNode(root.children[i], type, size, i);
 
-            if (child == null) {
-                continue;
-            }
-
-            if (current == null || child.cost < current.cost) {
+            if (child.cost < current.cost) {
                 current = child;
             }
         }
 
-        return current == null ? null : current.node;
+        return current.node;
     }
 
     NodeWithCost findStartNode(QueryTreeNode node, String parentType, int parentSize, int position) {
 
         if (node.isVariable) {
-            return null;
+            return new NodeWithCost(node, MAX_COST);
         }
 
-
-        QueryTreeNode[] children = node.children;
-
-        if (children.length == 0) {
+        if (node.isLeaf()) {
             int cost = getCost(node.atom, parentType, parentSize, position);
             return new NodeWithCost(node, cost);
         }
 
-        QueryTreeNode currentNode = null;
+        QueryTreeNode currentNode = node;
         String type = node.atom.getType();
         int size = node.size;
-        int currentCost = 0;
+        int currentCost = MAX_COST;
+        QueryTreeNode[] children = node.children;
 
         for (int i = 0; i < children.length; i++) {
             NodeWithCost child = findStartNode(children[i], type, size, i);
 
-            if (child == null) {
-                continue;
-            }
-
-            if (currentNode == null || child.cost <= currentCost) {
+            if (child.cost <= currentCost) {
                 currentNode = child.node;
                 currentCost = child.cost;
             }
         }
 
-        return currentNode == null ? null : new NodeWithCost(currentNode, currentCost);
+        return new NodeWithCost(currentNode, currentCost);
     }
 
     boolean matchSubTree(QueryMatcherNode match) {
