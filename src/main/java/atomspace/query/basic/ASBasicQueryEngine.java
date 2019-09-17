@@ -161,10 +161,15 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         }
 
         ASOutgoingList outgoingList = ((ASLink) rightAtom).getOutgoingList();
-
         QueryTreeNode[] children = match.leftTreeNode.children;
+        int size = children.length;
 
-        for (int i = 0; i < children.length; i++) {
+        // match outgoing list size
+        if (size != outgoingList.getSize()) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
 
             // Already visited
             if (match.direction == i) {
