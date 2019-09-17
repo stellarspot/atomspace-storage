@@ -25,7 +25,7 @@ public class RandomTreeQueryAtomsBenchmark {
     private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
     private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
     private static final int averageVariables = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_VARIABLES;
-    private static final int statements = 10_000;
+    private static final int statements = 1_000;
 
     @Param({"250", "500", "750", "1000"})
     int queries = -1;
@@ -36,12 +36,14 @@ public class RandomTreeQueryAtomsBenchmark {
     AtomSpaceNeo4jStorage atomspaceNeo4j;
 
     @Setup
-    public void setUp() {
+    public void setUp() throws Exception {
         PerformanceModelParameters params = new PerformanceModelParameters(statements, queries);
         model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, averageVariables);
         queryEngine = new ASBasicQueryEngine();
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
         atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
+        model.createAtoms(atomspaceMemory);
+        model.createAtoms(atomspaceNeo4j);
     }
 
     @Benchmark
