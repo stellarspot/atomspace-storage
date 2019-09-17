@@ -70,7 +70,7 @@ public class PerformanceResultPlotter extends Application {
         xAxis.setLabel(LABEL);
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setTitle("Chart");
+        lineChart.setTitle(TITLE);
 
         return lineChart;
     }
@@ -92,9 +92,9 @@ public class PerformanceResultPlotter extends Application {
     public static void showMeasurements(String title,
                                         String label,
                                         String timeUnits,
-                                        Map<String, List<PerformanceResult.ParamWithTime>> results) {
+                                        Map<String, List<PerformanceResult.ParamWithTime>> measurements) {
         // Platform.startup(...) method is not available in JDK 8.
-        MEASUREMENTS.putAll(results);
+        MEASUREMENTS.putAll(measurements);
         TITLE = title;
         LABEL = label;
         TIME_UNITS = timeUnits;

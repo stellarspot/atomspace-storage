@@ -8,8 +8,12 @@ import atomspace.storage.performance.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.performance.PerformanceModel;
 import atomspace.storage.performance.PerformanceModelConfiguration;
 import atomspace.storage.performance.PerformanceModelParameters;
+import atomspace.storage.performance.result.PerformanceResult;
+import atomspace.storage.performance.result.PerformanceResultPlotter;
 import org.openjdk.jmh.annotations.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Fork(1)
@@ -54,5 +58,13 @@ public class RandomTreeQueryAtomsBenchmark {
     @Benchmark
     public void queryNeo4j() throws Exception {
         model.queryAtoms(atomspaceNeo4j, queryEngine);
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        Map<String, List<PerformanceResult.ParamWithTime>> measurements =
+                PerformanceResult.runJMHTest(RandomTreeQueryAtomsBenchmark.class, "queries");
+
+        PerformanceResultPlotter.showMeasurements("Query", "queries", "ms", measurements);
     }
 }
