@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTransaction {
+public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTransaction {
 
     final JanusGraph graph;
     private final Transaction tx;
 
-    public AtomSpaceJanusGraphStorageTransaction(JanusGraph graph) {
+    public AtomspaceJanusGraphStorageTransaction(JanusGraph graph) {
         this.graph = graph;
         this.tx = graph.newTransaction();
     }

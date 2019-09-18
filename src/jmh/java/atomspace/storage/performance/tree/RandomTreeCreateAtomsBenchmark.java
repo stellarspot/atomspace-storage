@@ -1,5 +1,6 @@
 package atomspace.storage.performance.tree;
 
+import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.storage.performance.AtomspaceStoragePerformanceUtils;
@@ -33,6 +34,7 @@ public class RandomTreeCreateAtomsBenchmark {
     PerformanceModel model;
     AtomspaceMemoryStorage atomspaceMemory;
     AtomSpaceNeo4jStorage atomspaceNeo4j;
+    AtomspaceJanusGraphStorage janusGraphStorage;
 
     @Setup
     public void setUp() {
@@ -40,6 +42,7 @@ public class RandomTreeCreateAtomsBenchmark {
         model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, -1);
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
         atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
+//        janusGraphStorage = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage();
     }
 
     @Benchmark
@@ -51,6 +54,11 @@ public class RandomTreeCreateAtomsBenchmark {
     public void createNeo4j() throws Exception {
         model.createAtoms(atomspaceNeo4j);
     }
+
+//    @Benchmark
+//    public void createJanusGraph() throws Exception {
+//        model.createAtoms(janusGraphStorage);
+//    }
 
     public static void main(String[] args) throws Exception {
 

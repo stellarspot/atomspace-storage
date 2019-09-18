@@ -5,9 +5,9 @@ import atomspace.storage.util.AtomspaceStorageHelper;
 public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper {
 
 
-    private final AtomSpaceJanusGraphStorageTransaction tx;
+    private final AtomspaceJanusGraphStorageTransaction tx;
 
-    public AtomspaceJanusGraphStorageHelper(AtomSpaceJanusGraphStorageTransaction tx) {
+    public AtomspaceJanusGraphStorageHelper(AtomspaceJanusGraphStorageTransaction tx) {
         this.tx = tx;
     }
 

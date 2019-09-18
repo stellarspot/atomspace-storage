@@ -4,11 +4,11 @@ import atomspace.storage.AtomspaceStorage;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 
-public class AtomSpaceJanusGraphjStorage implements AtomspaceStorage {
+public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
 
     final JanusGraph graph;
 
-    public AtomSpaceJanusGraphjStorage(String storageDirectory) {
+    public AtomspaceJanusGraphStorage(String storageDirectory) {
         graph = JanusGraphFactory.build()
                 .set("storage.backend", "berkeleyje")
                 .set("storage.directory", String.format("%s/graph", storageDirectory))
@@ -16,13 +16,12 @@ public class AtomSpaceJanusGraphjStorage implements AtomspaceStorage {
                 .set("index.search.directory", String.format("%s/index", storageDirectory))
 //                .set("query.force-index", true)
                 .open();
-
     }
 
 
     @Override
-    public AtomSpaceJanusGraphStorageTransaction getTx() {
-        return new AtomSpaceJanusGraphStorageTransaction(graph);
+    public AtomspaceJanusGraphStorageTransaction getTx() {
+        return new AtomspaceJanusGraphStorageTransaction(graph);
     }
 
     @Override
