@@ -1,21 +1,19 @@
 package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
-import atomspace.storage.ASIncomingSet;
 import atomspace.storage.AtomspaceStorageTransaction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransaction {
+public class AtomspaceNeo4jStorageTransaction implements AtomspaceStorageTransaction {
 
     final GraphDatabaseService graph;
     private final Transaction tx;
 
-    public AtomSpaceNeo4jStorageTransaction(GraphDatabaseService graph) {
+    public AtomspaceNeo4jStorageTransaction(GraphDatabaseService graph) {
         this.graph = graph;
         this.tx = graph.beginTx();
     }
@@ -66,7 +64,21 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-        return null;
+        List<ASAtom> atoms = new ArrayList<>();
+
+        Iterator<Node> nodes = graph.findNodes(Label.label("Node"));
+
+        while (nodes.hasNext()) {
+            atoms.add(new ASNeo4jNode(nodes.next()));
+        }
+
+        Iterator<Node> links = graph.findNodes(Label.label("Link"));
+
+        while (links.hasNext()) {
+            atoms.add(new ASNeo4jLink(links.next()));
+        }
+
+        return atoms.iterator();
     }
 
     @Override
@@ -79,6 +91,16 @@ public class AtomSpaceNeo4jStorageTransaction implements AtomspaceStorageTransac
         tx.close();
     }
 
+    void reset() {
+
+        for (Relationship r : graph.getAllRelationships()) {
+            r.delete();
+        }
+
+        for (Node n : graph.getAllNodes()) {
+            n.delete();
+        }
+    }
 
     private static long[] getIds(ASAtom... atoms) {
         long[] ids = new long[atoms.length];

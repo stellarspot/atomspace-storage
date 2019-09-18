@@ -1,14 +1,8 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
-import atomspace.storage.neo4j.AtomSpaceNeo4jStorageTransaction;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-
-import java.io.File;
 
 public class AtomSpaceJanusGraphjStorage implements AtomspaceStorage {
 
@@ -27,7 +21,7 @@ public class AtomSpaceJanusGraphjStorage implements AtomspaceStorage {
 
 
     @Override
-    public AtomspaceStorageTransaction getTx() {
+    public AtomSpaceJanusGraphStorageTransaction getTx() {
         return new AtomSpaceJanusGraphStorageTransaction(graph);
     }
 

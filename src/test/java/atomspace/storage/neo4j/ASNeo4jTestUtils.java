@@ -1,20 +1,37 @@
 package atomspace.storage.neo4j;
 
 import atomspace.ASTestUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
+import atomspace.storage.util.AtomspaceStorageHelper;
 
 public class ASNeo4jTestUtils {
 
     public static final String NEO4J_STORAGE_DIR = "/tmp/atomspace-storage/junit/neo4j";
+    private static final AtomSpaceNeo4jStorage NEO4J_STORAGE;
+
+    static {
+        ASTestUtils.removeDirectory(NEO4J_STORAGE_DIR);
+        NEO4J_STORAGE = new AtomSpaceNeo4jStorage(NEO4J_STORAGE_DIR);
+        addShutdownHook();
+    }
 
     public static AtomSpaceNeo4jStorage getTestStorage() {
-        ASTestUtils.removeDirectory(NEO4J_STORAGE_DIR);
-        return new AtomSpaceNeo4jStorage(NEO4J_STORAGE_DIR);
+        resetStorage();
+        return NEO4J_STORAGE;
+    }
+
+    public static AtomspaceNeo4jStorageHelper getStorageHelper(AtomspaceNeo4jStorageTransaction tx) {
+        return new AtomspaceNeo4jStorageHelper(tx);
+    }
+
+    private static void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            NEO4J_STORAGE.close();
+        }));
+    }
+
+    private static void resetStorage() {
+        AtomspaceNeo4jStorageTransaction tx = NEO4J_STORAGE.getTx();
+        AtomspaceStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
+        helper.reset();
     }
 }

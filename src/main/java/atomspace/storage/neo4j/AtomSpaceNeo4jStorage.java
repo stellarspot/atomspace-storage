@@ -1,7 +1,6 @@
 package atomspace.storage.neo4j;
 
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
@@ -16,12 +15,12 @@ public class AtomSpaceNeo4jStorage implements AtomspaceStorage {
     }
 
     @Override
-    public AtomspaceStorageTransaction getTx() {
-        return new AtomSpaceNeo4jStorageTransaction(graph);
+    public AtomspaceNeo4jStorageTransaction getTx() {
+        return new AtomspaceNeo4jStorageTransaction(graph);
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         graph.shutdown();
     }
 }

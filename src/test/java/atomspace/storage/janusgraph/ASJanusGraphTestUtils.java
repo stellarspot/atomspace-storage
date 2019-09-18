@@ -1,27 +1,44 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.ASTestUtils;
-import atomspace.storage.memory.AtomspaceMemoryStorageHelper;
-import atomspace.storage.memory.AtomspaceMemoryStorageTransaction;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
+import atomspace.storage.util.AtomspaceStorageHelper;
 
 public class ASJanusGraphTestUtils {
 
-    public static final String JANUSGRAPH_STORAGE_DIR = "/tmp/atomspace-storage/junit/janusgraph";
+    private static final String JANUSGRAPH_STORAGE_DIR = "/tmp/atomspace-storage/junit/janusgraph";
+    private static final AtomSpaceJanusGraphjStorage JANUS_GRAPHJ_STORAGE;
+
+    static {
+        ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
+        JANUS_GRAPHJ_STORAGE = new AtomSpaceJanusGraphjStorage(JANUSGRAPH_STORAGE_DIR);
+        addShutdownHook();
+    }
 
     public static AtomSpaceJanusGraphjStorage getTestStorage() {
-        ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
-        return new AtomSpaceJanusGraphjStorage(JANUSGRAPH_STORAGE_DIR);
+        resetStorage();
+        return JANUS_GRAPHJ_STORAGE;
     }
 
     public static AtomspaceJanusGraphStorageHelper getStorageHelper(AtomSpaceJanusGraphStorageTransaction tx) {
         return new AtomspaceJanusGraphStorageHelper(tx);
     }
 
+    private static void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                JANUS_GRAPHJ_STORAGE.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }));
+    }
+
+    private static void resetStorage() {
+        try (AtomSpaceJanusGraphStorageTransaction tx = JANUS_GRAPHJ_STORAGE.getTx()) {
+            AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
+            helper.reset();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

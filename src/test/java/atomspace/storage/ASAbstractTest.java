@@ -6,8 +6,8 @@ public abstract class ASAbstractTest {
 
     protected void testAtomspaceStorage(AtomspaceStorageTest test) throws Exception {
 
-        try (AtomspaceStorage storage = getStorage();
-             AtomspaceStorageTransaction tx = storage.getTx()) {
+        AtomspaceStorage storage = getStorage();
+        try (AtomspaceStorageTransaction tx = storage.getTx()) {
 
             test.run(tx);
             tx.commit();
