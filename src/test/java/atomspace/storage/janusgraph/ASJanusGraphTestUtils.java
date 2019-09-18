@@ -1,6 +1,8 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.ASTestUtils;
+import atomspace.storage.memory.AtomspaceMemoryStorageHelper;
+import atomspace.storage.memory.AtomspaceMemoryStorageTransaction;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,4 +19,9 @@ public class ASJanusGraphTestUtils {
         ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
         return new AtomSpaceJanusGraphjStorage(JANUSGRAPH_STORAGE_DIR);
     }
+
+    public static AtomspaceJanusGraphStorageHelper getStorageHelper(AtomSpaceJanusGraphStorageTransaction tx) {
+        return new AtomspaceJanusGraphStorageHelper(tx);
+    }
+
 }

@@ -1,7 +1,5 @@
 package atomspace.storage.memory;
 
-import atomspace.storage.AtomspaceStorage;
-
 public class ASMemoryTestUtils {
 
     public static AtomspaceMemoryStorage getTestStorage() {

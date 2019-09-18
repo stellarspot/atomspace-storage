@@ -1,6 +1,8 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.storage.ASAtom;
+import atomspace.storage.ASLink;
+import atomspace.storage.ASNode;
 import atomspace.storage.AtomspaceStorageTransaction;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -8,7 +10,9 @@ import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphVertex;
 import org.janusgraph.core.Transaction;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTransaction {
 
@@ -78,7 +82,24 @@ public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-        return null;
+
+        List<ASAtom> atoms = new ArrayList<>();
+
+        GraphTraversal<Vertex, Vertex> nodes = tx.traversal().V().hasLabel("Node");
+
+        while (nodes.hasNext()) {
+            ASNode node = new ASJanusGraphNode((JanusGraphVertex) nodes.next());
+            atoms.add(node);
+        }
+
+        GraphTraversal<Vertex, Vertex> links = tx.traversal().V().hasLabel("Link");
+
+        while (links.hasNext()) {
+            ASLink link = new ASJanusGraphLink((JanusGraphVertex) links.next());
+            atoms.add(link);
+        }
+
+        return atoms.iterator();
     }
 
     @Override
@@ -98,5 +119,10 @@ public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTr
             ids[i] = atoms[i].getId();
         }
         return ids;
+    }
+
+    void reset() {
+        tx.traversal().E().drop().iterate();
+        tx.traversal().V().drop().iterate();
     }
 }
