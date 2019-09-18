@@ -101,7 +101,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
             List<ASLink> links = new ArrayList<>();
             Iterator<Edge> iter = getSet(type, size, position);
             while (iter.hasNext()) {
-                JanusGraphVertex vertex = (JanusGraphVertex) iter.next().outVertex();
+                JanusGraphVertex vertex = (JanusGraphVertex) iter.next().inVertex();
                 links.add(new ASJanusGraphLink(vertex));
             }
 
