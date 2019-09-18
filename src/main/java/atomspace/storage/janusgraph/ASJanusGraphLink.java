@@ -3,11 +3,8 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
-import atomspace.storage.neo4j.ASNeo4jAtom;
 import org.janusgraph.core.JanusGraphTransaction;
 import org.janusgraph.core.JanusGraphVertex;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 
 public class ASJanusGraphLink extends ASJanusGraphAtom implements ASLink {
 

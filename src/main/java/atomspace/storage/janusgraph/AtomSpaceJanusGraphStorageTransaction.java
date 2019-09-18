@@ -25,8 +25,8 @@ public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
         GraphTraversal<Vertex, Vertex> iter = tx.traversal().V()
                 .hasLabel("Node")
-                .property("type", type)
-                .property("value", value);
+                .has("type", type)
+                .has("value", value);
 
         JanusGraphVertex vertex = null;
         if (iter.hasNext()) {
@@ -46,13 +46,12 @@ public class AtomSpaceJanusGraphStorageTransaction implements AtomspaceStorageTr
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
 
-
         long[] ids = getIds(atoms);
 
         GraphTraversal<Vertex, Vertex> iter = tx.traversal().V()
                 .hasLabel("Link")
-                .property("type", type)
-                .property("ids", ids);
+                .has("type", type)
+                .has("ids", ids);
 
         JanusGraphVertex vertex = null;
         if (iter.hasNext()) {

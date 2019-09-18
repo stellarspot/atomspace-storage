@@ -3,13 +3,10 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
-import atomspace.storage.neo4j.ASNeo4jLink;
-import atomspace.storage.neo4j.ASNeo4jNode;
+import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraphVertex;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +20,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
 
     public ASJanusGraphAtom(JanusGraphVertex vertex) {
         this.vertex = vertex;
-        this.incomingSet = null;
+        this.incomingSet = new ASJanusGraphIncomingSet();
     }
 
     @Override
@@ -61,7 +58,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
     }
 
     public static ASJanusGraphAtom getAtom(JanusGraphVertex vertex) {
-        String kind = vertex.property("kind").toString();
+        String kind = vertex.property("kind").value().toString();
 
         switch (kind) {
             case "Node":
@@ -70,6 +67,54 @@ public abstract class ASJanusGraphAtom implements ASAtom {
                 return new ASJanusGraphLink(vertex);
             default:
                 throw new RuntimeException(String.format("Unknown vertex kind: %s", kind));
+        }
+    }
+
+    class ASJanusGraphIncomingSet implements ASIncomingSet {
+
+        @Override
+        public void add(ASLink link, int size, int position) {
+            JanusGraphVertex parent = ((ASJanusGraphLink) link).vertex;
+            String key = getKey(link.getType(), size, position);
+            vertex.addEdge(key, parent);
+        }
+
+        @Override
+        public void remove(ASLink link, int size, int position) {
+        }
+
+        @Override
+        public int getIncomingSetSize(String type, int size, int position) {
+
+            // TBD: use the count store
+            int s = 0;
+            Iterator<Edge> iter = getSet(type, size, position);
+            for (; iter.hasNext(); iter.next()) {
+                s++;
+            }
+            return s;
+        }
+
+        @Override
+        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
+
+            List<ASLink> links = new ArrayList<>();
+            Iterator<Edge> iter = getSet(type, size, position);
+            while (iter.hasNext()) {
+                JanusGraphVertex vertex = (JanusGraphVertex) iter.next().outVertex();
+                links.add(new ASJanusGraphLink(vertex));
+            }
+
+            return links.iterator();
+        }
+
+        private Iterator<Edge> getSet(String type, int size, int position) {
+            String key = getKey(type, size, position);
+            return vertex.edges(Direction.OUT, key);
+        }
+
+        private String getKey(String type, int size, int position) {
+            return String.format("%s_%d_%d", type, size, position);
         }
     }
 }
