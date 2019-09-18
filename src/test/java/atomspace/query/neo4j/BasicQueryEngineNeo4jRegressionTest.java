@@ -4,7 +4,7 @@ import atomspace.query.AbstractBasicQueryEngineRegressionTest;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.neo4j.ASNeo4jTestUtils;
 
-public class Neo4jBasicQueryEngineRegressionTest extends AbstractBasicQueryEngineRegressionTest {
+public class BasicQueryEngineNeo4jRegressionTest extends AbstractBasicQueryEngineRegressionTest {
 
     @Override
     protected AtomspaceStorage getStorage() {

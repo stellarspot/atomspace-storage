@@ -1,10 +1,10 @@
 package atomspace.query.memory;
 
-import atomspace.query.AbstractBasicQueryEngineRegressionTest;
+import atomspace.query.AbstractBasicQueryEngineRepeatedVariablesTest;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.memory.ASMemoryTestUtils;
 
-public class MemoryBasicQueryEngineRegressionTest extends AbstractBasicQueryEngineRegressionTest {
+public class BasicQueryEngineRepeatedVariablesMemoryTest extends AbstractBasicQueryEngineRepeatedVariablesTest {
 
     @Override
     protected AtomspaceStorage getStorage() {
