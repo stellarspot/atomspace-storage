@@ -85,14 +85,14 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
         List<ASAtom> atoms = new ArrayList<>();
 
-        GraphTraversal<Vertex, Vertex> nodes = tx.traversal().V().hasLabel("Node");
+        GraphTraversal<Vertex, Vertex> nodes = tx.traversal().V().has("kind", "Node");
 
         while (nodes.hasNext()) {
             ASNode node = new ASJanusGraphNode((JanusGraphVertex) nodes.next());
             atoms.add(node);
         }
 
-        GraphTraversal<Vertex, Vertex> links = tx.traversal().V().hasLabel("Link");
+        GraphTraversal<Vertex, Vertex> links = tx.traversal().V().has("kind", "Link");
 
         while (links.hasNext()) {
             ASLink link = new ASJanusGraphLink((JanusGraphVertex) links.next());

@@ -11,7 +11,7 @@ public class ASJanusGraphTestUtils {
     static {
         ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
         JANUS_GRAPHJ_STORAGE = new AtomspaceJanusGraphStorage(JANUSGRAPH_STORAGE_DIR);
-        addShutdownHook();
+        //addShutdownHook();
     }
 
     public static AtomspaceJanusGraphStorage getTestStorage() {
