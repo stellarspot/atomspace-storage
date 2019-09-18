@@ -45,6 +45,17 @@ public class ASTestUtils {
         Assert.assertEquals(expected, actual);
     }
 
+    public static <T> int count(Iterator<T> iter) {
+
+        int count = 0;
+        while (iter.hasNext()) {
+            iter.next();
+            count++;
+        }
+
+        return count;
+    }
+
     public static void removeDirectory(String directory) {
         Path pathToBeDeleted = Paths.get(directory);
 

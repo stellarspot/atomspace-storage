@@ -9,19 +9,21 @@ import java.util.*;
 
 public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransaction {
 
-    private static long UNIQUE_ID = 0;
-    private final Map<String, ASNode> nodesInverseIndex = new HashMap<>();
-    private final Map<String, ASLink> linksInverseIndex = new HashMap<>();
+    private final AtomspaceMemoryStorage storage;
+
+    public AtomspaceMemoryStorageTransaction(AtomspaceMemoryStorage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public ASAtom get(String type, String value) {
 
         String key = getNodeKey(type, value);
-        ASNode node = nodesInverseIndex.get(key);
+        ASNode node = storage.nodesInverseIndex.get(key);
 
         if (node == null) {
-            node = new ASMemoryNode(nextId(), type, value);
-            this.nodesInverseIndex.put(key, node);
+            node = new ASMemoryNode(storage.nextId(), type, value);
+            storage.nodesInverseIndex.put(key, node);
         }
 
         return node;
@@ -31,11 +33,11 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
     public ASAtom get(String type, ASAtom... atoms) {
 
         String key = getListKey(type, atoms);
-        ASLink link = linksInverseIndex.get(key);
+        ASLink link = storage.linksInverseIndex.get(key);
 
         if (link == null) {
-            link = new ASMemoryLink(nextId(), type, atoms);
-            this.linksInverseIndex.put(key, link);
+            link = new ASMemoryLink(storage.nextId(), type, atoms);
+            storage.linksInverseIndex.put(key, link);
 
             int size = atoms.length;
             for (int i = 0; i < atoms.length; i++) {
@@ -48,9 +50,9 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-        List<ASAtom> atoms = new ArrayList<>(nodesInverseIndex.size() + linksInverseIndex.size());
-        atoms.addAll(nodesInverseIndex.values());
-        atoms.addAll(linksInverseIndex.values());
+        List<ASAtom> atoms = new ArrayList<>(storage.nodesInverseIndex.size() + storage.linksInverseIndex.size());
+        atoms.addAll(storage.nodesInverseIndex.values());
+        atoms.addAll(storage.linksInverseIndex.values());
         return atoms.iterator();
     }
 
@@ -60,10 +62,6 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
 
     @Override
     public void close() {
-    }
-
-    private long nextId() {
-        return UNIQUE_ID++;
     }
 
     private static String getNodeKey(String type, String value) {
@@ -77,4 +75,7 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
         return b.toString();
     }
 
+    void reset() {
+        storage.reset();
+    }
 }
