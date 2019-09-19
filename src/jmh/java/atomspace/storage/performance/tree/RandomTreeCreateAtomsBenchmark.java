@@ -28,7 +28,7 @@ public class RandomTreeCreateAtomsBenchmark {
     private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
     private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
 
-    @Param({"250", "500", "750", "1000"})
+    @Param({"50", "100", "150", "200", "250"})
     int statements = -1;
 
     PerformanceModel model;
@@ -42,7 +42,7 @@ public class RandomTreeCreateAtomsBenchmark {
         model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, -1);
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
         atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
-//        janusGraphStorage = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage();
+        janusGraphStorage = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage();
     }
 
     @Benchmark
@@ -55,10 +55,16 @@ public class RandomTreeCreateAtomsBenchmark {
         model.createAtoms(atomspaceNeo4j);
     }
 
-//    @Benchmark
-//    public void createJanusGraph() throws Exception {
-//        model.createAtoms(janusGraphStorage);
-//    }
+    @Benchmark
+    public void createJanusGraph() throws Exception {
+        model.createAtoms(janusGraphStorage);
+    }
+
+    @TearDown
+    public void tearDown() throws Exception {
+        atomspaceNeo4j.close();
+        janusGraphStorage.close();
+    }
 
     public static void main(String[] args) throws Exception {
 

@@ -4,7 +4,6 @@ import atomspace.storage.AtomspaceStorage;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
-import org.janusgraph.core.schema.JanusGraphIndex;
 import org.janusgraph.core.schema.JanusGraphManagement;
 
 public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
@@ -36,16 +35,11 @@ public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
 
 
     private void makeIndices() {
-        JanusGraphManagement mgmt = graph.openManagement();
 
+        JanusGraphManagement mgmt = graph.openManagement();
         createIndex(mgmt, "kindIndex", "kind");
         createIndexWithLabel(mgmt, "nodeIndex", "Node", "type", "value");
         createIndexWithLabel(mgmt, "linkIndex", "Link", "type", "ids");
-
-        for (JanusGraphIndex ind : mgmt.getGraphIndexes(Vertex.class)) {
-            System.out.printf("vertex index: %s%n", ind);
-        }
-
         mgmt.commit();
     }
 
@@ -54,6 +48,7 @@ public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
     }
 
     private static void createIndexWithLabel(JanusGraphManagement mgmt, String indexName, String label, String... keys) {
+
         if (mgmt.getGraphIndex(indexName) == null) {
             JanusGraphManagement.IndexBuilder builder = mgmt.buildIndex(indexName, Vertex.class);
 
