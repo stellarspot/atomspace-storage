@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 public class RandomTreeQueryAtomsBenchmark {
 
 
-    private static final PerformanceModelConfiguration config = RandomTreeBenchmarkConstants.DEFAULT_CONFIG;
-    private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
-    private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
-    private static final int averageVariables = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_VARIABLES;
+    private static final PerformanceModelConfiguration config = RandomTreeDefaultConstants.DEFAULT_CONFIG;
+    private static final int averageWidth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_WIDTH;
+    private static final int averageDepth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_DEPTH;
+    private static final int averageVariables = RandomTreeDefaultConstants.DEFAULT_AVERAGE_VARIABLES;
     private static final int statements = 300;
 
     @Param({"100", "150", "200", "250", "300"})

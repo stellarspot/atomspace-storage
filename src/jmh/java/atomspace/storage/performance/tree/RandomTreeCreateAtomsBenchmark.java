@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class RandomTreeCreateAtomsBenchmark {
 
 
-    private static final PerformanceModelConfiguration config = RandomTreeBenchmarkConstants.DEFAULT_CONFIG;
-    private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
-    private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
+    private static final PerformanceModelConfiguration config = RandomTreeDefaultConstants.DEFAULT_CONFIG;
+    private static final int averageWidth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_WIDTH;
+    private static final int averageDepth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_DEPTH;
 
     @Param({"100", "200", "300", "400", "500"})
     int statements = -1;

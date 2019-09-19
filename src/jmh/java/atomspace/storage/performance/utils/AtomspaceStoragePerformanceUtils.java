@@ -88,4 +88,10 @@ public class AtomspaceStoragePerformanceUtils {
 
         PerformanceResultPlotter.showMeasurements(props);
     }
+
+    public static void waitForProfiler() {
+        System.out.printf("Type any key when profiler is started.");
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+    }
 }
