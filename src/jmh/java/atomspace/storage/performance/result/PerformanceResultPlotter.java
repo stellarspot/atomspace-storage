@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -17,9 +18,12 @@ import static atomspace.storage.performance.result.PerformanceResult.ParamWithTi
 public class PerformanceResultPlotter extends Application {
 
 
+    private static int WIDTH = 700;
+    private static int HEIGHT = 300;
     private static String TITLE = "TITLE";
     private static String LABEL = "LABEL";
     private static String TIME_UNITS = "ms";
+    private static boolean SAME_CHART = true;
     private static Map<String, List<ParamWithTime>> MEASUREMENTS = new HashMap<>();
 
 
@@ -28,50 +32,50 @@ public class PerformanceResultPlotter extends Application {
 
         stage.setTitle(TITLE);
 
-        final LineChart<Number, Number> lineChart = getLineChartWithBounds(MEASUREMENTS);
+        List<LineChart<Number, Number>> lineCharts = getLineCharts(SAME_CHART, MEASUREMENTS);
+        HBox hbox = new HBox(lineCharts.toArray(new LineChart[]{}));
 
-
-        for (Map.Entry<String, List<ParamWithTime>> entry : MEASUREMENTS.entrySet()) {
-            String name = entry.getKey();
-            List<ParamWithTime> values = entry.getValue();
-            lineChart.getData().addAll(getSeries(name, values));
-        }
-
-        Scene scene = new Scene(lineChart, 500, 300);
+        Scene scene = new Scene(hbox, WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.show();
     }
 
-    LineChart<Number, Number> getLineChartWithBounds(Map<String, List<ParamWithTime>> measurements) {
+    List<LineChart<Number, Number>> getLineCharts(boolean sameChart, Map<String, List<ParamWithTime>> measurements) {
 
-        double xMin = Double.MAX_VALUE;
-        double xMax = Double.MIN_VALUE;
+        List<LineChart<Number, Number>> charts = new ArrayList<>();
 
-        double yMin = Double.MAX_VALUE;
-        double yMax = Double.MIN_VALUE;
+        Bounds bounds = getBounds(measurements);
 
-        for (List<ParamWithTime> values : measurements.values()) {
-            for (ParamWithTime value : values) {
+        if (sameChart) {
+            charts.add(getLineChart(bounds));
+        }
 
-                int x = Integer.parseInt(value.param);
-                double y = value.time;
+        for (Map.Entry<String, List<ParamWithTime>> entry : MEASUREMENTS.entrySet()) {
+            String name = entry.getKey();
+            List<ParamWithTime> values = entry.getValue();
 
-                if (x < xMin) xMin = x;
-                if (x > xMax) xMax = x;
-                if (y < yMin) yMin = y;
-                if (y > yMax) yMax = y;
+            LineChart<Number, Number> lineChart = sameChart
+                    ? charts.get(0)
+                    : getLineChart(getBounds(values));
+
+            lineChart.getData().addAll(getSeries(name, values));
+            if (!sameChart) {
+                charts.add(lineChart);
             }
         }
 
+        return charts;
+    }
 
-        final NumberAxis xAxis = new NumberAxis(xMin, xMax, (xMax - xMin) / 8);
-        final NumberAxis yAxis = new NumberAxis(yMin, yMax, (yMax - yMin) / 8);
-        yAxis.setLabel("Time(ms)");
+    LineChart<Number, Number> getLineChart(Bounds b) {
+
+        final NumberAxis xAxis = new NumberAxis(b.xMin, b.xMax, (b.xMax - b.xMin) / 8);
+        final NumberAxis yAxis = new NumberAxis(b.yMin, b.yMax, (b.yMax - b.yMin) / 8);
+        yAxis.setLabel(String.format("Time(%s)", TIME_UNITS));
         xAxis.setLabel(LABEL);
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle(TITLE);
-
         return lineChart;
     }
 
@@ -102,6 +106,17 @@ public class PerformanceResultPlotter extends Application {
         launch();
     }
 
+    public static void showMeasurements(PlotterProperties props) {
+        // Platform.startup(...) method is not available in JDK 8.
+        MEASUREMENTS.putAll(props.measurements);
+        TITLE = props.title;
+        LABEL = props.label;
+        TIME_UNITS = props.timeUnits;
+        SAME_CHART = props.sameChart;
+
+        launch();
+    }
+
     public static void main(String[] args) {
 
         Map<String, List<ParamWithTime>> measurements = new HashMap<>();
@@ -120,6 +135,89 @@ public class PerformanceResultPlotter extends Application {
         list.add(new ParamWithTime("8", 32));
         measurements.put("testB", list);
 
-        showMeasurements("Chart", "sample", "ms", measurements);
+//        PlotterProperties props = PlotterProperties.sameChartMs("Chart", "sample", measurements);
+        PlotterProperties props = PlotterProperties.differentChartsMs("Chart", "sample", measurements);
+
+        showMeasurements(props);
+    }
+
+    Bounds getBounds(Map<String, List<ParamWithTime>> measurements) {
+        Bounds bounds = new Bounds(Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MIN_VALUE);
+
+        for (List<ParamWithTime> values : measurements.values()) {
+            bounds = bounds.union(getBounds(values));
+        }
+
+        return bounds;
+    }
+
+
+    Bounds getBounds(List<ParamWithTime> values) {
+        double xMin = Double.MAX_VALUE;
+        double xMax = Double.MIN_VALUE;
+
+        double yMin = Double.MAX_VALUE;
+        double yMax = Double.MIN_VALUE;
+
+        for (ParamWithTime value : values) {
+
+            int x = Integer.parseInt(value.param);
+            double y = value.time;
+
+            if (x < xMin) xMin = x;
+            if (x > xMax) xMax = x;
+            if (y < yMin) yMin = y;
+            if (y > yMax) yMax = y;
+        }
+
+        return new Bounds(xMin, xMax, yMin, yMax);
+    }
+
+    static class Bounds {
+        final double xMin;
+        final double xMax;
+
+        final double yMin;
+        final double yMax;
+
+        public Bounds(double xMin, double xMax, double yMin, double yMax) {
+            this.xMin = xMin;
+            this.xMax = xMax;
+            this.yMin = yMin;
+            this.yMax = yMax;
+        }
+
+        Bounds union(Bounds that) {
+
+            return new Bounds(
+                    Math.min(this.xMin, that.xMin),
+                    Math.max(this.xMax, that.xMax),
+                    Math.min(this.yMin, that.yMin),
+                    Math.max(this.yMax, that.yMax));
+        }
+    }
+
+    public static class PlotterProperties {
+        public final String title;
+        public final String label;
+        public final String timeUnits;
+        public final boolean sameChart;
+        public final Map<String, List<PerformanceResult.ParamWithTime>> measurements;
+
+        public PlotterProperties(String title, String label, String timeUnits, boolean sameChart, Map<String, List<ParamWithTime>> measurements) {
+            this.title = title;
+            this.label = label;
+            this.timeUnits = timeUnits;
+            this.sameChart = sameChart;
+            this.measurements = measurements;
+        }
+
+        public static PlotterProperties sameChartMs(String title, String label, Map<String, List<ParamWithTime>> measurements) {
+            return new PlotterProperties(title, label, "ms", true, measurements);
+        }
+
+        public static PlotterProperties differentChartsMs(String title, String label, Map<String, List<ParamWithTime>> measurements) {
+            return new PlotterProperties(title, label, "ms", false, measurements);
+        }
     }
 }
