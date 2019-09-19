@@ -41,19 +41,22 @@ public class PerformanceResultPlotter extends Application {
         Bounds bounds = getBounds(props.measurements);
 
         if (props.sameChart) {
-            charts.add(getLineChart(bounds, props));
+            charts.add(getLineChart("", bounds, props));
         }
 
         for (Map.Entry<String, List<ParamWithTime>> entry : props.measurements.entrySet()) {
             String name = entry.getKey();
+            String seriesName = props.sameChart ? name : "";
             List<ParamWithTime> values = entry.getValue();
 
             LineChart<Number, Number> lineChart = props.sameChart
                     ? charts.get(0)
-                    : getLineChart(getBounds(values), props);
+                    : getLineChart(name, getBounds(values), props);
 
-            lineChart.getData().addAll(getSeries(name, values));
+            lineChart.getData().addAll(getSeries(seriesName, values));
+
             if (!props.sameChart) {
+                lineChart.setLegendVisible(false);
                 charts.add(lineChart);
             }
         }
@@ -61,15 +64,18 @@ public class PerformanceResultPlotter extends Application {
         return charts;
     }
 
-    LineChart<Number, Number> getLineChart(Bounds b, PlotterProperties props) {
+    LineChart<Number, Number> getLineChart(String name, Bounds b, PlotterProperties props) {
 
         final NumberAxis xAxis = new NumberAxis(b.xMin, b.xMax, (b.xMax - b.xMin) / 8);
         final NumberAxis yAxis = new NumberAxis(b.yMin, b.yMax, (b.yMax - b.yMin) / 8);
-        yAxis.setLabel(String.format("Time(%s)", props.timeUnits));
-        xAxis.setLabel(props.label);
+
+        LabelWithTitle labelWithTitle = getLabelWithTitle(name);
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setTitle(props.title);
+        yAxis.setLabel(String.format("Time(%s)", props.timeUnits));
+        xAxis.setLabel(labelWithTitle.label);
+        lineChart.setTitle(labelWithTitle.title);
+
         return lineChart;
     }
 
@@ -127,7 +133,6 @@ public class PerformanceResultPlotter extends Application {
         return bounds;
     }
 
-
     Bounds getBounds(List<ParamWithTime> values) {
         double xMin = Double.MAX_VALUE;
         double xMax = Double.MIN_VALUE;
@@ -147,6 +152,34 @@ public class PerformanceResultPlotter extends Application {
         }
 
         return new Bounds(xMin, xMax, yMin, yMax);
+    }
+
+    static LabelWithTitle getLabelWithTitle(String str) {
+
+        for (int i = 0; i < str.length(); i++) {
+            if (Character.isUpperCase(str.charAt(i))) {
+                String label = str.substring(0, i);
+                String title = str.substring(i, str.length());
+                return new LabelWithTitle(label, title);
+            }
+        }
+
+        return new LabelWithTitle(str, "");
+    }
+
+    static class LabelWithTitle {
+        public final String label;
+        public final String title;
+
+        public LabelWithTitle(String label, String title) {
+            this.label = label;
+            this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("label: %s, title: %s", label, title);
+        }
     }
 
     static class Bounds {
@@ -177,7 +210,6 @@ public class PerformanceResultPlotter extends Application {
         public int width = 700;
         public int height = 300;
         public String title = "";
-        public String label = "";
         public String timeUnits = "ms";
         public boolean sameChart = true;
         public Map<String, List<PerformanceResult.ParamWithTime>> measurements;

@@ -68,7 +68,6 @@ public class RandomTreeQueryAtomsBenchmark {
         PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
 
         props.title = "Query";
-        props.label = "queries";
         props.timeUnits = "ms";
         props.measurements = measurements;
 

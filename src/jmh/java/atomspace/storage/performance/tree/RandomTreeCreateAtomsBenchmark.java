@@ -67,7 +67,6 @@ public class RandomTreeCreateAtomsBenchmark {
 
         PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
         props.title = "Create";
-        props.label = "atoms";
         props.timeUnits = "ms";
         props.sameChart = false;
         props.measurements = measurements;
