@@ -65,6 +65,13 @@ public class RandomTreeQueryAtomsBenchmark {
         Map<String, List<PerformanceResult.ParamWithTime>> measurements =
                 PerformanceResult.runJMHTest(RandomTreeQueryAtomsBenchmark.class, "queries");
 
-        PerformanceResultPlotter.showMeasurements("Query", "queries", "ms", measurements);
+        PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
+
+        props.title = "Query";
+        props.label = "queries";
+        props.timeUnits = "ms";
+        props.measurements = measurements;
+
+        PerformanceResultPlotter.showMeasurements(props);
     }
 }

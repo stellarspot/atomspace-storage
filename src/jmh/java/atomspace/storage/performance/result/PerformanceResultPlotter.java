@@ -17,49 +17,43 @@ import static atomspace.storage.performance.result.PerformanceResult.ParamWithTi
 
 public class PerformanceResultPlotter extends Application {
 
-
-    private static int WIDTH = 700;
-    private static int HEIGHT = 300;
-    private static String TITLE = "TITLE";
-    private static String LABEL = "LABEL";
-    private static String TIME_UNITS = "ms";
-    private static boolean SAME_CHART = true;
-    private static Map<String, List<ParamWithTime>> MEASUREMENTS = new HashMap<>();
-
+    // Platform.startup(...) method is not available in JDK 8.
+    private static PlotterProperties PROPS;
 
     @Override
     public void start(Stage stage) {
 
-        stage.setTitle(TITLE);
+        stage.setTitle(PROPS.title);
 
-        List<LineChart<Number, Number>> lineCharts = getLineCharts(SAME_CHART, MEASUREMENTS);
+        List<LineChart<Number, Number>> lineCharts =
+                getLineCharts(PROPS);
         HBox hbox = new HBox(lineCharts.toArray(new LineChart[]{}));
 
-        Scene scene = new Scene(hbox, WIDTH, HEIGHT);
+        Scene scene = new Scene(hbox, PROPS.width, PROPS.height);
         stage.setScene(scene);
         stage.show();
     }
 
-    List<LineChart<Number, Number>> getLineCharts(boolean sameChart, Map<String, List<ParamWithTime>> measurements) {
+    List<LineChart<Number, Number>> getLineCharts(PlotterProperties props) {
 
         List<LineChart<Number, Number>> charts = new ArrayList<>();
 
-        Bounds bounds = getBounds(measurements);
+        Bounds bounds = getBounds(props.measurements);
 
-        if (sameChart) {
-            charts.add(getLineChart(bounds));
+        if (props.sameChart) {
+            charts.add(getLineChart(bounds, props));
         }
 
-        for (Map.Entry<String, List<ParamWithTime>> entry : MEASUREMENTS.entrySet()) {
+        for (Map.Entry<String, List<ParamWithTime>> entry : props.measurements.entrySet()) {
             String name = entry.getKey();
             List<ParamWithTime> values = entry.getValue();
 
-            LineChart<Number, Number> lineChart = sameChart
+            LineChart<Number, Number> lineChart = props.sameChart
                     ? charts.get(0)
-                    : getLineChart(getBounds(values));
+                    : getLineChart(getBounds(values), props);
 
             lineChart.getData().addAll(getSeries(name, values));
-            if (!sameChart) {
+            if (!props.sameChart) {
                 charts.add(lineChart);
             }
         }
@@ -67,15 +61,15 @@ public class PerformanceResultPlotter extends Application {
         return charts;
     }
 
-    LineChart<Number, Number> getLineChart(Bounds b) {
+    LineChart<Number, Number> getLineChart(Bounds b, PlotterProperties props) {
 
         final NumberAxis xAxis = new NumberAxis(b.xMin, b.xMax, (b.xMax - b.xMin) / 8);
         final NumberAxis yAxis = new NumberAxis(b.yMin, b.yMax, (b.yMax - b.yMin) / 8);
-        yAxis.setLabel(String.format("Time(%s)", TIME_UNITS));
-        xAxis.setLabel(LABEL);
+        yAxis.setLabel(String.format("Time(%s)", props.timeUnits));
+        xAxis.setLabel(props.label);
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setTitle(TITLE);
+        lineChart.setTitle(props.title);
         return lineChart;
     }
 
@@ -93,27 +87,9 @@ public class PerformanceResultPlotter extends Application {
         return series;
     }
 
-    public static void showMeasurements(String title,
-                                        String label,
-                                        String timeUnits,
-                                        Map<String, List<PerformanceResult.ParamWithTime>> measurements) {
-        // Platform.startup(...) method is not available in JDK 8.
-        MEASUREMENTS.putAll(measurements);
-        TITLE = title;
-        LABEL = label;
-        TIME_UNITS = timeUnits;
-
-        launch();
-    }
-
     public static void showMeasurements(PlotterProperties props) {
         // Platform.startup(...) method is not available in JDK 8.
-        MEASUREMENTS.putAll(props.measurements);
-        TITLE = props.title;
-        LABEL = props.label;
-        TIME_UNITS = props.timeUnits;
-        SAME_CHART = props.sameChart;
-
+        PROPS = props;
         launch();
     }
 
@@ -135,8 +111,8 @@ public class PerformanceResultPlotter extends Application {
         list.add(new ParamWithTime("8", 32));
         measurements.put("testB", list);
 
-//        PlotterProperties props = PlotterProperties.sameChartMs("Chart", "sample", measurements);
-        PlotterProperties props = PlotterProperties.differentChartsMs("Chart", "sample", measurements);
+//        PlotterProperties props = PlotterProperties.sameChart(measurements);
+        PlotterProperties props = PlotterProperties.differentCharts(measurements);
 
         showMeasurements(props);
     }
@@ -198,26 +174,26 @@ public class PerformanceResultPlotter extends Application {
     }
 
     public static class PlotterProperties {
-        public final String title;
-        public final String label;
-        public final String timeUnits;
-        public final boolean sameChart;
-        public final Map<String, List<PerformanceResult.ParamWithTime>> measurements;
+        public int width = 700;
+        public int height = 300;
+        public String title = "";
+        public String label = "";
+        public String timeUnits = "ms";
+        public boolean sameChart = true;
+        public Map<String, List<PerformanceResult.ParamWithTime>> measurements;
 
-        public PlotterProperties(String title, String label, String timeUnits, boolean sameChart, Map<String, List<ParamWithTime>> measurements) {
-            this.title = title;
-            this.label = label;
-            this.timeUnits = timeUnits;
-            this.sameChart = sameChart;
-            this.measurements = measurements;
+        public static PlotterProperties sameChart(Map<String, List<ParamWithTime>> measurements) {
+            PlotterProperties props = new PlotterProperties();
+            props.sameChart = true;
+            props.measurements = measurements;
+            return props;
         }
 
-        public static PlotterProperties sameChartMs(String title, String label, Map<String, List<ParamWithTime>> measurements) {
-            return new PlotterProperties(title, label, "ms", true, measurements);
-        }
-
-        public static PlotterProperties differentChartsMs(String title, String label, Map<String, List<ParamWithTime>> measurements) {
-            return new PlotterProperties(title, label, "ms", false, measurements);
+        public static PlotterProperties differentCharts(Map<String, List<ParamWithTime>> measurements) {
+            PlotterProperties props = new PlotterProperties();
+            props.sameChart = false;
+            props.measurements = measurements;
+            return props;
         }
     }
 }

@@ -65,6 +65,14 @@ public class RandomTreeCreateAtomsBenchmark {
         Map<String, List<PerformanceResult.ParamWithTime>> measurements =
                 PerformanceResult.runJMHTest(RandomTreeCreateAtomsBenchmark.class, "statements");
 
-        PerformanceResultPlotter.showMeasurements("Create", "atoms", "ms", measurements);
+        PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
+        props.title = "Create";
+        props.label = "atoms";
+        props.timeUnits = "ms";
+        props.sameChart = false;
+        props.measurements = measurements;
+
+        PerformanceResultPlotter.showMeasurements(props);
+
     }
 }
