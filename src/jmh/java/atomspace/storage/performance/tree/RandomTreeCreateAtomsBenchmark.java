@@ -28,7 +28,7 @@ public class RandomTreeCreateAtomsBenchmark {
     private static final int averageWidth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_WIDTH;
     private static final int averageDepth = RandomTreeBenchmarkConstants.DEFAULT_AVERAGE_DEPTH;
 
-    @Param({"50", "100", "150", "200", "250"})
+    @Param({"100", "200", "300", "400", "500"})
     int statements = -1;
 
     PerformanceModel model;
