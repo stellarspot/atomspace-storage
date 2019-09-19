@@ -3,16 +3,12 @@ package atomspace.storage.performance.tree;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
-import atomspace.storage.performance.AtomspaceStoragePerformanceUtils;
+import atomspace.storage.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.performance.PerformanceModel;
 import atomspace.storage.performance.PerformanceModelConfiguration;
 import atomspace.storage.performance.PerformanceModelParameters;
-import atomspace.storage.performance.result.PerformanceResult;
-import atomspace.storage.performance.result.PerformanceResultPlotter;
 import org.openjdk.jmh.annotations.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Fork(1)
@@ -68,16 +64,6 @@ public class RandomTreeCreateAtomsBenchmark {
 
     public static void main(String[] args) throws Exception {
 
-        Map<String, List<PerformanceResult.ParamWithTime>> measurements =
-                PerformanceResult.runJMHTest(RandomTreeCreateAtomsBenchmark.class, "statements");
-
-        PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
-        props.title = "Create";
-        props.timeUnits = "ms";
-        props.sameChart = false;
-        props.measurements = measurements;
-
-        PerformanceResultPlotter.showMeasurements(props);
-
+        AtomspaceStoragePerformanceUtils.runJMHTest(RandomTreeCreateAtomsBenchmark.class, "statements", true);
     }
 }

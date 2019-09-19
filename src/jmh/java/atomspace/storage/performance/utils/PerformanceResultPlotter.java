@@ -1,4 +1,4 @@
-package atomspace.storage.performance.result;
+package atomspace.storage.performance.utils;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static atomspace.storage.performance.result.PerformanceResult.ParamWithTime;
 
 public class PerformanceResultPlotter extends Application {
 
@@ -44,10 +42,10 @@ public class PerformanceResultPlotter extends Application {
             charts.add(getLineChart("", bounds, props));
         }
 
-        for (Map.Entry<String, List<ParamWithTime>> entry : props.measurements.entrySet()) {
+        for (Map.Entry<String, List<PointDouble>> entry : props.measurements.entrySet()) {
             String name = entry.getKey();
             String seriesName = props.sameChart ? name : "";
-            List<ParamWithTime> values = entry.getValue();
+            List<PointDouble> values = entry.getValue();
 
             LineChart<Number, Number> lineChart = props.sameChart
                     ? charts.get(0)
@@ -80,13 +78,13 @@ public class PerformanceResultPlotter extends Application {
     }
 
 
-    static XYChart.Series getSeries(String name, List<ParamWithTime> values) {
+    static XYChart.Series getSeries(String name, List<PointDouble> values) {
         XYChart.Series series = new XYChart.Series();
         series.setName(name);
 
-        for (ParamWithTime value : values) {
-            int x = Integer.parseInt(value.param);
-            double y = value.time;
+        for (PointDouble value : values) {
+            double x = value.x;
+            double y = value.y;
             series.getData().add(new XYChart.Data(x, y));
         }
 
@@ -101,20 +99,20 @@ public class PerformanceResultPlotter extends Application {
 
     public static void main(String[] args) {
 
-        Map<String, List<ParamWithTime>> measurements = new HashMap<>();
+        Map<String, List<PointDouble>> measurements = new HashMap<>();
 
-        List<ParamWithTime> list = new ArrayList<>();
-        list.add(new ParamWithTime("2", 4));
-        list.add(new ParamWithTime("4", 8));
-        list.add(new ParamWithTime("6", 12));
-        list.add(new ParamWithTime("8", 16));
+        List<PointDouble> list = new ArrayList<>();
+        list.add(new PointDouble(2, 4));
+        list.add(new PointDouble(4, 8));
+        list.add(new PointDouble(6, 12));
+        list.add(new PointDouble(8, 16));
         measurements.put("testA", list);
 
         list = new ArrayList<>();
-        list.add(new ParamWithTime("2", 4));
-        list.add(new ParamWithTime("4", 8));
-        list.add(new ParamWithTime("6", 16));
-        list.add(new ParamWithTime("8", 32));
+        list.add(new PointDouble(2, 4));
+        list.add(new PointDouble(4, 8));
+        list.add(new PointDouble(6, 16));
+        list.add(new PointDouble(8, 32));
         measurements.put("testB", list);
 
 //        PlotterProperties props = PlotterProperties.sameChart(measurements);
@@ -123,27 +121,27 @@ public class PerformanceResultPlotter extends Application {
         showMeasurements(props);
     }
 
-    Bounds getBounds(Map<String, List<ParamWithTime>> measurements) {
+    Bounds getBounds(Map<String, List<PointDouble>> measurements) {
         Bounds bounds = new Bounds(Double.MAX_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MIN_VALUE);
 
-        for (List<ParamWithTime> values : measurements.values()) {
+        for (List<PointDouble> values : measurements.values()) {
             bounds = bounds.union(getBounds(values));
         }
 
         return bounds;
     }
 
-    Bounds getBounds(List<ParamWithTime> values) {
+    Bounds getBounds(List<PointDouble> values) {
         double xMin = Double.MAX_VALUE;
         double xMax = Double.MIN_VALUE;
 
         double yMin = Double.MAX_VALUE;
         double yMax = Double.MIN_VALUE;
 
-        for (ParamWithTime value : values) {
+        for (PointDouble value : values) {
 
-            int x = Integer.parseInt(value.param);
-            double y = value.time;
+            double x = value.x;
+            double y = value.y;
 
             if (x < xMin) xMin = x;
             if (x > xMax) xMax = x;
@@ -182,6 +180,16 @@ public class PerformanceResultPlotter extends Application {
         }
     }
 
+    public static class PointDouble {
+        final double x;
+        final double y;
+
+        public PointDouble(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     static class Bounds {
         final double xMin;
         final double xMax;
@@ -212,16 +220,16 @@ public class PerformanceResultPlotter extends Application {
         public String title = "";
         public String timeUnits = "ms";
         public boolean sameChart = true;
-        public Map<String, List<PerformanceResult.ParamWithTime>> measurements;
+        public Map<String, List<PointDouble>> measurements;
 
-        public static PlotterProperties sameChart(Map<String, List<ParamWithTime>> measurements) {
+        public static PlotterProperties sameChart(Map<String, List<PointDouble>> measurements) {
             PlotterProperties props = new PlotterProperties();
             props.sameChart = true;
             props.measurements = measurements;
             return props;
         }
 
-        public static PlotterProperties differentCharts(Map<String, List<ParamWithTime>> measurements) {
+        public static PlotterProperties differentCharts(Map<String, List<PointDouble>> measurements) {
             PlotterProperties props = new PlotterProperties();
             props.sameChart = false;
             props.measurements = measurements;
