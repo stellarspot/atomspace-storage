@@ -84,6 +84,7 @@ public class AtomspaceStoragePerformanceUtils {
         PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
 
         props.timeUnits = "ms";
+        props.sameChart = false;
         props.measurements = measurements;
 
         PerformanceResultPlotter.showMeasurements(props);
