@@ -24,8 +24,6 @@ public abstract class AbstractBasicQueryEngineRegressionTest extends ASAbstractT
                                     as.get("Node2", "Value2"),
                                     as.get("Node3", "Value3")));
 
-            System.out.printf("%s%n", atom);
-
             // Link1(
             //  Node1("value1"),
             //  List2(

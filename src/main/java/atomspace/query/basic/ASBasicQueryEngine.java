@@ -309,5 +309,10 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         public boolean isLeaf() {
             return size == 0;
         }
+
+        @Override
+        public String toString() {
+            return String.format("QueryTreeNode for atom: %s", atom);
+        }
     }
 }

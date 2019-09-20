@@ -7,5 +7,5 @@ public interface RandomTreeDefaultConstants {
     int DEFAULT_AVERAGE_WIDTH = 5;
     int DEFAULT_AVERAGE_DEPTH = 5;
     int DEFAULT_AVERAGE_VARIABLES = 2;
-    PerformanceModelConfiguration DEFAULT_CONFIG = new PerformanceModelConfiguration(5, 5, 5);
+    PerformanceModelConfiguration DEFAULT_CONFIG = new PerformanceModelConfiguration(5, 5, 5, false);
 }

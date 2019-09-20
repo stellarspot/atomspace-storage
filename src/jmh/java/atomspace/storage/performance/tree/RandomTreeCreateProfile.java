@@ -19,7 +19,7 @@ public class RandomTreeCreateProfile {
 
         int atomsNumber = 100;
 
-        PerformanceModelConfiguration config = new PerformanceModelConfiguration(5, 5, 2);
+        PerformanceModelConfiguration config = new PerformanceModelConfiguration(5, 5, 2, false);
         PerformanceModelParameters params = new PerformanceModelParameters(atomsNumber, 0);
         RandomTreePerformanceModel model = new RandomTreePerformanceModel(config, params, 3, 3, 2);
 

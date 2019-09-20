@@ -1,6 +1,7 @@
 package atomspace.storage.performance.tree;
 
 import atomspace.query.ASQueryEngine;
+import atomspace.query.ASQueryEngine.ASQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
@@ -12,6 +13,7 @@ import atomspace.storage.performance.PerformanceModelParameters;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class RandomTreePerformanceModel implements PerformanceModel {
 
@@ -24,8 +26,8 @@ public class RandomTreePerformanceModel implements PerformanceModel {
     public final int averageVariables;
     public final Random random;
 
-    private final List<RandomNode> statements = new ArrayList<>();
-    private final List<NodeQueryPair> queries = new ArrayList<>();
+    private final List<NodeWithQuery> statements = new ArrayList<>();
+    private final List<NodeWithQuery> queries = new ArrayList<>();
 
     public RandomTreePerformanceModel(PerformanceModelConfiguration config,
                                       PerformanceModelParameters params,
@@ -47,8 +49,8 @@ public class RandomTreePerformanceModel implements PerformanceModel {
     public void createAtoms(AtomspaceStorage atomspace) throws IOException {
 
         try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
-            for (RandomNode statement : statements) {
-                createAtom(tx, statement);
+            for (NodeWithQuery nodeWithQuery : statements) {
+                createAtom(tx, nodeWithQuery.node);
             }
         }
     }
@@ -73,29 +75,52 @@ public class RandomTreePerformanceModel implements PerformanceModel {
     public void queryAtoms(AtomspaceStorage atomspace, ASQueryEngine queryEngine) throws Exception {
 
         try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
-            for (NodeQueryPair pair : queries) {
+            for (NodeWithQuery pair : queries) {
                 ASAtom query = createAtom(tx, pair.query);
-                Iterator iter = queryEngine.match(query);
+                Iterator<ASQueryResult> results = queryEngine.match(query);
+
+                if (config.checkQueries) {
+
+                    Set<ASAtom> atoms = new HashSet<>();
+                    while (results.hasNext()) {
+                        ASQueryResult result = results.next();
+                        atoms.add(result.getAtom());
+                    }
+
+                    ASAtom atom = createAtom(tx, pair.node);
+
+                    if (!atoms.contains(atom)) {
+                        String msg = String.format("Atom: %s with query: %s was not found in results: %s%n",
+                                query, atom, atoms);
+                        throw new RuntimeException(msg);
+                    }
+                }
             }
         }
     }
 
     private final void init() {
+
+        loop:
         for (int i = 0; i < params.statements; i++) {
-            statements.add(getNode(averageWidth, averageDepth - 1));
+
+            RandomNode node = getNode(averageWidth, averageDepth - 1);
+
+            while (true) {
+
+                QueryItem queryItem = getQuery(node, averageVariables);
+
+                if (validQuery(queryItem.node)) {
+                    statements.add(new NodeWithQuery(node, queryItem.node));
+                    continue loop;
+                }
+                node = getNode(averageWidth, averageDepth - 1);
+            }
         }
 
         for (int i = 0; i < params.queries; i++) {
-
-            RandomNode node = statements.get(random.nextInt(statements.size()));
-
-            QueryItem queryItem = getQuery(node, averageVariables);
-
-            while (!hasVariable(queryItem.node)) {
-                queryItem = getQuery(node, averageVariables);
-            }
-
-            queries.add(new NodeQueryPair(node, queryItem.node));
+            int index = random.nextInt(statements.size());
+            queries.add(statements.get(index));
         }
     }
 
@@ -124,7 +149,7 @@ public class RandomTreePerformanceModel implements PerformanceModel {
         if (n == 0) {
 
             if (convertNodeToVariable(variables)) {
-                String variableName = String.format("$%s", node.value.toUpperCase());
+                String variableName = String.format("$%s_%s", node.type.toUpperCase(), node.value.toUpperCase());
                 return new QueryItem(new RandomNode(VARIABLE_TYPE, variableName), variables - 1);
             } else {
                 return new QueryItem(node, variables);
@@ -158,14 +183,28 @@ public class RandomTreePerformanceModel implements PerformanceModel {
         return variables > 0 && random.nextInt(5) >= 2;
     }
 
-    private static boolean hasVariable(RandomNode node) {
+    private static boolean validQuery(RandomNode node) {
+        return hasVariable(node) && hasLeaf(node);
+    }
 
-        if (VARIABLE_TYPE.equals(node.type)) {
-            return true;
+    private static boolean hasVariable(RandomNode node) {
+        return acceptRandomNode(node, n -> VARIABLE_TYPE.equals(n.type));
+    }
+
+    private static boolean hasLeaf(RandomNode node) {
+        return acceptRandomNode(node, n -> !VARIABLE_TYPE.equals(n.type));
+    }
+
+    private static boolean acceptRandomNode(RandomNode node, Predicate<RandomNode> accept) {
+
+        RandomNode[] children = node.children;
+
+        if (children.length == 0) {
+            return accept.test(node);
         }
 
         for (RandomNode child : node.children) {
-            if (hasVariable(child)) {
+            if (acceptRandomNode(child, accept)) {
                 return true;
             }
         }
@@ -175,11 +214,11 @@ public class RandomTreePerformanceModel implements PerformanceModel {
     public void dump() {
         System.out.printf("--- dump ---%n");
         System.out.printf("statements: %d%n", statements.size());
-        for (RandomNode statement : statements) {
-            System.out.printf("%s%n", statement);
+        for (NodeWithQuery pair : statements) {
+            System.out.printf("%s%n", pair.node);
         }
         System.out.printf("queries: %d%n", queries.size());
-        for (NodeQueryPair pair : queries) {
+        for (NodeWithQuery pair : queries) {
             System.out.printf("%s%n", pair.query);
         }
         System.out.printf("--- ---- ---%n");
@@ -195,11 +234,11 @@ public class RandomTreePerformanceModel implements PerformanceModel {
         }
     }
 
-    private static class NodeQueryPair {
+    private static class NodeWithQuery {
         final RandomNode node;
         final RandomNode query;
 
-        public NodeQueryPair(RandomNode node, RandomNode query) {
+        public NodeWithQuery(RandomNode node, RandomNode query) {
             this.node = node;
             this.query = query;
         }
@@ -239,9 +278,6 @@ public class RandomTreePerformanceModel implements PerformanceModel {
                     .append("\n")
                     .append(indent)
                     .append(type)
-                    .append("[")
-                    .append(children.length)
-                    .append("]")
                     .append("(");
             if (children.length == 0) {
                 builder
@@ -260,7 +296,7 @@ public class RandomTreePerformanceModel implements PerformanceModel {
 
     public static void main(String[] args) throws Exception {
 
-        PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3);
+        PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3, true);
         PerformanceModelParameters params = new PerformanceModelParameters(5, 5);
         RandomTreePerformanceModel model = new RandomTreePerformanceModel(config, params, 3, 3, 2);
         model.dump();
