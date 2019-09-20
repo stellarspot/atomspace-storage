@@ -3,13 +3,8 @@ package atomspace.query;
 import atomspace.ASTestUtils;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
-import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
-import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.query.basic.ASBasicQueryEngine;
 import org.junit.Test;
-
-import java.util.*;
 
 import static atomspace.ASTestUtils.KeyWithValue;
 
@@ -29,7 +24,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
                     new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object"))});
         });
     }
@@ -56,7 +51,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
                     new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object1"))},
                     new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object2"))});
         });

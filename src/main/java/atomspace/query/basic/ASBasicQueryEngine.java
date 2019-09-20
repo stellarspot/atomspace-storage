@@ -4,6 +4,7 @@ import atomspace.query.ASQueryEngine;
 import atomspace.storage.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     private static final int UNDEFINED_DIRECTION = -2;
 
     @Override
-    public Iterator<Map<String, ASAtom>> match(ASAtom atom) {
+    public <T> Iterator<T> match(ASAtom atom, Function<ASQueryResult, T> mapper) {
 
         LOG.trace("query {}", atom);
 
@@ -36,7 +37,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         Queue<QueryMatcherNode> queries = new ArrayDeque<>();
         queries.add(new QueryMatcherNode(UNDEFINED_DIRECTION, startNode, startNode.atom, new HashMap<>()));
 
-        List<Map<String, ASAtom>> results = new LinkedList<>();
+        List<T> results = new LinkedList<>();
 
         while (!queries.isEmpty()) {
             QueryMatcherNode match = queries.poll();
@@ -50,7 +51,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             // match root
             if (match.leftTreeNode.isRoot()) {
                 LOG.trace("node accepted {}", match.rightAtom);
-                results.add(match.variables);
+                results.add(mapper.apply(new ASBasicQueryResult(match.rightAtom, match.variables)));
                 continue;
             }
 
@@ -193,6 +194,27 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     static int getCost(ASAtom atom, String type, int size, int position) {
         ASIncomingSet incomingSet = atom.getIncomingSet();
         return incomingSet.getIncomingSetSize(type, size, position);
+    }
+
+
+    static class ASBasicQueryResult implements ASQueryResult {
+        final ASAtom atom;
+        final Map<String, ASAtom> variables;
+
+        public ASBasicQueryResult(ASAtom atom, Map<String, ASAtom> variables) {
+            this.atom = atom;
+            this.variables = variables;
+        }
+
+        @Override
+        public ASAtom getAtom() {
+            return atom;
+        }
+
+        @Override
+        public Map<String, ASAtom> getVariables() {
+            return variables;
+        }
     }
 
     static class NodeWithCost {

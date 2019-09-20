@@ -1,5 +1,7 @@
 package atomspace;
 
+import atomspace.query.ASQueryEngine.ASQueryResult;
+import atomspace.storage.ASAtom;
 import org.junit.Assert;
 
 import java.io.File;
@@ -8,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 
 public class ASTestUtils {
 
@@ -22,6 +25,10 @@ public class ASTestUtils {
 
 
         Assert.assertEquals(expected, actual);
+    }
+
+    public static void assertQueryResultsEqual(Iterator<ASQueryResult> iter, KeyWithValue<String, ASAtom>[]... elements) {
+        assertIteratorOfMapsEqual(map(iter, res -> res.getVariables()), elements);
     }
 
     public static <K, V> void assertIteratorOfMapsEqual(Iterator<Map<K, V>> iter, KeyWithValue<K, V>[]... elements) {
@@ -54,6 +61,20 @@ public class ASTestUtils {
         }
 
         return count;
+    }
+
+    public static <T, R> Iterator<R> map(Iterator<T> iter, Function<T, R> mapper) {
+        return new Iterator<R>() {
+            @Override
+            public boolean hasNext() {
+                return iter.hasNext();
+            }
+
+            @Override
+            public R next() {
+                return mapper.apply(iter.next());
+            }
+        };
     }
 
     public static void removeDirectory(String directory) {

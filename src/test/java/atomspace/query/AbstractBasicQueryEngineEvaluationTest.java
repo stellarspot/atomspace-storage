@@ -29,7 +29,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
                     new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object"))});
         });
     }
@@ -58,7 +58,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
                     new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
                     new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
         });
@@ -100,7 +100,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertIteratorOfMapsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
                     new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
                     new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
         });
