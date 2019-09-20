@@ -17,6 +17,7 @@ public class JanusGraphPerformanceUtils {
 
         JanusGraph graph = JanusGraphFactory.build()
                 .set("storage.backend", "berkeleyje")
+                //.set("storage.backend", "inmemory")
                 .set("storage.directory", String.format("%s/graph", storageDirectory))
                 .set("index.search.backend", "lucene")
                 .set("index.search.directory", String.format("%s/index", storageDirectory))
@@ -70,6 +71,16 @@ public class JanusGraphPerformanceUtils {
             tx.traversal().E().drop().iterate();
             tx.traversal().V().drop().iterate();
             tx.commit();
+        }
+    }
+
+    public static void assertVerticesCount(JanusGraph graph, String msg, int count) {
+        long vertices = JanusGraphPerformanceUtils.getVerticesCount(graph);
+        System.out.printf("%s: %d", msg, vertices);
+
+        if (vertices != count) {
+            String err = String.format("expected vertices: %d. actual: %d", count, vertices);
+            throw new RuntimeException(err);
         }
     }
 
