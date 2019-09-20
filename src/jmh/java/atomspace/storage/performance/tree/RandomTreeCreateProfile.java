@@ -21,7 +21,8 @@ public class RandomTreeCreateProfile {
 
         PerformanceModelConfiguration config = new PerformanceModelConfiguration(5, 5, 2, false);
         PerformanceModelParameters params = new PerformanceModelParameters(atomsNumber, 0);
-        RandomTreePerformanceModel model = new RandomTreePerformanceModel(config, params, 3, 3, 2);
+        RandomTreeModelParameters treeParameters = new RandomTreeModelParameters(3, 3, 2);
+        RandomTreeModel model = new RandomTreeModel(config, params, treeParameters);
 
         try (AtomspaceStorage atomspace = getStorage();
              AtomspaceStorageTransaction tx = atomspace.getTx()) {

@@ -21,8 +21,7 @@ public class RandomTreeCreateAtomsBenchmark {
 
 
     private static final PerformanceModelConfiguration config = RandomTreeDefaultConstants.DEFAULT_CONFIG;
-    private static final int averageWidth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_WIDTH;
-    private static final int averageDepth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_DEPTH;
+    private static final RandomTreeModelParameters treeParams = RandomTreeDefaultConstants.DEFAULT_TREE_PARAMETERS;
 
     @Param({"100", "200", "300", "400", "500"})
     int statements = -1;
@@ -35,7 +34,7 @@ public class RandomTreeCreateAtomsBenchmark {
     @Setup
     public void setUp() {
         PerformanceModelParameters params = new PerformanceModelParameters(statements, -1);
-        model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, -1);
+        model = new RandomTreeModel(config, params, new RandomTreeModelParameters(treeParams.maxWidth, treeParams.maxWidth, 1));
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
         atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
         janusGraphStorage = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage();

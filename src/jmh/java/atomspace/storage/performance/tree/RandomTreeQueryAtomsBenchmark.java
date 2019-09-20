@@ -23,9 +23,7 @@ public class RandomTreeQueryAtomsBenchmark {
 
 
     private static final PerformanceModelConfiguration config = RandomTreeDefaultConstants.DEFAULT_CONFIG;
-    private static final int averageWidth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_WIDTH;
-    private static final int averageDepth = RandomTreeDefaultConstants.DEFAULT_AVERAGE_DEPTH;
-    private static final int averageVariables = RandomTreeDefaultConstants.DEFAULT_AVERAGE_VARIABLES;
+    private static final RandomTreeModelParameters treeParams = RandomTreeDefaultConstants.DEFAULT_TREE_PARAMETERS;
     private static final int statements = 300;
 
     @Param({"100", "150", "200", "250", "300"})
@@ -40,7 +38,7 @@ public class RandomTreeQueryAtomsBenchmark {
     @Setup
     public void setUp() throws Exception {
         PerformanceModelParameters params = new PerformanceModelParameters(statements, queries);
-        model = new RandomTreePerformanceModel(config, params, averageWidth, averageDepth, averageVariables);
+        model = new RandomTreeModel(config, params, treeParams);
         queryEngine = new ASBasicQueryEngine();
 
         atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();

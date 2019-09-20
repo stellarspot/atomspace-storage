@@ -8,10 +8,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PerformanceResultPlotter extends Application {
 
@@ -42,7 +39,11 @@ public class PerformanceResultPlotter extends Application {
             charts.add(getLineChart("", bounds, props));
         }
 
-        for (Map.Entry<String, List<PointDouble>> entry : props.measurements.entrySet()) {
+        Set<Map.Entry<String, List<PointDouble>>> entries = props.measurements.entrySet();
+        TreeSet<Map.Entry<String, List<PointDouble>>> sortedEntries = new TreeSet<>(Comparator.comparing(Map.Entry::getKey));
+        sortedEntries.addAll(entries);
+
+        for (Map.Entry<String, List<PointDouble>> entry : sortedEntries) {
             String name = entry.getKey();
             String seriesName = props.sameChart ? name : "";
             List<PointDouble> values = entry.getValue();

@@ -15,31 +15,24 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class RandomTreePerformanceModel implements PerformanceModel {
+public class RandomTreeModel implements PerformanceModel {
 
     private static final String VARIABLE_TYPE = ASBasicQueryEngine.TYPE_NODE_VARIABLE;
 
     public final PerformanceModelConfiguration config;
     public final PerformanceModelParameters params;
-    public final int averageWidth;
-    public final int averageDepth;
-    public final int averageVariables;
+    public final RandomTreeModelParameters treeParams;
     public final Random random;
 
     private final List<NodeWithQuery> statements = new ArrayList<>();
     private final List<NodeWithQuery> queries = new ArrayList<>();
 
-    public RandomTreePerformanceModel(PerformanceModelConfiguration config,
-                                      PerformanceModelParameters params,
-                                      int averageWidth,
-                                      int averageDepth,
-                                      int averageVariables) {
-
+    public RandomTreeModel(PerformanceModelConfiguration config,
+                           PerformanceModelParameters params,
+                           RandomTreeModelParameters treeParams) {
         this.config = config;
         this.params = params;
-        this.averageWidth = averageWidth;
-        this.averageDepth = averageDepth;
-        this.averageVariables = averageVariables;
+        this.treeParams = treeParams;
         this.random = new Random(config.randomSeed + 2);
 
         this.init();
@@ -104,17 +97,17 @@ public class RandomTreePerformanceModel implements PerformanceModel {
         loop:
         for (int i = 0; i < params.statements; i++) {
 
-            RandomNode node = getNode(averageWidth, averageDepth - 1);
+            RandomNode node = getNode(treeParams.maxWidth, treeParams.maxDepth - 1);
 
             while (true) {
 
-                QueryItem queryItem = getQuery(node, averageVariables);
+                QueryItem queryItem = getQuery(node, treeParams.maxVariables);
 
                 if (validQuery(queryItem.node)) {
                     statements.add(new NodeWithQuery(node, queryItem.node));
                     continue loop;
                 }
-                node = getNode(averageWidth, averageDepth - 1);
+                node = getNode(treeParams.maxWidth, treeParams.maxDepth - 1);
             }
         }
 
@@ -298,7 +291,8 @@ public class RandomTreePerformanceModel implements PerformanceModel {
 
         PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3, true);
         PerformanceModelParameters params = new PerformanceModelParameters(5, 5);
-        RandomTreePerformanceModel model = new RandomTreePerformanceModel(config, params, 3, 3, 2);
+        RandomTreeModelParameters treeParams = new RandomTreeModelParameters(3, 3, 2);
+        RandomTreeModel model = new RandomTreeModel(config, params, treeParams);
         model.dump();
 
         try (AtomspaceStorage atomspace = new AtomspaceMemoryStorage();
