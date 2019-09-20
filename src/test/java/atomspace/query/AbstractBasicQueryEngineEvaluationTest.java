@@ -1,6 +1,7 @@
 package atomspace.query;
 
 import atomspace.ASTestUtils;
+import atomspace.ASTestUtils.TestQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
@@ -30,7 +31,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object"))});
+                    new TestQueryResult(link, new KeyWithValue("$OBJECT", as.get("ConceptNode", "object"))));
         });
     }
 
@@ -59,8 +60,8 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
-                    new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
+                    new TestQueryResult(link1, new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))),
+                    new TestQueryResult(link2, new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))));
         });
     }
 
@@ -101,8 +102,8 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))},
-                    new KeyWithValue[]{new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))});
+                    new TestQueryResult(link1, new KeyWithValue("$OBJECT", as.get("ConceptNode", "object1"))),
+                    new TestQueryResult(link2, new KeyWithValue("$OBJECT", as.get("ConceptNode", "object2"))));
         });
     }
 }

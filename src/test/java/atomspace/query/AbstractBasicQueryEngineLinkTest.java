@@ -1,6 +1,7 @@
 package atomspace.query;
 
 import atomspace.ASTestUtils;
+import atomspace.ASTestUtils.TestQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
@@ -28,10 +29,11 @@ public abstract class AbstractBasicQueryEngineLinkTest extends ASAbstractTest {
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{
+                    new TestQueryResult(
+                            link,
                             new KeyWithValue<>("$LIST_LINK", as.get("ListLink",
                                     as.get("ConceptNode", "subject"),
-                                    as.get("ConceptNode", "object")))});
+                                    as.get("ConceptNode", "object")))));
         });
     }
 
@@ -77,15 +79,16 @@ public abstract class AbstractBasicQueryEngineLinkTest extends ASAbstractTest {
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{
+                    new TestQueryResult(
+                            link1,
                             new KeyWithValue<>("$LIST_LINK", as.get("ListLink",
                                     as.get("ConceptNode", "subject1"),
-                                    as.get("ConceptNode", "object1")))},
-                    new KeyWithValue[]{
+                                    as.get("ConceptNode", "object1")))),
+                    new TestQueryResult(
+                            link2,
                             new KeyWithValue<>("$LIST_LINK", as.get("ListLink",
                                     as.get("ConceptNode", "subject2"),
-                                    as.get("ConceptNode", "object2")))});
-
+                                    as.get("ConceptNode", "object2")))));
         });
     }
 }

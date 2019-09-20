@@ -40,31 +40,6 @@ public class ASTestUtils {
         Assert.assertEquals(expectedSet, actualSet);
     }
 
-    public static void assertQueryResultsEqual(Iterator<ASQueryResult> iter, KeyWithValue<String, ASAtom>[]... elements) {
-        assertIteratorOfMapsEqual(map(iter, res -> res.getVariables()), elements);
-    }
-
-    public static <K, V> void assertIteratorOfMapsEqual(Iterator<Map<K, V>> iter, KeyWithValue<K, V>[]... elements) {
-
-        Set<Map<K, V>> actual = new HashSet<>();
-
-        while (iter.hasNext()) {
-            actual.add(iter.next());
-        }
-
-        Set<Map<K, V>> expected = new HashSet<>();
-
-        for (KeyWithValue<K, V>[] kvs : elements) {
-            Map<K, V> map = new HashMap<>();
-            for (KeyWithValue<K, V> kv : kvs) {
-                map.put(kv.key, kv.value);
-            }
-            expected.add(map);
-        }
-
-        Assert.assertEquals(expected, actual);
-    }
-
     public static <T> int count(Iterator<T> iter) {
 
         int count = 0;

@@ -1,6 +1,7 @@
 package atomspace.query;
 
 import atomspace.ASTestUtils;
+import atomspace.ASTestUtils.TestQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
@@ -17,7 +18,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
     public void test1() throws Exception {
         testAtomspaceStorage(as -> {
 
-            ASAtom atom1 = as.get("Link",
+            ASAtom atom = as.get("Link",
                     as.get("Node", "value"),
                     as.get("Node", "value"));
 
@@ -29,7 +30,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "value"))});
+                    new TestQueryResult(atom, new KeyWithValue("$VALUE", as.get("Node", "value"))));
         });
     }
 
@@ -63,8 +64,8 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
             ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "A"))},
-                    new KeyWithValue[]{new KeyWithValue("$VALUE", as.get("Node", "B"))});
+                    new TestQueryResult(atom1, new KeyWithValue("$VALUE", as.get("Node", "A"))),
+                    new TestQueryResult(atom3, new KeyWithValue("$VALUE", as.get("Node", "B"))));
         });
     }
 }
