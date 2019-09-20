@@ -1,12 +1,11 @@
 package atomspace.query;
 
-import atomspace.ASTestUtils;
+import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
-import atomspace.query.basic.ASBasicQueryEngine;
 import org.junit.Test;
 
-import static atomspace.ASTestUtils.KeyWithValue;
+import static atomspace.ASTestUtils.*;
 
 public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
@@ -24,8 +23,8 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object"))});
+            assertQueryResultsEqual(queryEngine.match(query),
+                    new TestQueryResult(atom, new KeyWithValue("$WHAT", as.get("ObjectNode", "object"))));
         });
     }
 
@@ -51,9 +50,9 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
-                    new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object1"))},
-                    new KeyWithValue[]{new KeyWithValue("$WHAT", as.get("ObjectNode", "object2"))});
+            assertQueryResultsEqual(queryEngine.match(query),
+                    new TestQueryResult(atom2, new KeyWithValue("$WHAT", as.get("ObjectNode", "object2"))),
+                    new TestQueryResult(atom1, new KeyWithValue("$WHAT", as.get("ObjectNode", "object1"))));
         });
     }
 }

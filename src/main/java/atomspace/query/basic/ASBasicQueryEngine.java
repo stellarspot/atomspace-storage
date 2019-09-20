@@ -215,6 +215,29 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         public Map<String, ASAtom> getVariables() {
             return variables;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj instanceof ASQueryResult) {
+                ASQueryResult that = (ASQueryResult) obj;
+                return Objects.equals(this.getAtom(), that.getAtom()) &&
+                        Objects.equals(this.getVariables(), that.getVariables());
+
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(atom, variables);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("atom: %s, variables: %s", atom, variables);
+        }
+
     }
 
     static class NodeWithCost {

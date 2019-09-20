@@ -8,11 +8,11 @@ import java.util.function.Function;
 
 public interface ASQueryEngine {
 
+    <T> Iterator<T> match(ASAtom atom, Function<ASQueryResult, T> mapper);
+
     default Iterator<ASQueryResult> match(ASAtom atom) {
         return match(atom, Function.identity());
     }
-
-    <T> Iterator<T> match(ASAtom atom, Function<ASQueryResult, T> mapper);
 
     interface ASQueryResult {
 

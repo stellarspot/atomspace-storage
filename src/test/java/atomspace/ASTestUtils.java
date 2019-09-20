@@ -27,6 +27,19 @@ public class ASTestUtils {
         Assert.assertEquals(expected, actual);
     }
 
+    public static void assertQueryResultsEqual(Iterator<ASQueryResult> actual, ASQueryResult... expect) {
+
+        Set<ASQueryResult> actualSet = new HashSet<>();
+        while (actual.hasNext()) {
+            actualSet.add(actual.next());
+        }
+
+        Set<ASQueryResult> expectedSet = new HashSet<>();
+        expectedSet.addAll(Arrays.asList(expect));
+
+        Assert.assertEquals(expectedSet, actualSet);
+    }
+
     public static void assertQueryResultsEqual(Iterator<ASQueryResult> iter, KeyWithValue<String, ASAtom>[]... elements) {
         assertIteratorOfMapsEqual(map(iter, res -> res.getVariables()), elements);
     }
@@ -120,6 +133,50 @@ public class ASTestUtils {
         @Override
         public int hashCode() {
             return Objects.hash(key, value);
+        }
+    }
+
+    public static class TestQueryResult implements ASQueryResult {
+        private final ASAtom atom;
+        private final Map<String, ASAtom> variables = new HashMap<>();
+
+        public TestQueryResult(ASAtom atoml, KeyWithValue<String, ASAtom>... variables) {
+            this.atom = atoml;
+            for (KeyWithValue<String, ASAtom> variable : variables) {
+                this.variables.put(variable.key, variable.value);
+            }
+        }
+
+        @Override
+        public ASAtom getAtom() {
+            return atom;
+        }
+
+        @Override
+        public Map<String, ASAtom> getVariables() {
+            return variables;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj instanceof ASQueryResult) {
+                ASQueryResult that = (ASQueryResult) obj;
+                return Objects.equals(this.getAtom(), that.getAtom()) &&
+                        Objects.equals(this.getVariables(), that.getVariables());
+
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(atom, variables);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("atom: %s, variables: %s", atom, variables);
         }
     }
 }
