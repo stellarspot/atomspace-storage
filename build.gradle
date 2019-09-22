@@ -27,6 +27,10 @@ dependencies {
     testCompile group: 'org.janusgraph', name: 'janusgraph-berkeleyje', version: '0.4.0'
     testCompile group: 'org.janusgraph', name: 'janusgraph-lucene', version: '0.4.0'
 
+    // Derby
+    compile group: 'org.apache.derby', name: 'derbyclient', version: '10.14.2.0'
+    testCompile group: 'org.apache.derby', name: 'derby', version: '10.14.2.0'
+
     // logger
     compile group: 'org.slf4j', name: 'slf4j-api', version: '2.0.0-alpha0'
     testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha0'
