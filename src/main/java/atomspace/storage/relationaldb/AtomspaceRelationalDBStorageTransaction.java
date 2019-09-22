@@ -15,7 +15,7 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
             TABLE_ATOMS);
 
     static final String INSERT_NODE = String.format(
-            "INSERT INTO %s (type, value) values (?, ?)",
+            "INSERT INTO %s (type, value, size) values (?, ?, 0)",
             TABLE_ATOMS);
 
     final Connection connection;
@@ -80,14 +80,5 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     }
 
     void reset() {
-    }
-
-    private static long[] getIds(ASAtom... atoms) {
-        long[] ids = new long[atoms.length];
-
-        for (int i = 0; i < atoms.length; i++) {
-            ids[i] = atoms[i].getId();
-        }
-        return ids;
     }
 }
