@@ -2,6 +2,7 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
 import java.util.Iterator;
@@ -16,6 +17,14 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
     static final String INSERT_NODE = String.format(
             "INSERT INTO %s (type, value, size) values (?, ?, 0)",
+            TABLE_ATOMS);
+
+    static final String QUERY_LIST = String.format(
+            "SELECT id from %s where type = ? and size = ? and ids = ?",
+            TABLE_ATOMS);
+
+    static final String INSERT_LIST = String.format(
+            "INSERT INTO %s (type, size, ids) values (?, ?, ?)",
             TABLE_ATOMS);
 
     final Connection connection;
@@ -61,7 +70,38 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
 
-        return null;
+        String ids = AtomspaceStorageUtils.convertIdsToString(atoms);
+
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_LIST)) {
+
+            statement.setString(1, type);
+            statement.setInt(2, atoms.length);
+            statement.setString(3, ids);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                long id = resultSet.getLong("id");
+                return new ASRelationalDBLink(connection, id, type, atoms);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement statement = connection
+                .prepareStatement(INSERT_LIST, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, type);
+            statement.setInt(2, atoms.length);
+            statement.setString(3, ids);
+
+            long id = statement.executeUpdate();
+            return new ASRelationalDBLink(connection, id, type, atoms);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

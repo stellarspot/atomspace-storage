@@ -12,4 +12,22 @@ public class AtomspaceStorageUtils {
         }
         return ids;
     }
+
+    public static String convertIdsToString(ASAtom... atoms) {
+
+        switch (atoms.length) {
+            case 0:
+                return "";
+            case 1:
+                return Long.toString(atoms[0].getId());
+            default: {
+
+                StringBuilder builder = new StringBuilder();
+                for (ASAtom atom : atoms) {
+                    builder.append(atom.getId()).append(':');
+                }
+                return builder.toString();
+            }
+        }
+    }
 }

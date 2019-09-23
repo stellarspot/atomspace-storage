@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class ASRelationalDBTestUtils {
 
-    public static final String DB_URL_JUNIT = "jdbc:derby:ATOMSPACE_JUNIT;create=true";
+    public static final String DB_URL_JUNIT = "jdbc:derby:/tmp/atomspace-storage/junit/relationaldb;create=true";
     private static final AtomSpaceRelationalDBStorage RELATIONALDB_STORAGE_STORAGE;
 
     static {

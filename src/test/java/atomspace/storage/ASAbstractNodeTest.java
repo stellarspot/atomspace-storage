@@ -22,6 +22,15 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     }
 
     @Test
+    public void testIdEquals() throws Exception {
+
+        testAtomspaceStorage(as ->
+                Assert.assertEquals(
+                        as.get("Node", "value").getId(),
+                        as.get("Node", "value").getId()));
+    }
+
+    @Test
     public void testHashcode() throws Exception {
 
         testAtomspaceStorage(as ->

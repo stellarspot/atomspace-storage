@@ -29,6 +29,19 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     }
 
     @Test
+    public void testIdEquals() throws Exception {
+
+        testAtomspaceStorage(as ->
+                Assert.assertEquals(
+                        as.get("Link",
+                                as.get("Node1", "value1"),
+                                as.get("Node2", "value-2")).getId(),
+                        as.get("Link",
+                                as.get("Node1", "value1"),
+                                as.get("Node2", "value-2")).getId()));
+    }
+
+    @Test
     public void testHashcode() throws Exception {
 
         testAtomspaceStorage(as ->
