@@ -119,6 +119,22 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     public void close() {
     }
 
-    void reset() {
+    void reset() throws SQLException {
+        resetTable(AtomSpaceRelationalDBStorage.TABLE_ATOMS);
+        resetTable(AtomSpaceRelationalDBStorage.TABLE_INCOMING_SET);
+    }
+
+    void resetTable(String table) throws SQLException {
+
+        String sql = String.format("TRUNCATE TABLE %s", table);
+
+        DatabaseMetaData dbmd = connection.getMetaData();
+        try (ResultSet rs = dbmd.getTables(null, null, table, null)) {
+            if (rs.next()) {
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate(sql);
+                }
+            }
+        }
     }
 }

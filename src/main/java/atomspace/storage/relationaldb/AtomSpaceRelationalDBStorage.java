@@ -8,7 +8,8 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
 
 
     static final String TABLE_ATOMS = "ATOMS";
-    static final String TABLE_OUTGOING_LIST = "OUTGOING_LIST";
+    static final String TABLE_INCOMING_SET = "INCOMING_SET";
+
     static final String CREATE_TABLE_ATOMS = String.format(
             "CREATE TABLE %s(" +
                     "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
@@ -18,6 +19,14 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
                     "ids VARCHAR(255)" + // Use LONG VARCHAR
                     ")",
             TABLE_ATOMS);
+
+    static final String CREATE_TABLE_INCOMING_SET = String.format(
+            "CREATE TABLE %s(" +
+                    "id BIGINT," +
+                    "type_size_pos VARCHAR(255)," +
+                    "parent_id BIGINT" +
+                    ")",
+            TABLE_INCOMING_SET);
 
 
     final Connection connection;
@@ -39,6 +48,7 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
 
     void initDB() throws SQLException {
         initTable(TABLE_ATOMS, CREATE_TABLE_ATOMS);
+        initTable(TABLE_ATOMS, CREATE_TABLE_INCOMING_SET);
     }
 
     private void initTable(String tableName, String sql) throws SQLException {

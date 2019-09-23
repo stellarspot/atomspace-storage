@@ -1,5 +1,7 @@
 package atomspace.storage.relationaldb;
 
+import atomspace.storage.util.AtomspaceStorageHelper;
+
 import java.sql.SQLException;
 
 public class ASRelationalDBTestUtils {
@@ -15,11 +17,18 @@ public class ASRelationalDBTestUtils {
         }
     }
 
+
     public static AtomSpaceRelationalDBStorage getTestStorage() {
-        resetStorage();
+        //resetStorage();
         return RELATIONALDB_STORAGE_STORAGE;
     }
 
     private static void resetStorage() {
+        try (AtomspaceRelationalDBStorageTransaction tx = RELATIONALDB_STORAGE_STORAGE.getTx()) {
+            AtomspaceStorageHelper helper = new AtomspaceRelationalDBStorageHelper(tx);
+            helper.reset();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,10 +1,9 @@
 package atomspace.storage.relationaldb;
 
-import atomspace.storage.ASAbstractNodeTest;
+import atomspace.storage.ASAbstractOutgoingListTest;
 import atomspace.storage.AtomspaceStorage;
-import org.junit.Test;
 
-public class ASRelationalDBNodeTest extends ASAbstractNodeTest {
+public class ASRelationalDBOutgoingListTest extends ASAbstractOutgoingListTest {
 
     @Override
     protected AtomspaceStorage getStorage() {
