@@ -51,17 +51,17 @@ public class RandomTreeQueryAtomsBenchmark {
     }
 
     @Benchmark
-    public void queryMemory() throws Exception {
+    public void query1Memory() throws Exception {
         model.queryAtoms(atomspaceMemory, queryEngine);
     }
 
     @Benchmark
-    public void queryNeo4j() throws Exception {
+    public void query1Neo4j() throws Exception {
         model.queryAtoms(atomspaceNeo4j, queryEngine);
     }
 
     @Benchmark
-    public void queryJanusGraph() throws Exception {
+    public void query3JanusGraph() throws Exception {
         model.queryAtoms(atomspaceJanusGraph, queryEngine);
     }
 

@@ -41,17 +41,17 @@ public class RandomTreeCreateAtomsBenchmark {
     }
 
     @Benchmark
-    public void createMemory() throws Exception {
+    public void create1Memory() throws Exception {
         model.createAtoms(atomspaceMemory);
     }
 
     @Benchmark
-    public void createNeo4j() throws Exception {
+    public void create2Neo4j() throws Exception {
         model.createAtoms(atomspaceNeo4j);
     }
 
     @Benchmark
-    public void createJanusGraph() throws Exception {
+    public void create3JanusGraph() throws Exception {
         model.createAtoms(janusGraphStorage);
     }
 

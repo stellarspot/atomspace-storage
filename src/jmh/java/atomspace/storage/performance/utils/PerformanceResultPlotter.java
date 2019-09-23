@@ -156,9 +156,18 @@ public class PerformanceResultPlotter extends Application {
     static LabelWithTitle getLabelWithTitle(String str) {
 
         for (int i = 0; i < str.length(); i++) {
+
+            char c = str.charAt(i);
+
             if (Character.isUpperCase(str.charAt(i))) {
                 String label = str.substring(0, i);
-                String title = str.substring(i, str.length());
+                String title = str.substring(i);
+                return new LabelWithTitle(label, title);
+            }
+
+            if (Character.isDigit(str.charAt(i))) {
+                String label = str.substring(0, i);
+                String title = str.substring(i + 1);
                 return new LabelWithTitle(label, title);
             }
         }
