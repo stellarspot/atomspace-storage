@@ -27,6 +27,9 @@ dependencies {
     testCompile group: 'org.janusgraph', name: 'janusgraph-berkeleyje', version: '0.4.0'
     testCompile group: 'org.janusgraph', name: 'janusgraph-lucene', version: '0.4.0'
 
+    // Gremlin
+    compile group: 'org.apache.tinkerpop', name: 'gremlin-driver', version: '3.4.3'
+
     // Derby
     compile group: 'org.apache.derby', name: 'derbyclient', version: '10.14.2.0'
     testCompile group: 'org.apache.derby', name: 'derby', version: '10.14.2.0'
