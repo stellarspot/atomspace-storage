@@ -3,6 +3,7 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraphTransaction;
 import org.janusgraph.core.JanusGraphVertex;
 
@@ -10,7 +11,7 @@ public class ASJanusGraphLink extends ASJanusGraphAtom implements ASLink {
 
     final ASJanusGraphOutgoingList outgoingList;
 
-    public ASJanusGraphLink(JanusGraphVertex vertex) {
+    public ASJanusGraphLink(Vertex vertex) {
         super(vertex);
         this.outgoingList = new ASJanusGraphOutgoingList(vertex);
     }
@@ -28,12 +29,12 @@ public class ASJanusGraphLink extends ASJanusGraphAtom implements ASLink {
     static class ASJanusGraphOutgoingList implements ASOutgoingList {
         final ASAtom[] atoms;
 
-        public ASJanusGraphOutgoingList(JanusGraphVertex vertex) {
+        public ASJanusGraphOutgoingList(Vertex vertex) {
 
             long[] ids = (long[]) vertex.property("ids").value();
             this.atoms = new ASAtom[ids.length];
 
-            JanusGraphTransaction graph = vertex.graph();
+            JanusGraphTransaction graph = ((JanusGraphVertex) vertex).graph();
 
             for (int i = 0; i < ids.length; i++) {
                 long id = ids[i];

@@ -14,11 +14,11 @@ import java.util.List;
 
 public abstract class ASJanusGraphAtom implements ASAtom {
 
-    final JanusGraphVertex vertex;
+    final Vertex vertex;
     final ASIncomingSet incomingSet;
 
 
-    public ASJanusGraphAtom(JanusGraphVertex vertex) {
+    public ASJanusGraphAtom(Vertex vertex) {
         this.vertex = vertex;
         this.incomingSet = new ASJanusGraphIncomingSet();
     }
@@ -74,7 +74,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
 
         @Override
         public void add(ASLink link, int size, int position) {
-            JanusGraphVertex parent = ((ASJanusGraphLink) link).vertex;
+            Vertex parent = ((ASJanusGraphLink) link).vertex;
             String key = getKey(link.getType(), size, position);
             vertex.addEdge(key, parent);
         }
