@@ -19,8 +19,8 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
     final AtomspaceJanusGraphStorage storage;
     final JanusGraph graph;
-    private final Transaction tx;
-    private final GraphTraversalSource g;
+    final Transaction tx;
+    final GraphTraversalSource g;
 
     public AtomspaceJanusGraphStorageTransaction(AtomspaceJanusGraphStorage storage) {
         this.storage = storage;
