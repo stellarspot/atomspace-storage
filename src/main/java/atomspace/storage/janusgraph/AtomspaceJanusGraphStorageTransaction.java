@@ -9,7 +9,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
-import org.janusgraph.core.JanusGraphVertex;
 import org.janusgraph.core.Transaction;
 
 import java.util.ArrayList;
@@ -21,17 +20,17 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
     final AtomspaceJanusGraphStorage storage;
     final JanusGraph graph;
     private final Transaction tx;
+    private final GraphTraversalSource g;
 
     public AtomspaceJanusGraphStorageTransaction(AtomspaceJanusGraphStorage storage) {
         this.storage = storage;
         this.graph = storage.graph;
         this.tx = graph.newTransaction();
+        this.g = tx.traversal();
     }
 
     @Override
     public ASAtom get(String type, String value) {
-
-        GraphTraversalSource g = tx.traversal();
 
         GraphTraversal<Vertex, Vertex> iter = g
                 .V()
@@ -61,8 +60,6 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
         long[] ids = getIds(atoms);
 
-        GraphTraversalSource g = tx.traversal();
-
         GraphTraversal<Vertex, Vertex> iter = g
                 .V()
                 .hasLabel("Link")
@@ -71,7 +68,7 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
         Vertex vertex = null;
         if (iter.hasNext()) {
-            vertex = (JanusGraphVertex) iter.next();
+            vertex = iter.next();
         }
 
         if (vertex == null) {
@@ -99,17 +96,17 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
 
         List<ASAtom> atoms = new ArrayList<>();
 
-        GraphTraversal<Vertex, Vertex> nodes = tx.traversal().V().has("kind", "Node");
+        GraphTraversal<Vertex, Vertex> nodes = g.V().has("kind", "Node");
 
         while (nodes.hasNext()) {
-            ASNode node = new ASJanusGraphNode((JanusGraphVertex) nodes.next());
+            ASNode node = new ASJanusGraphNode(nodes.next());
             atoms.add(node);
         }
 
-        GraphTraversal<Vertex, Vertex> links = tx.traversal().V().has("kind", "Link");
+        GraphTraversal<Vertex, Vertex> links = g.V().has("kind", "Link");
 
         while (links.hasNext()) {
-            ASLink link = new ASJanusGraphLink((JanusGraphVertex) links.next());
+            ASLink link = new ASJanusGraphLink(links.next());
             atoms.add(link);
         }
 
@@ -136,7 +133,7 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
     }
 
     void reset() {
-        tx.traversal().E().drop().iterate();
-        tx.traversal().V().drop().iterate();
+        g.E().drop().iterate();
+        g.V().drop().iterate();
     }
 }
