@@ -3,7 +3,6 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.AtomspaceStorage;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
-import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.core.schema.JanusGraphManagement;
 import org.janusgraph.graphdb.database.StandardJanusGraph;
 import org.janusgraph.graphdb.idmanagement.IDManager;
@@ -16,21 +15,11 @@ public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
     final IDManager idManager;
     final AtomicLong currentId = new AtomicLong();
 
-    public AtomspaceJanusGraphStorage(String storageDirectory) {
-        this.graph = JanusGraphFactory.build()
-                .set("storage.backend", "berkeleyje")
-                .set("storage.directory", String.format("%s/graph", storageDirectory))
-                .set("graph.set-vertex-id", "true")
-                .set("index.search.backend", "lucene")
-                .set("index.search.directory", String.format("%s/index", storageDirectory))
-                //.set("query.force-index", true)
-                .open();
-
+    public AtomspaceJanusGraphStorage(JanusGraph graph) {
+        this.graph = graph;
         this.idManager = ((StandardJanusGraph) graph).getIDManager();
-
         makeIndices();
     }
-
 
     @Override
     public AtomspaceJanusGraphStorageTransaction getTx() {

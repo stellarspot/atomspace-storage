@@ -10,8 +10,8 @@ public class ASJanusGraphTestUtils {
 
     static {
         ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
-        JANUS_GRAPHJ_STORAGE = new AtomspaceJanusGraphStorage(JANUSGRAPH_STORAGE_DIR);
-        //addShutdownHook();
+        JANUS_GRAPHJ_STORAGE = AtomspaceJanusGraphStorageHelper
+                .getJanusGraphBerkeleyDBStorage(JANUSGRAPH_STORAGE_DIR);
     }
 
     public static AtomspaceJanusGraphStorage getTestStorage() {
@@ -21,16 +21,6 @@ public class ASJanusGraphTestUtils {
 
     public static AtomspaceJanusGraphStorageHelper getStorageHelper(AtomspaceJanusGraphStorageTransaction tx) {
         return new AtomspaceJanusGraphStorageHelper(tx);
-    }
-
-    private static void addShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                JANUS_GRAPHJ_STORAGE.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }));
     }
 
     private static void resetStorage() {

@@ -1,6 +1,5 @@
 package atomspace.storage.janusgraph;
 
-import atomspace.storage.ASAbstractNodeTest;
 import atomspace.storage.ASAbstractTransactionTest;
 import atomspace.storage.AtomspaceStorage;
 

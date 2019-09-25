@@ -7,6 +7,7 @@ import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageTransaction;
+import atomspace.storage.util.AtomspaceStorageUtils;
 import org.openjdk.jmh.results.Result;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
@@ -14,6 +15,11 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static atomspace.storage.performance.utils.PerformanceResultPlotter.PointDouble;
@@ -43,12 +49,9 @@ public class AtomspaceStoragePerformanceUtils {
     public static AtomspaceJanusGraphStorage getCleanJanusGraphStorage() {
 
         String storageDir = String.format("%s/janusgraph", STORAGE_DIR);
-        AtomspaceJanusGraphStorage storage = new AtomspaceJanusGraphStorage(storageDir);
-
-        try (AtomspaceJanusGraphStorageTransaction tx = storage.getTx()) {
-            AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
-            helper.reset();
-        }
+        removeDirectory(storageDir);
+        AtomspaceJanusGraphStorage storage = AtomspaceJanusGraphStorageHelper
+                .getJanusGraphBerkeleyDBStorage(storageDir);
 
         return storage;
     }
@@ -94,5 +97,23 @@ public class AtomspaceStoragePerformanceUtils {
         System.out.printf("Type any key when profiler is started.");
         Scanner in = new Scanner(System.in);
         String s = in.nextLine();
+    }
+
+    public static void removeDirectory(String directory) {
+        Path pathToBeDeleted = Paths.get(directory);
+
+        if (!Files.exists(pathToBeDeleted)) {
+            return;
+        }
+
+        try {
+            Files.walk(pathToBeDeleted)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
