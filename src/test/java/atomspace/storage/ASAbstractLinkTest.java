@@ -12,7 +12,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
                 Assert.assertNotNull(
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2"))));
+                                as.get("Node2", "value2"))));
     }
 
     @Test
@@ -22,10 +22,10 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")),
+                                as.get("Node2", "value2")),
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2"))));
+                                as.get("Node2", "value2"))));
     }
 
     @Test
@@ -35,10 +35,10 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")).getId(),
+                                as.get("Node2", "value2")).getId(),
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")).getId()));
+                                as.get("Node2", "value2")).getId()));
     }
 
     @Test
@@ -48,10 +48,10 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")).hashCode(),
+                                as.get("Node2", "value2")).hashCode(),
                         as.get("Link",
                                 as.get("Node1", "value1"),
-                                as.get("Node2", "value-2")).hashCode()));
+                                as.get("Node2", "value2")).hashCode()));
     }
 
     @Test

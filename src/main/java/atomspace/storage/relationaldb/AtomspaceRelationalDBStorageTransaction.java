@@ -8,23 +8,16 @@ import java.sql.*;
 import java.util.Iterator;
 
 import static atomspace.storage.relationaldb.AtomSpaceRelationalDBStorage.TABLE_ATOMS;
+import static atomspace.storage.relationaldb.AtomSpaceRelationalDBStorage.TABLE_INCOMING_SET;
 
 public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorageTransaction {
 
-    static final String QUERY_NODE = String.format(
-            "SELECT id from %s where type = ? and value = ?",
+    static final String QUERY = String.format(
+            "SELECT id from %s where type = ? and value = ? and size = ? and ids = ?",
             TABLE_ATOMS);
 
-    static final String INSERT_NODE = String.format(
-            "INSERT INTO %s (type, value, size) values (?, ?, 0)",
-            TABLE_ATOMS);
-
-    static final String QUERY_LIST = String.format(
-            "SELECT id from %s where type = ? and size = ? and ids = ?",
-            TABLE_ATOMS);
-
-    static final String INSERT_LIST = String.format(
-            "INSERT INTO %s (type, size, ids) values (?, ?, ?)",
+    static final String INSERT = String.format(
+            "INSERT INTO %s (type, value, size, ids) values (?, ?, ?, ?)",
             TABLE_ATOMS);
 
     final Connection connection;
@@ -36,68 +29,56 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     @Override
     public ASAtom get(String type, String value) {
 
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_NODE)) {
-
-            statement.setString(1, type);
-            statement.setString(2, value);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                long id = resultSet.getLong("id");
-                return new ASRelationalDBNode(connection, id, type, value);
-            }
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (PreparedStatement statement = connection
-                .prepareStatement(INSERT_NODE, Statement.RETURN_GENERATED_KEYS)) {
-
-            statement.setString(1, type);
-            statement.setString(2, value);
-
-            long id = statement.executeUpdate();
-            return new ASRelationalDBNode(connection, id, type, value);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        long id = get(type, value, 0, "");
+        return new ASRelationalDBNode(connection, id, type, value);
     }
 
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
 
         String ids = AtomspaceStorageUtils.convertIdsToString(atoms);
+        long id = get(type, "", atoms.length, ids);
+        return new ASRelationalDBLink(connection, id, type, atoms);
+    }
 
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_LIST)) {
+    private long get(String type, String value, int size, String ids) {
+
+        try (PreparedStatement statement = connection.prepareStatement(QUERY)) {
 
             statement.setString(1, type);
-            statement.setInt(2, atoms.length);
-            statement.setString(3, ids);
+            statement.setString(2, value);
+            statement.setInt(3, size);
+            statement.setString(4, ids);
 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 long id = resultSet.getLong("id");
-                return new ASRelationalDBLink(connection, id, type, atoms);
+                dump(String.format("after atom found id: %d", id));
+                return id;
             }
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try (PreparedStatement statement = connection
-                .prepareStatement(INSERT_LIST, Statement.RETURN_GENERATED_KEYS)) {
+                .prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, type);
-            statement.setInt(2, atoms.length);
-            statement.setString(3, ids);
+            statement.setString(2, value);
+            statement.setInt(3, size);
+            statement.setString(4, ids);
 
-            long id = statement.executeUpdate();
-            return new ASRelationalDBLink(connection, id, type, atoms);
+            statement.executeUpdate();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                generatedKeys.next();
+                long id = generatedKeys.getLong(1);
+                dump(String.format("after atom insert id: %d", id));
+                return id;
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,7 +87,6 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-
         return null;
     }
 
@@ -120,8 +100,8 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     }
 
     void reset() throws SQLException {
-        resetTable(AtomSpaceRelationalDBStorage.TABLE_ATOMS);
-        resetTable(AtomSpaceRelationalDBStorage.TABLE_INCOMING_SET);
+        resetTable(TABLE_ATOMS);
+        resetTable(TABLE_INCOMING_SET);
     }
 
     void resetTable(String table) throws SQLException {
@@ -135,6 +115,32 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
                     statement.executeUpdate(sql);
                 }
             }
+        }
+    }
+
+    void dump(String msg) {
+        System.out.printf("dump %s%n", msg);
+        try {
+            dump();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void dump() throws SQLException {
+
+        String sql = String.format("select * from %s", TABLE_ATOMS);
+
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+
+        while (rs.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                System.out.print(rs.getString(i) + " ");
+            }
+            System.out.println();
         }
     }
 }

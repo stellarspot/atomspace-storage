@@ -15,7 +15,13 @@ public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelpe
 
     @Override
     public void dump() {
+        try {
+            tx.dump();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     @Override
     public void reset() {

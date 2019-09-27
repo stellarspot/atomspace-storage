@@ -19,7 +19,7 @@ public class ASRelationalDBTestUtils {
 
 
     public static AtomSpaceRelationalDBStorage getTestStorage() {
-        //resetStorage();
+        resetStorage();
         return RELATIONALDB_STORAGE_STORAGE;
     }
 
