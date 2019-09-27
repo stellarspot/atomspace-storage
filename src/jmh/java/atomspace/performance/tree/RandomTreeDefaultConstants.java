@@ -1,6 +1,6 @@
-package atomspace.storage.performance.tree;
+package atomspace.performance.tree;
 
-import atomspace.storage.performance.PerformanceModelConfiguration;
+import atomspace.performance.PerformanceModelConfiguration;
 
 public interface RandomTreeDefaultConstants {
 

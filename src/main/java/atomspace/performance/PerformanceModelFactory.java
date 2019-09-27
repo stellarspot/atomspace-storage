@@ -1,4 +1,4 @@
-package atomspace.storage.performance;
+package atomspace.performance;
 
 public interface PerformanceModelFactory {
 

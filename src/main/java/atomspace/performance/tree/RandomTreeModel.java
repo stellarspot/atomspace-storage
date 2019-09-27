@@ -1,5 +1,7 @@
-package atomspace.storage.performance.tree;
+package atomspace.performance.tree;
 
+import atomspace.performance.PerformanceModelConfiguration;
+import atomspace.performance.PerformanceModelParameters;
 import atomspace.query.ASQueryEngine;
 import atomspace.query.ASQueryEngine.ASQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
@@ -7,9 +9,7 @@ import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.AtomspaceStorageTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.storage.performance.PerformanceModelConfiguration;
-import atomspace.storage.performance.PerformanceModel;
-import atomspace.storage.performance.PerformanceModelParameters;
+import atomspace.performance.PerformanceModel;
 
 import java.io.IOException;
 import java.util.*;

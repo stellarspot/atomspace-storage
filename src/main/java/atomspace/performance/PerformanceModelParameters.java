@@ -1,4 +1,4 @@
-package atomspace.storage.performance;
+package atomspace.performance;
 
 public class PerformanceModelParameters {
     public final int statements;

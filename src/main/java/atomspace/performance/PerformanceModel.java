@@ -1,4 +1,4 @@
-package atomspace.storage.performance;
+package atomspace.performance;
 
 import atomspace.query.ASQueryEngine;
 import atomspace.storage.AtomspaceStorage;

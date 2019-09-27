@@ -1,16 +1,22 @@
-package graph.janusgraph.performance;
+package atomspace.performance.tree;
 
+import atomspace.performance.PerformanceModelConfiguration;
+import atomspace.performance.PerformanceModelParameters;
+import atomspace.storage.AtomspaceStorage;
+import atomspace.storage.AtomspaceStorageTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageTransaction;
-import atomspace.performance.PerformanceModelConfiguration;
-import atomspace.performance.PerformanceModelParameters;
-import atomspace.performance.tree.RandomTreeModel;
-import atomspace.performance.tree.RandomTreeModelParameters;
-import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
+import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
-public class JanusGraphRandomTreeModelTest {
+public class RandomTreeModelTest {
+
+
+    private static AtomspaceStorage getStorage() {
+//        return new AtomspaceMemoryStorage();
+        return AtomspaceJanusGraphStorageHelper.getJanusGraphInMemoryStorage();
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -22,8 +28,8 @@ public class JanusGraphRandomTreeModelTest {
         RandomTreeModel model = new RandomTreeModel(config, params, treeParams);
 //        model.dump();
 
-        try (AtomspaceJanusGraphStorage atomspace = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage()) {
-            try (AtomspaceJanusGraphStorageTransaction tx = atomspace.getTx()) {
+        try (AtomspaceStorage atomspace = getStorage()) {
+            try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
 
                 long time = System.currentTimeMillis();
                 model.createAtoms(atomspace);

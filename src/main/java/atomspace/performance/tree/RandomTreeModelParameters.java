@@ -1,4 +1,4 @@
-package atomspace.storage.performance.tree;
+package atomspace.performance.tree;
 
 public class RandomTreeModelParameters {
     public final int maxWidth;

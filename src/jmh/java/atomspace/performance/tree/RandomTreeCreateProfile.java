@@ -1,10 +1,10 @@
-package atomspace.storage.performance.tree;
+package atomspace.performance.tree;
 
+import atomspace.performance.PerformanceModelParameters;
+import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.AtomspaceStorageTransaction;
-import atomspace.storage.performance.PerformanceModelConfiguration;
-import atomspace.storage.performance.PerformanceModelParameters;
-import atomspace.storage.performance.utils.AtomspaceStoragePerformanceUtils;
+import atomspace.performance.PerformanceModelConfiguration;
 
 public class RandomTreeCreateProfile {
 

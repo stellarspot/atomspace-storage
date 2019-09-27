@@ -1,13 +1,11 @@
-package atomspace.storage.performance.utils;
+package atomspace.performance.utils;
 
-import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageTransaction;
-import atomspace.storage.util.AtomspaceStorageUtils;
 import org.openjdk.jmh.results.Result;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
@@ -22,7 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static atomspace.storage.performance.utils.PerformanceResultPlotter.PointDouble;
+import static atomspace.performance.utils.PerformanceResultPlotter.PointDouble;
 
 
 public class AtomspaceStoragePerformanceUtils {

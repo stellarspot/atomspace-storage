@@ -1,12 +1,12 @@
-package atomspace.storage.performance.tree;
+package atomspace.performance.tree;
 
+import atomspace.performance.PerformanceModelParameters;
+import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
-import atomspace.storage.performance.utils.AtomspaceStoragePerformanceUtils;
-import atomspace.storage.performance.PerformanceModel;
-import atomspace.storage.performance.PerformanceModelConfiguration;
-import atomspace.storage.performance.PerformanceModelParameters;
+import atomspace.performance.PerformanceModel;
+import atomspace.performance.PerformanceModelConfiguration;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

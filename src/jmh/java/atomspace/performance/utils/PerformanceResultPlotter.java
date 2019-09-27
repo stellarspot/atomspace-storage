@@ -1,4 +1,4 @@
-package atomspace.storage.performance.utils;
+package atomspace.performance.utils;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

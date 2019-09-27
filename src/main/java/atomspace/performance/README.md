@@ -4,7 +4,7 @@
 [PerformanceModel](PerformanceModel.java)
 
 Models:
-* [RandomTreeModel](tree/RandomTreeModel.java)
+* [RandomTreeModel](../../../../jmh/java/atomspace/performance/tree/RandomTreeModel.java)
 
 ## RandomTreeModel
 
@@ -29,12 +29,12 @@ RandomTree model parameters:
 
 ### Create Atoms
 
-[Atoms create benchmark](tree/RandomTreeCreateAtomsBenchmark.java)
+[Atoms create benchmark](../../../../jmh/java/atomspace/performance/tree/RandomTreeCreateAtomsBenchmark.java)
 
 ![Create Atoms](../../../../../../docs/images/perfomance/performance_all_create.png)
 
 ### Query Atoms
 
-[Atoms query benchmark](tree/RandomTreeQueryAtomsBenchmark.java)
+[Atoms query benchmark](../../../../jmh/java/atomspace/performance/tree/RandomTreeQueryAtomsBenchmark.java)
 
 ![Create Atoms](../../../../../../docs/images/perfomance/performance_all_query.png)

@@ -1,6 +1,6 @@
 package graph.janusgraph.performance;
 
-import atomspace.storage.performance.utils.AtomspaceStoragePerformanceUtils;
+import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphTransaction;
 import org.janusgraph.core.JanusGraphVertex;

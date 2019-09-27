@@ -1,6 +1,6 @@
 package graph.janusgraph.performance;
 
-import atomspace.storage.performance.utils.AtomspaceStoragePerformanceUtils;
+import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
