@@ -10,29 +10,29 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
     @Test
     public void testTransaction() throws Exception {
 
-        try (AtomspaceStorage storage = getStorage()) {
-            try (AtomspaceStorageTransaction tx = storage.getTx()) {
-                Iterator<ASAtom> iter = tx.getAtoms();
-                Assert.assertFalse(iter.hasNext());
-            }
+        AtomspaceStorage storage = getStorage();
 
-            try (AtomspaceStorageTransaction tx = storage.getTx()) {
-                tx.get("Node", "value");
-                Iterator<ASAtom> iter = tx.getAtoms();
-                Assert.assertTrue(iter.hasNext());
-                ASAtom atom = iter.next();
-                Assert.assertEquals("Node", atom.getType());
-                Assert.assertFalse(iter.hasNext());
-            }
+        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+            Iterator<ASAtom> iter = tx.getAtoms();
+            Assert.assertFalse(iter.hasNext());
+        }
 
-            try (AtomspaceStorageTransaction tx = storage.getTx()) {
-                tx.get("Node", "value");
-                Iterator<ASAtom> iter = tx.getAtoms();
-                Assert.assertTrue(iter.hasNext());
-                ASAtom atom = iter.next();
-                Assert.assertEquals("Node", atom.getType());
-                Assert.assertFalse(iter.hasNext());
-            }
+        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+            tx.get("Node", "value");
+            Iterator<ASAtom> iter = tx.getAtoms();
+            Assert.assertTrue(iter.hasNext());
+            ASAtom atom = iter.next();
+            Assert.assertEquals("Node", atom.getType());
+            Assert.assertFalse(iter.hasNext());
+        }
+
+        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+            tx.get("Node", "value");
+            Iterator<ASAtom> iter = tx.getAtoms();
+            Assert.assertTrue(iter.hasNext());
+            ASAtom atom = iter.next();
+            Assert.assertEquals("Node", atom.getType());
+            Assert.assertFalse(iter.hasNext());
         }
     }
 }

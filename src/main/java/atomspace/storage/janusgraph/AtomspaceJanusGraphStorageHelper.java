@@ -33,9 +33,9 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
         JanusGraph graph = JanusGraphFactory.build()
                 .set("storage.backend", "inmemory")
                 .set("graph.set-vertex-id", "true")
-                //.set("ids.block-size", "1000000")
+                .set("ids.block-size", "100000")
                 .set("ids.authority.wait-time", "5")
-                //.set("ids.renew-timeout", "50")
+                .set("ids.renew-timeout", "50")
                 //.set("query.force-index", true)
                 .open();
         return new AtomspaceJanusGraphStorage(graph);
@@ -48,8 +48,9 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
                 .set("index.search.backend", "lucene")
                 .set("index.search.directory", String.format("%s/index", storageDirectory))
                 .set("graph.set-vertex-id", "true")
-                //.set("ids.block-size", "10000")
-                .set("ids.authority.wait-time", "75")
+                .set("ids.block-size", "100000")
+                .set("ids.authority.wait-time", "5")
+                .set("ids.renew-timeout", "50")
                 //.set("query.force-index", true)
                 .open();
         return new AtomspaceJanusGraphStorage(graph);

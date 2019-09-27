@@ -50,15 +50,13 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
             statement.setInt(3, size);
             statement.setString(4, ids);
 
-            ResultSet resultSet = statement.executeQuery();
+            try (ResultSet resultSet = statement.executeQuery()) {
 
-            if (resultSet.next()) {
-                long id = resultSet.getLong("id");
-                dump(String.format("after atom found id: %d", id));
-                return id;
+                if (resultSet.next()) {
+                    long id = resultSet.getLong("id");
+                    return id;
+                }
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +74,6 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 generatedKeys.next();
                 long id = generatedKeys.getLong(1);
-                dump(String.format("after atom insert id: %d", id));
                 return id;
             }
 
@@ -131,16 +128,18 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
         String sql = String.format("select * from %s", TABLE_ATOMS);
 
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int columnsNumber = rsmd.getColumnCount();
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-        while (rs.next()) {
-            for (int i = 1; i <= columnsNumber; i++) {
-                System.out.print(rs.getString(i) + " ");
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                for (int i = 1; i <= columnsNumber; i++) {
+                    System.out.print(rs.getString(i) + " ");
+                }
+                System.out.println();
             }
-            System.out.println();
         }
     }
 }

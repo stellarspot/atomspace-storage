@@ -16,7 +16,7 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
                     "type VARCHAR(255)," +
                     "value VARCHAR(255)," +
                     "size INTEGER NOT NULL," +
-                    "ids VARCHAR(255)" + // Use LONG VARCHAR
+                    "ids VARCHAR(1024)" + // Use LONG VARCHAR
                     ")",
             TABLE_ATOMS);
 
