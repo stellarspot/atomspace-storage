@@ -47,8 +47,8 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
                 .set("index.search.backend", "lucene")
                 .set("index.search.directory", String.format("%s/index", storageDirectory))
                 .set("graph.set-vertex-id", "true")
-                .set("ids.block-size", "100000")
-                .set("ids.authority.wait-time", "5")
+                //.set("ids.block-size", "10000")
+                .set("ids.authority.wait-time", "50")
                 //.set("query.force-index", true)
                 .open();
         return new AtomspaceJanusGraphStorage(graph);

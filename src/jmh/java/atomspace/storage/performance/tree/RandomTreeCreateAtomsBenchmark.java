@@ -12,8 +12,8 @@ import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 @Fork(1)
-@Warmup(iterations = 1, batchSize = 1)
-@Measurement(iterations = 1, batchSize = 3)
+@Warmup(iterations = 0, batchSize = 0)
+@Measurement(iterations = 1, batchSize = 1)
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)

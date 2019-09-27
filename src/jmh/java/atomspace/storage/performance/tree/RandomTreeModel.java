@@ -42,9 +42,23 @@ public class RandomTreeModel implements PerformanceModel {
     public void createAtoms(AtomspaceStorage atomspace) throws IOException {
 
         try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
+
+            int iterations = 0;
+            int commits = 0;
+
             for (NodeWithQuery nodeWithQuery : statements) {
                 createAtom(tx, nodeWithQuery.node);
+
+                if(iterations++>= params.iterationsBeforeCommit) {
+                    tx.commit();
+                    iterations = 0;
+                    commits++;
+                }
             }
+
+            tx.commit();
+            commits++;
+            System.out.printf("commits: %d%n", commits);
         }
     }
 

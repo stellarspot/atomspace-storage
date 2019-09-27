@@ -14,8 +14,9 @@ public class JanusGraphRandomTreeModelTest {
 
     public static void main(String[] args) throws Exception {
 
+        AtomspaceStoragePerformanceUtils.waitForProfiler();
         PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3, true);
-        PerformanceModelParameters params = new PerformanceModelParameters(100, 1);
+        PerformanceModelParameters params = new PerformanceModelParameters(500, 1, 1);
         RandomTreeModelParameters treeParams = new RandomTreeModelParameters(3, 3, 2);
         RandomTreeModel model = new RandomTreeModel(config, params, treeParams);
 //        model.dump();
