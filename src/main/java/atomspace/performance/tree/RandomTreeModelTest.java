@@ -10,6 +10,8 @@ import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
+import java.util.Scanner;
+
 public class RandomTreeModelTest {
 
 
@@ -20,23 +22,24 @@ public class RandomTreeModelTest {
 
     public static void main(String[] args) throws Exception {
 
-        //AtomspaceStoragePerformanceUtils.waitForProfiler();
 
         PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3, true);
-        PerformanceModelParameters params = new PerformanceModelParameters(500, 1, 1);
+        PerformanceModelParameters params = new PerformanceModelParameters(500, 1, 100);
         RandomTreeModelParameters treeParams = new RandomTreeModelParameters(3, 3, 2);
         RandomTreeModel model = new RandomTreeModel(config, params, treeParams);
-//        model.dump();
+        //model.dump();
 
+        //waitForProfiler();
+
+        long time = System.currentTimeMillis();
         try (AtomspaceStorage atomspace = getStorage()) {
             try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
 
-                long time = System.currentTimeMillis();
                 model.createAtoms(atomspace);
                 tx.commit();
-                System.out.printf("elapsed time: %ds%n", System.currentTimeMillis() - time);
             }
         }
+        System.out.printf("elapsed time: %ds%n", System.currentTimeMillis() - time);
     }
 
     private static void printStatistics(AtomspaceJanusGraphStorage atomspace, String msg) {
@@ -45,4 +48,11 @@ public class RandomTreeModelTest {
             helper.printStatistics(msg);
         }
     }
+
+    public static void waitForProfiler() {
+        System.out.printf("Type any key when profiler is started.");
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+    }
+
 }
