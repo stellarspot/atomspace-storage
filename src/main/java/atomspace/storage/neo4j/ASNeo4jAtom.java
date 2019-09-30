@@ -69,15 +69,10 @@ public abstract class ASNeo4jAtom implements ASAtom {
 
     class ASNeo4jIncomingSet implements ASIncomingSet {
 
-        @Override
         public void add(ASLink link, int arity, int position) {
             Node parent = ((ASNeo4jAtom) link).node;
             String key = getKey(link.getType(), arity, position);
             node.createRelationshipTo(parent, RelationshipType.withName(key));
-        }
-
-        @Override
-        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override

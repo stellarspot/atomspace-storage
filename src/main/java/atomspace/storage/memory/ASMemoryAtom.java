@@ -57,13 +57,8 @@ public abstract class ASMemoryAtom implements ASAtom {
 
         private final Map<String, Set<ASLink>> map = new HashMap<>();
 
-        @Override
         public void add(ASLink link, int arity, int position) {
             getOrCreateSet(link.getType(), arity, position).add(link);
-        }
-
-        @Override
-        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override

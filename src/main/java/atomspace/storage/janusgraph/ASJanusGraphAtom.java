@@ -72,15 +72,10 @@ public abstract class ASJanusGraphAtom implements ASAtom {
 
     class ASJanusGraphIncomingSet implements ASIncomingSet {
 
-        @Override
         public void add(ASLink link, int arity, int position) {
             Vertex parent = ((ASJanusGraphLink) link).vertex;
             String key = getKey(link.getType(), arity, position);
             vertex.addEdge(key, parent);
-        }
-
-        @Override
-        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override

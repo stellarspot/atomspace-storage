@@ -82,7 +82,7 @@ public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTr
             ASJanusGraphLink link = new ASJanusGraphLink(vertex);
             int size = atoms.length;
             for (int i = 0; i < size; i++) {
-                atoms[i].getIncomingSet().add(link, size, i);
+                ((ASJanusGraphAtom.ASJanusGraphIncomingSet)atoms[i].getIncomingSet()).add(link, size, i);
             }
 
             return link;

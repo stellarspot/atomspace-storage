@@ -41,7 +41,7 @@ public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransa
 
             int size = atoms.length;
             for (int i = 0; i < atoms.length; i++) {
-                atoms[i].getIncomingSet().add(link, size, i);
+                ((ASMemoryAtom.ASMemoryIncomingSet)atoms[i].getIncomingSet()).add(link, size, i);
             }
         }
 

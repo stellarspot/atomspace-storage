@@ -59,12 +59,7 @@ public abstract class ASRelationalDBAtom implements ASAtom {
 
     class ASRelationalDBIncomingSet implements ASIncomingSet {
 
-        @Override
         public void add(ASLink link, int arity, int position) {
-        }
-
-        @Override
-        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override

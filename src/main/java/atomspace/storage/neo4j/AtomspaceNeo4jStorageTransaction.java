@@ -53,7 +53,7 @@ public class AtomspaceNeo4jStorageTransaction implements AtomspaceStorageTransac
             ASNeo4jLink link = new ASNeo4jLink(node);
             int size = atoms.length;
             for (int i = 0; i < size; i++) {
-                atoms[i].getIncomingSet().add(link, size, i);
+                ((ASNeo4jAtom.ASNeo4jIncomingSet) atoms[i].getIncomingSet()).add(link, size, i);
             }
 
             return link;
