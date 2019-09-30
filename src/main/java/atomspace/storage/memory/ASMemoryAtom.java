@@ -58,36 +58,36 @@ public abstract class ASMemoryAtom implements ASAtom {
         private final Map<String, Set<ASLink>> map = new HashMap<>();
 
         @Override
-        public void add(ASLink link, int size, int position) {
-            getOrCreateSet(link.getType(), size, position).add(link);
+        public void add(ASLink link, int arity, int position) {
+            getOrCreateSet(link.getType(), arity, position).add(link);
         }
 
         @Override
-        public void remove(ASLink link, int size, int position) {
+        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override
-        public int getIncomingSetSize(String type, int size, int position) {
-            Set<ASLink> set = getSet(type, size, position);
+        public int getIncomingSetArity(String type, int arity, int position) {
+            Set<ASLink> set = getSet(type, arity, position);
             return (set == null) ? 0 : set.size();
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
-            Set<ASLink> set = getSet(type, size, position);
+        public Iterator<ASLink> getIncomingSet(String type, int arity, int position) {
+            Set<ASLink> set = getSet(type, arity, position);
             return (set == null) ? Collections.emptyIterator() : set.iterator();
         }
 
-        private static String getKey(String type, int size, int position) {
-            return String.format("%s_%d_%d", type, size, position);
+        private static String getKey(String type, int arity, int position) {
+            return String.format("%s_%d_%d", type, arity, position);
         }
 
-        private Set<ASLink> getSet(String type, int size, int position) {
-            return map.get(getKey(type, size, position));
+        private Set<ASLink> getSet(String type, int arity, int position) {
+            return map.get(getKey(type, arity, position));
         }
 
-        private Set<ASLink> getOrCreateSet(String type, int size, int position) {
-            return map.computeIfAbsent(getKey(type, size, position), key -> new HashSet<>());
+        private Set<ASLink> getOrCreateSet(String type, int arity, int position) {
+            return map.computeIfAbsent(getKey(type, arity, position), key -> new HashSet<>());
         }
     }
 }

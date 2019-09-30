@@ -31,7 +31,7 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
         }
 
         @Override
-        public int getSize() {
+        public int getArity() {
             return atoms.length;
         }
 

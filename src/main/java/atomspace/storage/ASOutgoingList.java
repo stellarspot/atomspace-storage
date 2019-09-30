@@ -2,7 +2,7 @@ package atomspace.storage;
 
 public interface ASOutgoingList {
 
-    int getSize();
+    int getArity();
 
     ASAtom getAtom(int index);
 }

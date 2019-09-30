@@ -34,7 +34,7 @@ public class ASRelationalDBLink extends ASRelationalDBAtom implements ASLink {
         }
 
         @Override
-        public int getSize() {
+        public int getArity() {
             return atoms.length;
         }
 

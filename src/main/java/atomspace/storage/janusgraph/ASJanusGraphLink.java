@@ -43,7 +43,7 @@ public class ASJanusGraphLink extends ASJanusGraphAtom implements ASLink {
         }
 
         @Override
-        public int getSize() {
+        public int getArity() {
             return atoms.length;
         }
 

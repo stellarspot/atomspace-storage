@@ -60,20 +60,20 @@ public abstract class ASRelationalDBAtom implements ASAtom {
     class ASRelationalDBIncomingSet implements ASIncomingSet {
 
         @Override
-        public void add(ASLink link, int size, int position) {
+        public void add(ASLink link, int arity, int position) {
         }
 
         @Override
-        public void remove(ASLink link, int size, int position) {
+        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override
-        public int getIncomingSetSize(String type, int size, int position) {
+        public int getIncomingSetArity(String type, int arity, int position) {
             return 0;
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
+        public Iterator<ASLink> getIncomingSet(String type, int arity, int position) {
 
             List<ASLink> links = new ArrayList<>();
             return links.iterator();

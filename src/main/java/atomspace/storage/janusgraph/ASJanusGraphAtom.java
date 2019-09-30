@@ -73,22 +73,22 @@ public abstract class ASJanusGraphAtom implements ASAtom {
     class ASJanusGraphIncomingSet implements ASIncomingSet {
 
         @Override
-        public void add(ASLink link, int size, int position) {
+        public void add(ASLink link, int arity, int position) {
             Vertex parent = ((ASJanusGraphLink) link).vertex;
-            String key = getKey(link.getType(), size, position);
+            String key = getKey(link.getType(), arity, position);
             vertex.addEdge(key, parent);
         }
 
         @Override
-        public void remove(ASLink link, int size, int position) {
+        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override
-        public int getIncomingSetSize(String type, int size, int position) {
+        public int getIncomingSetArity(String type, int arity, int position) {
 
             // TBD: use the count store
             int s = 0;
-            Iterator<Edge> iter = getSet(type, size, position);
+            Iterator<Edge> iter = getSet(type, arity, position);
             for (; iter.hasNext(); iter.next()) {
                 s++;
             }
@@ -96,10 +96,10 @@ public abstract class ASJanusGraphAtom implements ASAtom {
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
+        public Iterator<ASLink> getIncomingSet(String type, int arity, int position) {
 
             List<ASLink> links = new ArrayList<>();
-            Iterator<Edge> iter = getSet(type, size, position);
+            Iterator<Edge> iter = getSet(type, arity, position);
             while (iter.hasNext()) {
                 JanusGraphVertex vertex = (JanusGraphVertex) iter.next().inVertex();
                 links.add(new ASJanusGraphLink(vertex));

@@ -166,7 +166,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         int size = children.length;
 
         // match outgoing list size
-        if (size != outgoingList.getSize()) {
+        if (size != outgoingList.getArity()) {
             return false;
         }
 
@@ -193,7 +193,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
     static int getCost(ASAtom atom, String type, int size, int position) {
         ASIncomingSet incomingSet = atom.getIncomingSet();
-        return incomingSet.getIncomingSetSize(type, size, position);
+        return incomingSet.getIncomingSetArity(type, size, position);
     }
 
 
@@ -292,7 +292,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
                 this.isVariable = false;
                 ASLink link = (ASLink) atom;
                 ASOutgoingList outgoingList = link.getOutgoingList();
-                int n = outgoingList.getSize();
+                int n = outgoingList.getArity();
                 this.children = new QueryTreeNode[n];
                 this.size = n;
 

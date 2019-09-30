@@ -14,7 +14,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link");
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(0, outgoingList.getSize());
+            Assert.assertEquals(0, outgoingList.getArity());
         });
     }
 
@@ -26,7 +26,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(1, outgoingList.getSize());
+            Assert.assertEquals(1, outgoingList.getArity());
             Assert.assertEquals(node, outgoingList.getAtom(0));
         });
     }
@@ -40,7 +40,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node1, node2);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(2, outgoingList.getSize());
+            Assert.assertEquals(2, outgoingList.getArity());
             Assert.assertEquals(node1, outgoingList.getAtom(0));
             Assert.assertEquals(node2, outgoingList.getAtom(1));
         });
@@ -60,7 +60,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", atoms);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(n, outgoingList.getSize());
+            Assert.assertEquals(n, outgoingList.getArity());
             for (int i = 0; i < n; i++) {
                 Assert.assertEquals(atoms[i], outgoingList.getAtom(i));
             }

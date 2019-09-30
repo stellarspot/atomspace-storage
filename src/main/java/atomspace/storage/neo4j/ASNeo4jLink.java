@@ -42,7 +42,7 @@ public class ASNeo4jLink extends ASNeo4jAtom implements ASLink {
         }
 
         @Override
-        public int getSize() {
+        public int getArity() {
             return atoms.length;
         }
 

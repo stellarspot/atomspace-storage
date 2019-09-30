@@ -1,13 +1,10 @@
 package atomspace.storage;
 
 import atomspace.ASTestUtils;
-import atomspace.storage.*;
-import atomspace.storage.memory.AtomspaceMemoryStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Iterator;
-import java.util.Random;
 
 public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
@@ -105,19 +102,19 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
     private static void assertIncomingSet(ASAtom atom,
                                           String type,
-                                          int size,
+                                          int arity,
                                           int position,
                                           ASLink... links) {
-        assertIncomingSet(atom.getIncomingSet(), type, size, position, links);
+        assertIncomingSet(atom.getIncomingSet(), type, arity, position, links);
     }
 
     private static void assertIncomingSet(ASIncomingSet incomingSet,
                                           String type,
-                                          int size,
+                                          int arity,
                                           int position,
                                           ASLink... links) {
-        Assert.assertEquals(links.length, incomingSet.getIncomingSetSize(type, size, position));
-        Iterator<ASLink> iter = incomingSet.getIncomingSet(type, size, position);
+        Assert.assertEquals(links.length, incomingSet.getIncomingSetArity(type, arity, position));
+        Iterator<ASLink> iter = incomingSet.getIncomingSet(type, arity, position);
         ASTestUtils.assertIteratorEquals(iter, links);
     }
 }

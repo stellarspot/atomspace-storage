@@ -70,32 +70,32 @@ public abstract class ASNeo4jAtom implements ASAtom {
     class ASNeo4jIncomingSet implements ASIncomingSet {
 
         @Override
-        public void add(ASLink link, int size, int position) {
+        public void add(ASLink link, int arity, int position) {
             Node parent = ((ASNeo4jAtom) link).node;
-            String key = getKey(link.getType(), size, position);
+            String key = getKey(link.getType(), arity, position);
             node.createRelationshipTo(parent, RelationshipType.withName(key));
         }
 
         @Override
-        public void remove(ASLink link, int size, int position) {
+        public void remove(ASLink link, int arity, int position) {
         }
 
         @Override
-        public int getIncomingSetSize(String type, int size, int position) {
+        public int getIncomingSetArity(String type, int arity, int position) {
 
             // TBD: use the count store
             int s = 0;
-            for (Relationship r : getSet(type, size, position)) {
+            for (Relationship r : getSet(type, arity, position)) {
                 s++;
             }
             return s;
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int size, int position) {
+        public Iterator<ASLink> getIncomingSet(String type, int arity, int position) {
 
             List<ASLink> links = new ArrayList<>();
-            for (Relationship r : getSet(type, size, position)) {
+            for (Relationship r : getSet(type, arity, position)) {
                 Node parent = r.getEndNode();
                 links.add(new ASNeo4jLink(parent));
             }

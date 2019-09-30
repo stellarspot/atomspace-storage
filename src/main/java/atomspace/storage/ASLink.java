@@ -10,7 +10,7 @@ public interface ASLink extends ASAtom {
         builder.append(link.getType()).append("(");
 
         ASOutgoingList outgoingList = link.getOutgoingList();
-        for (int i = 0; i < outgoingList.getSize(); i++) {
+        for (int i = 0; i < outgoingList.getArity(); i++) {
             if (i != 0) {
                 builder.append(",");
             }
