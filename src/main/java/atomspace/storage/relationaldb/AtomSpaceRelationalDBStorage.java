@@ -23,11 +23,10 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
     static final String CREATE_TABLE_INCOMING_SET = String.format(
             "CREATE TABLE %s(" +
                     "id BIGINT," +
-                    "type_size_pos VARCHAR(255)," +
-                    "parent_id BIGINT" +
-                    ")",
+                    "type_arity_pos VARCHAR(255)," +
+                    "parent_id BIGINT," +
+                    "PRIMARY KEY (id, type_arity_pos, parent_id))",
             TABLE_INCOMING_SET);
-
 
     final Connection connection;
 

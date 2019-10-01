@@ -4,6 +4,10 @@ import atomspace.storage.ASAtom;
 
 public class AtomspaceStorageUtils {
 
+    public static String getKey(String type, int arity, int position) {
+        return String.format("%s_%d_%d", type, arity, position);
+    }
+
     public static long[] getIds(ASAtom... atoms) {
         long[] ids = new long[atoms.length];
 
@@ -13,18 +17,29 @@ public class AtomspaceStorageUtils {
         return ids;
     }
 
-    public static String convertIdsToString(ASAtom... atoms) {
+    public static long[] getIds(String str) {
+        String[] split = str.split(":");
 
-        switch (atoms.length) {
+        long[] ids = new long[split.length];
+
+        for (int i = 0; i < split.length; i++) {
+            ids[i] = Long.parseLong(split[i]);
+        }
+        return ids;
+    }
+
+    public static String idsToString(long... ids) {
+
+        switch (ids.length) {
             case 0:
                 return "";
             case 1:
-                return Long.toString(atoms[0].getId());
+                return Long.toString(ids[0]);
             default: {
 
                 StringBuilder builder = new StringBuilder();
-                for (ASAtom atom : atoms) {
-                    builder.append(atom.getId()).append(':');
+                for (long id : ids) {
+                    builder.append(id).append(':');
                 }
                 return builder.toString();
             }

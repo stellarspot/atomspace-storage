@@ -1,5 +1,6 @@
 package atomspace.storage.relationaldb;
 
+import atomspace.ASTestUtils;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ public class ASRelationalDBTestUtils {
 
     static {
         try {
+            ASTestUtils.removeDirectory(DB_URL_JUNIT);
             RELATIONALDB_STORAGE_STORAGE = new AtomSpaceRelationalDBStorage(DB_URL_JUNIT);
         } catch (SQLException e) {
             throw new RuntimeException(e);
