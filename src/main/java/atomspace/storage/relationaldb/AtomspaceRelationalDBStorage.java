@@ -4,7 +4,7 @@ import atomspace.storage.AtomspaceStorage;
 
 import java.sql.*;
 
-public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
+public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
 
 
     static final String TABLE_ATOMS = "ATOMS";
@@ -30,7 +30,7 @@ public class AtomSpaceRelationalDBStorage implements AtomspaceStorage {
 
     final Connection connection;
 
-    public AtomSpaceRelationalDBStorage(String dbURL) throws SQLException {
+    public AtomspaceRelationalDBStorage(String dbURL) throws SQLException {
         this.connection = DriverManager.getConnection(dbURL);
         this.initDB();
     }

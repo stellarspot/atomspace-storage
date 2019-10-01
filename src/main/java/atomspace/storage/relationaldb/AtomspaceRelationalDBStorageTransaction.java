@@ -2,13 +2,12 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorageTransaction;
-import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
 import java.util.Iterator;
 
-import static atomspace.storage.relationaldb.AtomSpaceRelationalDBStorage.TABLE_ATOMS;
-import static atomspace.storage.relationaldb.AtomSpaceRelationalDBStorage.TABLE_INCOMING_SET;
+import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_ATOMS;
+import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_INCOMING_SET;
 import static atomspace.storage.util.AtomspaceStorageUtils.*;
 
 public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorageTransaction {
