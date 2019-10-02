@@ -3,6 +3,9 @@ package atomspace.query;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageTransaction;
+import atomspace.storage.util.AtomspaceStorageHelper;
 import org.junit.Test;
 
 import static atomspace.ASTestUtils.*;

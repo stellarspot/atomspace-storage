@@ -136,7 +136,7 @@ public abstract class ASRelationalDBAtom implements ASAtom {
                 statement.setLong(1, id);
                 statement.setString(2, key);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
+                    while (resultSet.next()) {
                         long parentId = resultSet.getLong(1);
                         links.add((ASLink) getAtom(parentId));
                     }

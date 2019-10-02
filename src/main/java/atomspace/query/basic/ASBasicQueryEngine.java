@@ -27,8 +27,9 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(root);
 
-        // Only support queries with not variable nodes in it
+        // Only support queries which contains at least one non variable node
         if (!startNode.isLeaf() || startNode.isVariable) {
+            LOG.warn("skip query that contains only variables {}", atom);
             return Collections.emptyIterator();
         }
 

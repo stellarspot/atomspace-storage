@@ -100,6 +100,27 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
         });
     }
 
+    // Link(SubjectNode("subject"), ObjectNode("object1"))
+    // Link(SubjectNode("subject"), ObjectNode("object2"))
+    @Test
+    public void testIncomingSetCommonChild() throws Exception {
+
+        testAtomspaceStorage(as -> {
+
+            ASAtom link1 = as.get("Link",
+                    as.get("SubjectNode", "subject"),
+                    as.get("ObjectNode", "object1"));
+
+            ASAtom link2 = as.get("Link",
+                    as.get("SubjectNode", "subject"),
+                    as.get("ObjectNode", "object2"));
+
+            ASIncomingSet incomingSet = as.get("SubjectNode", "subject").getIncomingSet();
+
+            assertIncomingSet(incomingSet, "Link", 2, 0, (ASLink) link1, (ASLink) link2);
+        });
+    }
+
     private static void assertIncomingSet(ASAtom atom,
                                           String type,
                                           int arity,

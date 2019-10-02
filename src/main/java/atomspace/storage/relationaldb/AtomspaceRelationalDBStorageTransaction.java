@@ -172,8 +172,10 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
     void dump() throws SQLException {
 
+        System.out.printf("--- Dump ---%n");
         dumpTable(TABLE_ATOMS);
         dumpTable(TABLE_INCOMING_SET);
+        System.out.printf("--- ---- ---%n");
     }
 
     void dumpTable(String table) throws SQLException {
