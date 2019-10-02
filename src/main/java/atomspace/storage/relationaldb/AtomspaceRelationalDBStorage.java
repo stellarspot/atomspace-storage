@@ -28,6 +28,14 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
                     "PRIMARY KEY (id, type_arity_pos, parent_id))",
             TABLE_INCOMING_SET);
 
+    static final String CREATE_INDEX_ATOM = String.format(
+            "CREATE UNIQUE INDEX atoms_index on %s(type, value, size, ids)",
+            TABLE_ATOMS);
+
+    static final String CREATE_INDEX_INCOMING_SET = String.format(
+            "CREATE INDEX incoming_sets_index on %s(id, type_arity_pos)",
+            TABLE_INCOMING_SET);
+
     final Connection connection;
 
     public AtomspaceRelationalDBStorage(String dbURL) throws SQLException {
@@ -46,8 +54,11 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
     }
 
     void initDB() throws SQLException {
+
         initTable(TABLE_ATOMS, CREATE_TABLE_ATOMS);
-        initTable(TABLE_ATOMS, CREATE_TABLE_INCOMING_SET);
+        initTable(TABLE_INCOMING_SET, CREATE_TABLE_INCOMING_SET);
+
+        initIndices();
     }
 
     private void initTable(String tableName, String sql) throws SQLException {
@@ -58,6 +69,13 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
                     statement.execute(sql);
                 }
             }
+        }
+    }
+
+    private void initIndices() throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(CREATE_INDEX_ATOM);
+            statement.execute(CREATE_INDEX_INCOMING_SET);
         }
     }
 }

@@ -8,23 +8,39 @@ import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
 import atomspace.storage.util.AtomspaceStorageHelper;
+import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.util.Scanner;
 
 public class RandomTreeModelTest {
 
-
     private static AtomspaceStorage getStorage() {
-//        return new AtomspaceMemoryStorage();
+        return getRelationalDBStorage();
+    }
+
+    private static AtomspaceStorage getMemoryGraphStorage() {
+        return new AtomspaceMemoryStorage();
+    }
+
+    private static AtomspaceStorage getRelationalDBStorage() {
+        String dir = "/tmp/atomspace-storage/performance/relationaldb";
+        AtomspaceStorageUtils.removeDirectory(dir);
+        return AtomspaceRelationalDBStorageHelper.getInMemoryStorage(dir);
+    }
+
+    private static AtomspaceStorage getJanusGraphStorage() {
         return AtomspaceJanusGraphStorageHelper.getJanusGraphInMemoryStorage();
     }
 
     public static void main(String[] args) throws Exception {
 
 
+        int statements = 100;
+        int queries = 1;
         PerformanceModelConfiguration config = new PerformanceModelConfiguration(3, 3, 3, true);
-        PerformanceModelParameters params = new PerformanceModelParameters(500, 1, 100);
+        PerformanceModelParameters params = new PerformanceModelParameters(statements, queries, 100);
         RandomTreeModelParameters treeParams = new RandomTreeModelParameters(3, 3, 2);
         RandomTreeModel model = new RandomTreeModel(config, params, treeParams);
         //model.dump();
@@ -54,5 +70,4 @@ public class RandomTreeModelTest {
         Scanner in = new Scanner(System.in);
         String s = in.nextLine();
     }
-
 }

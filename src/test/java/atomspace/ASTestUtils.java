@@ -16,6 +16,21 @@ public class ASTestUtils {
 
     public static <T> void assertIteratorEquals(Iterator<T> iter, T... elems) {
 
+        Set<T> expected = new HashSet<>();
+        expected.addAll(Arrays.asList(elems));
+
+        Set<T> actual = new HashSet<>();
+
+        while (iter.hasNext()) {
+            actual.add(iter.next());
+        }
+
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    public static <T> void assertIteratorEqualsSequentially(Iterator<T> iter, T... elems) {
+
         List<T> expected = Arrays.asList(elems);
         List<T> actual = new ArrayList<>();
 

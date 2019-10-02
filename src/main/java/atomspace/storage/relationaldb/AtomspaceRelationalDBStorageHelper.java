@@ -31,4 +31,13 @@ public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelpe
             throw new RuntimeException(e);
         }
     }
+
+    public static AtomspaceRelationalDBStorage getInMemoryStorage(String directory) {
+        String url = String.format("jdbc:derby:%s;create=true;", directory);
+        try {
+            return new AtomspaceRelationalDBStorage(url);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

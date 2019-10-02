@@ -2,6 +2,13 @@ package atomspace.storage.util;
 
 import atomspace.storage.ASAtom;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
+
 public class AtomspaceStorageUtils {
 
     public static String getKey(String type, int arity, int position) {
@@ -43,6 +50,24 @@ public class AtomspaceStorageUtils {
                 }
                 return builder.toString();
             }
+        }
+    }
+
+    public static void removeDirectory(String directory) {
+        Path pathToBeDeleted = Paths.get(directory);
+
+        if (!Files.exists(pathToBeDeleted)) {
+            return;
+        }
+
+        try {
+            Files.walk(pathToBeDeleted)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
