@@ -7,6 +7,7 @@ import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -27,37 +28,45 @@ public class RandomTreeCreateAtomsBenchmark {
     int statements = -1;
 
     PerformanceModel model;
-    AtomspaceMemoryStorage atomspaceMemory;
-    AtomSpaceNeo4jStorage atomspaceNeo4j;
+    AtomspaceMemoryStorage memoryStorage;
+    AtomspaceRelationalDBStorage relationalDBStorage;
+    AtomSpaceNeo4jStorage neo4jStorage;
     AtomspaceJanusGraphStorage janusGraphStorage;
 
     @Setup
     public void setUp() {
         PerformanceModelParameters params = new PerformanceModelParameters(statements, -1);
         model = new RandomTreeModel(config, params, new RandomTreeModelParameters(treeParams.maxWidth, treeParams.maxWidth, 1));
-        atomspaceMemory = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
-        atomspaceNeo4j = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
+        memoryStorage = AtomspaceStoragePerformanceUtils.getCleanMemoryStorage();
+        relationalDBStorage = AtomspaceStoragePerformanceUtils.getCleanRelationalDBStorage();
+        neo4jStorage = AtomspaceStoragePerformanceUtils.getCleanNeo4jStorage();
         janusGraphStorage = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage();
     }
 
     @Benchmark
     public void create1Memory() throws Exception {
-        model.createAtoms(atomspaceMemory);
+        model.createAtoms(memoryStorage);
     }
 
     @Benchmark
-    public void create2Neo4j() throws Exception {
-        model.createAtoms(atomspaceNeo4j);
+    public void create2RelationDB() throws Exception {
+        model.createAtoms(relationalDBStorage);
     }
 
     @Benchmark
-    public void create3JanusGraph() throws Exception {
+    public void create3Neo4j() throws Exception {
+        model.createAtoms(neo4jStorage);
+    }
+
+    @Benchmark
+    public void create4JanusGraph() throws Exception {
         model.createAtoms(janusGraphStorage);
     }
 
     @TearDown
     public void tearDown() throws Exception {
-        atomspaceNeo4j.close();
+        relationalDBStorage.close();
+        neo4jStorage.close();
         janusGraphStorage.close();
     }
 

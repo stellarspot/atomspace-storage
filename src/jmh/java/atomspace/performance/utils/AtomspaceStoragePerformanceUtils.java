@@ -6,6 +6,8 @@ import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageTransaction;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
+import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
 import org.openjdk.jmh.results.Result;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
@@ -31,23 +33,18 @@ public class AtomspaceStoragePerformanceUtils {
         return new AtomspaceMemoryStorage();
     }
 
+    public static AtomspaceRelationalDBStorage getCleanRelationalDBStorage() {
+        String storageDir = getCleanNormalizedTempDir("atomspace-storage-jmh-relationaldb");
+        return AtomspaceRelationalDBStorageHelper.getInMemoryStorage(storageDir);
+    }
+
     public static AtomSpaceNeo4jStorage getCleanNeo4jStorage() {
-
-        String storageDir = String.format("%s/neo4j", STORAGE_DIR);
-        AtomSpaceNeo4jStorage storage = new AtomSpaceNeo4jStorage(storageDir);
-
-        try (AtomspaceNeo4jStorageTransaction tx = storage.getTx()) {
-            AtomspaceNeo4jStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
-            helper.reset();
-        }
-
-        return storage;
+        String storageDir = getCleanNormalizedTempDir("atomspace-storage-jmh-neo4j");
+        return new AtomSpaceNeo4jStorage(storageDir);
     }
 
     public static AtomspaceJanusGraphStorage getCleanJanusGraphStorage() {
-
-        String storageDir = String.format("%s/janusgraph", STORAGE_DIR);
-        removeDirectory(storageDir);
+        String storageDir = getCleanNormalizedTempDir("atomspace-storage-jmh-janusgraph");
         AtomspaceJanusGraphStorage storage = AtomspaceJanusGraphStorageHelper
                 .getJanusGraphBerkeleyDBStorage(storageDir);
 
@@ -114,4 +111,19 @@ public class AtomspaceStoragePerformanceUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static String getTempDir(String prefix) {
+        try {
+            return Files.createTempDirectory(prefix).toAbsolutePath().toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getCleanNormalizedTempDir(String prefix) {
+        String path = getTempDir(prefix);
+        removeDirectory(path);
+        return path.replace('\\', '/');
+    }
+
 }

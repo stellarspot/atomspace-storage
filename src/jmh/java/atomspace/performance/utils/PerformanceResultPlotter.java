@@ -5,7 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -115,6 +117,20 @@ public class PerformanceResultPlotter extends Application {
         list.add(new PointDouble(6, 16));
         list.add(new PointDouble(8, 32));
         measurements.put("testB", list);
+
+        list = new ArrayList<>();
+        list.add(new PointDouble(2, 4));
+        list.add(new PointDouble(4, 5));
+        list.add(new PointDouble(6, 6));
+        list.add(new PointDouble(8, 7));
+        measurements.put("testC", list);
+
+        list = new ArrayList<>();
+        list.add(new PointDouble(2, 7));
+        list.add(new PointDouble(4, 6));
+        list.add(new PointDouble(6, 5));
+        list.add(new PointDouble(8, 4));
+        measurements.put("testD", list);
 
 //        PlotterProperties props = PlotterProperties.sameChart(measurements);
         PlotterProperties props = PlotterProperties.differentCharts(measurements);
