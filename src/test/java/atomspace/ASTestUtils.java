@@ -168,4 +168,14 @@ public class ASTestUtils {
             return String.format("atom: %s, variables: %s", atom, variables);
         }
     }
+
+    public static String getTempDir(String prefix) throws IOException {
+        return Files.createTempDirectory(prefix).toAbsolutePath().toString();
+    }
+
+    public static String getCleanNormalizedTempDir(String prefix) throws IOException {
+        String path = getTempDir(prefix);
+        removeDirectory(path);
+        return path.replace('\\', '/');
+    }
 }

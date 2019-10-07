@@ -3,22 +3,23 @@ package atomspace.storage.relationaldb;
 import atomspace.ASTestUtils;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class ASRelationalDBTestUtils {
 
-    public static final String DB_URL_JUNIT = "jdbc:derby:/tmp/atomspace-storage/junit/relationaldb;create=true";
+    public static final String DB_URL_JUNIT = "jdbc:derby:%s;create=true";
     private static final AtomspaceRelationalDBStorage RELATIONALDB_STORAGE_STORAGE;
 
     static {
         try {
-            ASTestUtils.removeDirectory(DB_URL_JUNIT);
-            RELATIONALDB_STORAGE_STORAGE = new AtomspaceRelationalDBStorage(DB_URL_JUNIT);
-        } catch (SQLException e) {
+            String path = ASTestUtils.getCleanNormalizedTempDir("atomspace-storage-junit-relationaldb");
+            String dbURL = String.format(DB_URL_JUNIT, path);
+            RELATIONALDB_STORAGE_STORAGE = new AtomspaceRelationalDBStorage(dbURL);
+        } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public static AtomspaceRelationalDBStorage getTestStorage() {
         resetStorage();

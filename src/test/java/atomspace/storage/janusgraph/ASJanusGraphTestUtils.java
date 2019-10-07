@@ -3,15 +3,22 @@ package atomspace.storage.janusgraph;
 import atomspace.ASTestUtils;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
+import java.io.IOException;
+
 public class ASJanusGraphTestUtils {
 
-    private static final String JANUSGRAPH_STORAGE_DIR = "/tmp/atomspace-storage/junit/janusgraph";
+    private static final String JANUSGRAPH_STORAGE_DIR;
     private static final AtomspaceJanusGraphStorage JANUS_GRAPHJ_STORAGE;
 
     static {
-        ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
-        JANUS_GRAPHJ_STORAGE = AtomspaceJanusGraphStorageHelper
-                .getJanusGraphBerkeleyDBStorage(JANUSGRAPH_STORAGE_DIR);
+        try {
+            JANUSGRAPH_STORAGE_DIR = ASTestUtils.getCleanNormalizedTempDir("atomspace-storage-junit-janusgraph");
+            ASTestUtils.removeDirectory(JANUSGRAPH_STORAGE_DIR);
+            JANUS_GRAPHJ_STORAGE = AtomspaceJanusGraphStorageHelper
+                    .getJanusGraphBerkeleyDBStorage(JANUSGRAPH_STORAGE_DIR);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static AtomspaceJanusGraphStorage getTestStorage() {
