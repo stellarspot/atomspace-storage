@@ -4,7 +4,7 @@ import atomspace.performance.PerformanceModelParameters;
 import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
+import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
@@ -30,7 +30,7 @@ public class RandomTreeCreateAtomsBenchmark {
     PerformanceModel model;
     AtomspaceMemoryStorage memoryStorage;
     AtomspaceRelationalDBStorage relationalDBStorage;
-    AtomSpaceNeo4jStorage neo4jStorage;
+    AtomspaceNeo4jStorage neo4jStorage;
     AtomspaceJanusGraphStorage janusGraphStorage;
 
     @Setup

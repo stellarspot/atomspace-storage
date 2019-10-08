@@ -3,9 +3,7 @@ package atomspace.performance.utils;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
-import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
-import atomspace.storage.neo4j.AtomspaceNeo4jStorageTransaction;
+import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
 import org.openjdk.jmh.results.Result;
@@ -38,9 +36,9 @@ public class AtomspaceStoragePerformanceUtils {
         return AtomspaceRelationalDBStorageHelper.getInMemoryStorage(storageDir);
     }
 
-    public static AtomSpaceNeo4jStorage getCleanNeo4jStorage() {
+    public static AtomspaceNeo4jStorage getCleanNeo4jStorage() {
         String storageDir = getCleanNormalizedTempDir("atomspace-storage-jmh-neo4j");
-        return new AtomSpaceNeo4jStorage(storageDir);
+        return new AtomspaceNeo4jStorage(storageDir);
     }
 
     public static AtomspaceJanusGraphStorage getCleanJanusGraphStorage() {

@@ -6,15 +6,15 @@ import atomspace.storage.util.AtomspaceStorageHelper;
 public class ASNeo4jTestUtils {
 
     public static final String NEO4J_STORAGE_DIR = "/tmp/atomspace-storage/junit/neo4j";
-    private static final AtomSpaceNeo4jStorage NEO4J_STORAGE;
+    private static final AtomspaceNeo4jStorage NEO4J_STORAGE;
 
     static {
         ASTestUtils.removeDirectory(NEO4J_STORAGE_DIR);
-        NEO4J_STORAGE = new AtomSpaceNeo4jStorage(NEO4J_STORAGE_DIR);
+        NEO4J_STORAGE = new AtomspaceNeo4jStorage(NEO4J_STORAGE_DIR);
         addShutdownHook();
     }
 
-    public static AtomSpaceNeo4jStorage getTestStorage() {
+    public static AtomspaceNeo4jStorage getTestStorage() {
         resetStorage();
         return NEO4J_STORAGE;
     }

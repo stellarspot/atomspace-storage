@@ -6,7 +6,7 @@ import atomspace.query.ASQueryEngine;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
-import atomspace.storage.neo4j.AtomSpaceNeo4jStorage;
+import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import org.openjdk.jmh.annotations.*;
@@ -32,7 +32,7 @@ public class RandomTreeQueryAtomsBenchmark {
     PerformanceModel model;
     ASQueryEngine queryEngine;
     AtomspaceMemoryStorage atomspaceMemory;
-    AtomSpaceNeo4jStorage atomspaceNeo4j;
+    AtomspaceNeo4jStorage atomspaceNeo4j;
     AtomspaceJanusGraphStorage atomspaceJanusGraph;
 
     @Setup

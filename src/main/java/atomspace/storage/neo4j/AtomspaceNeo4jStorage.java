@@ -5,16 +5,14 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.schema.IndexDefinition;
-import org.neo4j.graphdb.schema.Schema;
 
 import java.io.File;
 
-public class AtomSpaceNeo4jStorage implements AtomspaceStorage {
+public class AtomspaceNeo4jStorage implements AtomspaceStorage {
 
     final GraphDatabaseService graph;
 
-    public AtomSpaceNeo4jStorage(String storageDirectory) {
+    public AtomspaceNeo4jStorage(String storageDirectory) {
         this.graph = new GraphDatabaseFactory().newEmbeddedDatabase(new File(storageDirectory));
         makeIndices();
     }
