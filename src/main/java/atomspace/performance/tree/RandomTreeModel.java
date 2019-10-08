@@ -84,7 +84,7 @@ public class RandomTreeModel implements PerformanceModel {
         try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
             for (NodeWithQuery pair : queries) {
                 ASAtom query = createAtom(tx, pair.query);
-                Iterator<ASQueryResult> results = queryEngine.match(query);
+                Iterator<ASQueryResult> results = queryEngine.match(tx, query);
 
                 if (config.checkQueries) {
 

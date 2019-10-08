@@ -26,7 +26,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            assertQueryResultsEqual(queryEngine.match(query),
+            assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(atom, new KeyWithValue("$WHAT", as.get("ObjectNode", "object"))));
         });
     }
@@ -53,7 +53,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            assertQueryResultsEqual(queryEngine.match(query),
+            assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(atom2, new KeyWithValue("$WHAT", as.get("ObjectNode", "object2"))),
                     new TestQueryResult(atom1, new KeyWithValue("$WHAT", as.get("ObjectNode", "object1"))));
         });

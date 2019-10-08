@@ -35,7 +35,7 @@ public abstract class AbstractBasicQueryEngineRegressionTest extends ASAbstractT
                                     as.get("VariableNode", "$VARIABLE")));
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
-            queryEngine.match(query);
+            queryEngine.match(as, query);
         });
     }
 }

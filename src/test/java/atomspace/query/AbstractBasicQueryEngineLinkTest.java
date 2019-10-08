@@ -28,7 +28,7 @@ public abstract class AbstractBasicQueryEngineLinkTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(
                             link,
                             new KeyWithValue<>("$LIST_LINK", as.get("ListLink",
@@ -78,7 +78,7 @@ public abstract class AbstractBasicQueryEngineLinkTest extends ASAbstractTest {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(
                             link1,
                             new KeyWithValue<>("$LIST_LINK", as.get("ListLink",

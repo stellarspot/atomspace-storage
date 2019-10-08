@@ -15,9 +15,9 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
         testAtomspaceStorage(as -> {
 
             ASAtom node = as.get("Node", "value");
-            assertIncomingSet(node, "Node", 0, 0);
-            assertIncomingSet(node, "Node", 1, 0);
-            assertIncomingSet(node, "Node", 1, 1);
+            assertIncomingSet(as, node, "Node", 0, 0);
+            assertIncomingSet(as, node, "Node", 1, 0);
+            assertIncomingSet(as, node, "Node", 1, 1);
         });
     }
 
@@ -31,9 +31,9 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node);
 
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
-            assertIncomingSet(nodeIncomingSet, "Node", 0, 0);
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 0, link);
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 1);
+            assertIncomingSet(as, nodeIncomingSet, "Node", 0, 0);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 1, 0, link);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 1, 1);
         });
     }
 
@@ -48,12 +48,11 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node, node);
 
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
-            assertIncomingSet(nodeIncomingSet, "Link", 0, 0);
-            assertIncomingSet(nodeIncomingSet, "Link", 0, 1);
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 0);
-            assertIncomingSet(nodeIncomingSet, "Link", 1, 1);
-            assertIncomingSet(nodeIncomingSet, "Link", 2, 0, link);
-            assertIncomingSet(nodeIncomingSet, "Link", 2, 1, link);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 0, 0);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 0, 1);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 1, 0);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 2, 0, link);
+            assertIncomingSet(as, nodeIncomingSet, "Link", 2, 1, link);
         });
     }
 
@@ -71,14 +70,14 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
             // node1
             ASIncomingSet nodeIncomingSet1 = node1.getIncomingSet();
 
-            assertIncomingSet(nodeIncomingSet1, "Link", 2, 0, link);
-            assertIncomingSet(nodeIncomingSet1, "Link", 2, 1);
+            assertIncomingSet(as, nodeIncomingSet1, "Link", 2, 0, link);
+            assertIncomingSet(as, nodeIncomingSet1, "Link", 2, 1);
 
             // node2
             ASIncomingSet nodeIncomingSet2 = node2.getIncomingSet();
 
-            assertIncomingSet(nodeIncomingSet2, "Link", 2, 0);
-            assertIncomingSet(nodeIncomingSet2, "Link", 2, 1, link);
+            assertIncomingSet(as, nodeIncomingSet2, "Link", 2, 0);
+            assertIncomingSet(as, nodeIncomingSet2, "Link", 2, 1, link);
         });
     }
 
@@ -95,8 +94,8 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
             ASIncomingSet incomingSet = node.getIncomingSet();
 
-            assertIncomingSet(incomingSet, "Link1", 1, 0, link1);
-            assertIncomingSet(incomingSet, "Link2", 1, 0, link2);
+            assertIncomingSet(as, incomingSet, "Link1", 1, 0, link1);
+            assertIncomingSet(as, incomingSet, "Link2", 1, 0, link2);
         });
     }
 
@@ -117,25 +116,27 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
             ASIncomingSet incomingSet = as.get("SubjectNode", "subject").getIncomingSet();
 
-            assertIncomingSet(incomingSet, "Link", 2, 0, (ASLink) link1, (ASLink) link2);
+            assertIncomingSet(as, incomingSet, "Link", 2, 0, (ASLink) link1, (ASLink) link2);
         });
     }
 
-    private static void assertIncomingSet(ASAtom atom,
+    private static void assertIncomingSet(AtomspaceStorageTransaction tx,
+                                          ASAtom atom,
                                           String type,
                                           int arity,
                                           int position,
                                           ASLink... links) {
-        assertIncomingSet(atom.getIncomingSet(), type, arity, position, links);
+        assertIncomingSet(tx, atom.getIncomingSet(), type, arity, position, links);
     }
 
-    private static void assertIncomingSet(ASIncomingSet incomingSet,
+    private static void assertIncomingSet(AtomspaceStorageTransaction tx,
+                                          ASIncomingSet incomingSet,
                                           String type,
                                           int arity,
                                           int position,
                                           ASLink... links) {
-        Assert.assertEquals(links.length, incomingSet.getIncomingSetArity(type, arity, position));
-        Iterator<ASLink> iter = incomingSet.getIncomingSet(type, arity, position);
+        Assert.assertEquals(links.length, incomingSet.getIncomingSetArity(tx, type, arity, position));
+        Iterator<ASLink> iter = incomingSet.getIncomingSet(tx, type, arity, position);
         ASTestUtils.assertIteratorEquals(iter, links);
     }
 }

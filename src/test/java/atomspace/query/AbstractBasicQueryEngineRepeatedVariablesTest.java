@@ -29,7 +29,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(atom, new KeyWithValue("$VALUE", as.get("Node", "value"))));
         });
     }
@@ -63,7 +63,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
 
-            ASTestUtils.assertQueryResultsEqual(queryEngine.match(query),
+            ASTestUtils.assertQueryResultsEqual(queryEngine.match(as, query),
                     new TestQueryResult(atom1, new KeyWithValue("$VALUE", as.get("Node", "A"))),
                     new TestQueryResult(atom3, new KeyWithValue("$VALUE", as.get("Node", "B"))));
         });

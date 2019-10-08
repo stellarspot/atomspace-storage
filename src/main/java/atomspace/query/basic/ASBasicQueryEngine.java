@@ -20,12 +20,12 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     private static final int UNDEFINED_DIRECTION = -2;
 
     @Override
-    public <T> Iterator<T> match(ASAtom atom, Function<ASQueryResult, T> mapper) {
+    public <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom atom, Function<ASQueryResult, T> mapper) {
 
         LOG.trace("query {}", atom);
 
         QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
-        QueryTreeNode startNode = findStartNode(root);
+        QueryTreeNode startNode = findStartNode(tx, root);
 
         // Only support queries which contains at least one non variable node
         if (!startNode.isLeaf() || startNode.isVariable) {
@@ -70,7 +70,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             int parentSize = parent.size;
             int parentPosition = match.leftTreeNode.parentPosition;
 
-            Iterator<ASLink> iter = incomingSet.getIncomingSet(parentType, parentSize, parentPosition);
+            Iterator<ASLink> iter = incomingSet.getIncomingSet(tx, parentType, parentSize, parentPosition);
 
             while (iter.hasNext()) {
                 ASLink link = iter.next();
@@ -82,14 +82,14 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return results.iterator();
     }
 
-    QueryTreeNode findStartNode(QueryTreeNode root) {
+    QueryTreeNode findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode root) {
 
         NodeWithCost current = new NodeWithCost(root, MAX_COST);
 
         String type = root.atom.getType();
         int size = root.size;
         for (int i = 0; i < root.children.length; i++) {
-            NodeWithCost child = findStartNode(root.children[i], type, size, i);
+            NodeWithCost child = findStartNode(tx, root.children[i], type, size, i);
 
             if (child.cost < current.cost) {
                 current = child;
@@ -99,14 +99,14 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return current.node;
     }
 
-    NodeWithCost findStartNode(QueryTreeNode node, String parentType, int parentSize, int position) {
+    NodeWithCost findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode node, String parentType, int parentSize, int position) {
 
         if (node.isVariable) {
             return new NodeWithCost(node, MAX_COST);
         }
 
         if (node.isLeaf()) {
-            int cost = getCost(node.atom, parentType, parentSize, position);
+            int cost = getCost(tx, node.atom, parentType, parentSize, position);
             return new NodeWithCost(node, cost);
         }
 
@@ -117,7 +117,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         QueryTreeNode[] children = node.children;
 
         for (int i = 0; i < children.length; i++) {
-            NodeWithCost child = findStartNode(children[i], type, size, i);
+            NodeWithCost child = findStartNode(tx, children[i], type, size, i);
 
             if (child.cost <= currentCost) {
                 currentNode = child.node;
@@ -192,9 +192,9 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return TYPE_NODE_VARIABLE.equals(type);
     }
 
-    static int getCost(ASAtom atom, String type, int size, int position) {
+    static int getCost(AtomspaceStorageTransaction tx, ASAtom atom, String type, int size, int position) {
         ASIncomingSet incomingSet = atom.getIncomingSet();
-        return incomingSet.getIncomingSetArity(type, size, position);
+        return incomingSet.getIncomingSetArity(tx, type, size, position);
     }
 
 

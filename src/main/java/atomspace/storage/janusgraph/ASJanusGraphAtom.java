@@ -3,6 +3,7 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
+import atomspace.storage.AtomspaceStorageTransaction;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -79,7 +80,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
         }
 
         @Override
-        public int getIncomingSetArity(String type, int arity, int position) {
+        public int getIncomingSetArity(AtomspaceStorageTransaction tx, String type, int arity, int position) {
 
             // TBD: use the count store
             int s = 0;
@@ -91,7 +92,7 @@ public abstract class ASJanusGraphAtom implements ASAtom {
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(String type, int arity, int position) {
+        public Iterator<ASLink> getIncomingSet(AtomspaceStorageTransaction tx, String type, int arity, int position) {
 
             List<ASLink> links = new ArrayList<>();
             Iterator<Edge> iter = getSet(type, arity, position);
