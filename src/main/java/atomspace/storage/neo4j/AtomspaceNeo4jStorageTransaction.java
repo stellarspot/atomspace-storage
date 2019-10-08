@@ -21,8 +21,16 @@ public class AtomspaceNeo4jStorageTransaction implements AtomspaceStorageTransac
     @Override
     public ASAtom get(String type, String value) {
 
-        Label nodeLabel = Label.label(type);
-        Node node = graph.findNode(nodeLabel, "value", value);
+        Label nodeLabel = Label.label("Node");
+        Iterator<Node> nodes = graph.findNodes(nodeLabel,
+                "type", type,
+                "value", value);
+
+        Node node = null;
+
+        if (nodes.hasNext()) {
+            node = nodes.next();
+        }
 
         if (node == null) {
             node = graph.createNode();
@@ -38,9 +46,17 @@ public class AtomspaceNeo4jStorageTransaction implements AtomspaceStorageTransac
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
 
-        Label linkLabel = Label.label(type);
+        Label linkLabel = Label.label("Link");
         long[] ids = getIds(atoms);
-        Node node = graph.findNode(linkLabel, "ids", ids);
+        Iterator<Node> nodes = graph.findNodes(linkLabel,
+                "type", type,
+                "ids", ids);
+
+        Node node = null;
+
+        if (nodes.hasNext()) {
+            node = nodes.next();
+        }
 
         if (node == null) {
 
