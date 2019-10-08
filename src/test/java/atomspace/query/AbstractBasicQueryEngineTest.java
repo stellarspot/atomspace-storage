@@ -3,14 +3,27 @@ package atomspace.query;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAbstractTest;
 import atomspace.storage.ASAtom;
-import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
-import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageTransaction;
-import atomspace.storage.util.AtomspaceStorageHelper;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static atomspace.ASTestUtils.*;
 
 public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
+
+    @Ignore
+    @Test
+    // Use Typed variables
+    public void test0() throws Exception {
+        testAtomspaceStorage(as -> {
+
+            ASAtom atom = as.get("Node", "value");
+            ASAtom query = as.get("VariableNode", "$VALUE");
+
+            ASQueryEngine queryEngine = new ASBasicQueryEngine();
+            assertQueryResultsEqual(queryEngine.match(as, query),
+                    new TestQueryResult(atom, new KeyWithValue("$VALUE", as.get("Node", "value"))));
+        });
+    }
 
     @Test
     public void test1() throws Exception {

@@ -10,10 +10,10 @@ import java.util.function.Function;
 
 public interface ASQueryEngine {
 
-    <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom atom, Function<ASQueryResult, T> mapper);
+    <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom query, Function<ASQueryResult, T> mapper);
 
-    default Iterator<ASQueryResult> match(AtomspaceStorageTransaction tx, ASAtom atom) {
-        return match(tx, atom, Function.identity());
+    default Iterator<ASQueryResult> match(AtomspaceStorageTransaction tx, ASAtom query) {
+        return match(tx, query, Function.identity());
     }
 
     interface ASQueryResult {

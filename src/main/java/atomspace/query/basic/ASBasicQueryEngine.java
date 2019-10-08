@@ -20,16 +20,16 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     private static final int UNDEFINED_DIRECTION = -2;
 
     @Override
-    public <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom atom, Function<ASQueryResult, T> mapper) {
+    public <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom query, Function<ASQueryResult, T> mapper) {
 
-        LOG.trace("query {}", atom);
+        LOG.trace("query {}", query);
 
-        QueryTreeNode root = new QueryTreeNode(null, atom, ROOT_DIRECTION);
+        QueryTreeNode root = new QueryTreeNode(null, query, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(tx, root);
 
         // Only support queries which contains at least one non variable node
         if (!startNode.isLeaf() || startNode.isVariable) {
-            LOG.warn("skip query that contains only variables {}", atom);
+            LOG.warn("skip query that contains only variables {}", query);
             return Collections.emptyIterator();
         }
 
@@ -83,20 +83,8 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     }
 
     QueryTreeNode findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode root) {
-
-        NodeWithCost current = new NodeWithCost(root, MAX_COST);
-
-        String type = root.atom.getType();
-        int size = root.size;
-        for (int i = 0; i < root.children.length; i++) {
-            NodeWithCost child = findStartNode(tx, root.children[i], type, size, i);
-
-            if (child.cost < current.cost) {
-                current = child;
-            }
-        }
-
-        return current.node;
+        NodeWithCost startNodeWithCost = findStartNode(tx, root, null, -1, -1);
+        return startNodeWithCost.node;
     }
 
     NodeWithCost findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode node, String parentType, int parentSize, int position) {
