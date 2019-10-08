@@ -3,19 +3,19 @@
 ## Atoms
 
 Atom
-* id
-* type
+* `id`
+* `type`
 * IncomingSet
-  * getIncomingSetArity(id, type, arity, position): arity
-  * getIncomingSet(id, type, arity, position): [id]
+  * `getIncomingSetArity(id, type, arity, position): arity`
+  * `getIncomingSet(id, type, arity, position): [id]`
 
 Node extends Atom
-* value
+* `value`
 
 Link extends Atom
 * OutgoingSet
-  * arity
-  * childrenIds
+  * `arity`
+  * `childrenIds`
 
 ## Storage
 
@@ -23,12 +23,12 @@ Link extends Atom
 
 Atoms retrieving
 
-Get node:
-* get(type, value): id
+Get or create node:
+* `get(type, value): id`
 
-Get link:
-* get(type, [id]): id
+Get or create link:
+* `get(type, [id]): id`
 
 Get Incoming Set:
-* getIncomingSetArity(id, type, arity, pos): arity
-* getIncomingSet(id, type, arity, pos): [id]
+* `getIncomingSetArity(id, type, arity, pos): arity`
+* `getIncomingSet(id, type, arity, pos): [id]`
