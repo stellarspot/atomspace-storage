@@ -1,20 +1,18 @@
-package atomspace.storage.relationaldb;
+package atomspace.storage.base;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
-import atomspace.storage.basic.ASBasicIncomingSet;
 
-
-public abstract class ASRelationalDBAtom implements ASAtom {
+public abstract class ASBaseAtom implements ASAtom {
 
     final long id;
     final String type;
     final ASIncomingSet incomingSet;
 
-    public ASRelationalDBAtom(long id, String type) {
+    public ASBaseAtom(long id, String type) {
         this.id = id;
         this.type = type;
-        this.incomingSet = new ASBasicIncomingSet(id);
+        this.incomingSet = new ASBaseIncomingSet(id);
     }
 
     @Override
@@ -38,8 +36,8 @@ public abstract class ASRelationalDBAtom implements ASAtom {
             return true;
         }
 
-        if (obj instanceof ASRelationalDBAtom) {
-            ASRelationalDBAtom that = (ASRelationalDBAtom) obj;
+        if (obj instanceof ASAtom) {
+            ASAtom that = (ASAtom) obj;
             return this.getId() == that.getId();
         }
 

@@ -3,6 +3,8 @@ package atomspace.storage.relationaldb;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASTransaction;
+import atomspace.storage.base.ASBaseLink;
+import atomspace.storage.base.ASBaseNode;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
@@ -55,14 +57,14 @@ public class ASRelationalDBTransaction implements ASTransaction {
     @Override
     public ASAtom get(String type, String value) {
         long id = get(type, value, 0);
-        return new ASRelationalDBNode(id, type, value);
+        return new ASBaseNode(id, type, value);
     }
 
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
         long[] ids = AtomspaceStorageUtils.getIds(atoms);
         long id = get(type, "", atoms.length, ids);
-        return new ASRelationalDBLink(id, type, atoms);
+        return new ASBaseLink(id, type, atoms);
     }
 
     private long get(String type, String value, int size, long... ids) {
@@ -148,11 +150,11 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
                     if (arity == 0) {
                         String value = resultSet.getString("value");
-                        return new ASRelationalDBNode(id, type, value);
+                        return new ASBaseNode(id, type, value);
                     } else {
                         String childIds = resultSet.getString("ids");
                         long[] ids = AtomspaceStorageUtils.getIds(childIds);
-                        return new ASRelationalDBLink(id, type, ids);
+                        return new ASBaseLink(id, type, ids);
                     }
                 }
 
@@ -214,7 +216,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     long parentId = resultSet.getLong(1);
-                    links.add(new ASRelationalDBLink(parentId, type, arity));
+                    links.add(new ASBaseLink(parentId, type, arity));
                 }
             }
         } catch (SQLException e) {

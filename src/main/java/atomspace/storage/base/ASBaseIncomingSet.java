@@ -1,4 +1,4 @@
-package atomspace.storage.basic;
+package atomspace.storage.base;
 
 import atomspace.storage.ASLink;
 import atomspace.storage.ASIncomingSet;
@@ -6,11 +6,11 @@ import atomspace.storage.ASTransaction;
 
 import java.util.Iterator;
 
-public class ASBasicIncomingSet implements ASIncomingSet {
+public class ASBaseIncomingSet implements ASIncomingSet {
 
     final long atomId;
 
-    public ASBasicIncomingSet(long atomId) {
+    public ASBaseIncomingSet(long atomId) {
         this.atomId = atomId;
     }
 
