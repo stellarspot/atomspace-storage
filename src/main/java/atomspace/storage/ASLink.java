@@ -6,18 +6,11 @@ public interface ASLink extends ASAtom {
 
     default String toString(ASLink link) {
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(link.getType()).append("(");
-
-        ASOutgoingList outgoingList = link.getOutgoingList();
-        for (int i = 0; i < outgoingList.getArity(); i++) {
-            if (i != 0) {
-                builder.append(",");
-            }
-            builder.append(outgoingList.getAtom(i));
-        }
-
-        builder.append(")");
-        return builder.toString();
+        return new StringBuilder()
+                .append(link.getType())
+                .append("(")
+                .append(getOutgoingList())
+                .append(")")
+                .toString();
     }
 }

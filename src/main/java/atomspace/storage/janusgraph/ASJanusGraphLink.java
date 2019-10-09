@@ -3,6 +3,7 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
+import atomspace.storage.AtomspaceStorageTransaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraphTransaction;
 import org.janusgraph.core.JanusGraphVertex;
@@ -43,13 +44,18 @@ public class ASJanusGraphLink extends ASJanusGraphAtom implements ASLink {
         }
 
         @Override
-        public int getArity() {
+        public int getArity(AtomspaceStorageTransaction tx) {
             return atoms.length;
         }
 
         @Override
-        public ASAtom getAtom(int index) {
+        public ASAtom getAtom(AtomspaceStorageTransaction tx, int index) {
             return atoms[index];
+        }
+
+        @Override
+        public String toString() {
+            return toString(atoms);
         }
     }
 }

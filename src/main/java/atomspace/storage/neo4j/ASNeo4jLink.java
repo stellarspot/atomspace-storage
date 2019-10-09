@@ -3,6 +3,7 @@ package atomspace.storage.neo4j;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
+import atomspace.storage.AtomspaceStorageTransaction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
@@ -42,13 +43,19 @@ public class ASNeo4jLink extends ASNeo4jAtom implements ASLink {
         }
 
         @Override
-        public int getArity() {
+        public int getArity(AtomspaceStorageTransaction tx) {
             return atoms.length;
         }
 
         @Override
-        public ASAtom getAtom(int index) {
+        public ASAtom getAtom(AtomspaceStorageTransaction tx, int index) {
             return atoms[index];
         }
+
+        @Override
+        public String toString() {
+            return toString(atoms);
+        }
+
     }
 }

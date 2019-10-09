@@ -24,7 +24,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
         LOG.trace("query {}", query);
 
-        QueryTreeNode root = new QueryTreeNode(null, query, ROOT_DIRECTION);
+        QueryTreeNode root = new QueryTreeNode(tx, null, query, ROOT_DIRECTION);
         QueryTreeNode startNode = findStartNode(tx, root);
 
         // Only support queries which contains at least one non variable node
@@ -45,7 +45,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
             LOG.trace("node to match {}", match.rightAtom);
 
             // match subtree
-            if (!matchSubTree(match)) {
+            if (!matchSubTree(tx, match)) {
                 continue;
             }
 
@@ -116,7 +116,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return new NodeWithCost(currentNode, currentCost);
     }
 
-    boolean matchSubTree(QueryMatcherNode match) {
+    boolean matchSubTree(AtomspaceStorageTransaction tx, QueryMatcherNode match) {
 
         ASAtom rightAtom = match.rightAtom;
         ASAtom leftAtom = match.leftTreeNode.atom;
@@ -155,7 +155,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         int size = children.length;
 
         // match outgoing list size
-        if (size != outgoingList.getArity()) {
+        if (size != outgoingList.getArity(tx)) {
             return false;
         }
 
@@ -166,8 +166,9 @@ public class ASBasicQueryEngine implements ASQueryEngine {
                 continue;
             }
 
-            QueryMatcherNode childMatch = new QueryMatcherNode(ROOT_DIRECTION, children[i], outgoingList.getAtom(i), match.variables);
-            if (!matchSubTree(childMatch)) {
+            ASAtom child = outgoingList.getAtom(tx, i);
+            QueryMatcherNode childMatch = new QueryMatcherNode(ROOT_DIRECTION, children[i], child, match.variables);
+            if (!matchSubTree(tx, childMatch)) {
                 return false;
             }
         }
@@ -268,7 +269,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
         private static final QueryTreeNode[] EMPTY_CHILDREN = new QueryTreeNode[0];
 
-        public QueryTreeNode(QueryTreeNode parent, ASAtom atom, int parentPosition) {
+        public QueryTreeNode(AtomspaceStorageTransaction tx, QueryTreeNode parent, ASAtom atom, int parentPosition) {
             this.parent = parent;
             this.atom = atom;
             this.parentPosition = parentPosition;
@@ -281,12 +282,12 @@ public class ASBasicQueryEngine implements ASQueryEngine {
                 this.isVariable = false;
                 ASLink link = (ASLink) atom;
                 ASOutgoingList outgoingList = link.getOutgoingList();
-                int n = outgoingList.getArity();
+                int n = outgoingList.getArity(tx);
                 this.children = new QueryTreeNode[n];
                 this.size = n;
 
                 for (int i = 0; i < n; i++) {
-                    this.children[i] = new QueryTreeNode(this, outgoingList.getAtom(i), i);
+                    this.children[i] = new QueryTreeNode(tx, this, outgoingList.getAtom(tx, i), i);
                 }
             }
         }

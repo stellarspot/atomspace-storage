@@ -14,7 +14,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link");
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(0, outgoingList.getArity());
+            Assert.assertEquals(0, outgoingList.getArity(as));
         });
     }
 
@@ -26,8 +26,8 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(1, outgoingList.getArity());
-            Assert.assertEquals(node, outgoingList.getAtom(0));
+            Assert.assertEquals(1, outgoingList.getArity(as));
+            Assert.assertEquals(node, outgoingList.getAtom(as,0));
         });
     }
 
@@ -40,9 +40,9 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", node1, node2);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(2, outgoingList.getArity());
-            Assert.assertEquals(node1, outgoingList.getAtom(0));
-            Assert.assertEquals(node2, outgoingList.getAtom(1));
+            Assert.assertEquals(2, outgoingList.getArity(as));
+            Assert.assertEquals(node1, outgoingList.getAtom(as,0));
+            Assert.assertEquals(node2, outgoingList.getAtom(as,1));
         });
     }
 
@@ -60,11 +60,10 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             ASLink link = (ASLink) as.get("Link", atoms);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
-            Assert.assertEquals(n, outgoingList.getArity());
+            Assert.assertEquals(n, outgoingList.getArity(as));
             for (int i = 0; i < n; i++) {
-                Assert.assertEquals(atoms[i], outgoingList.getAtom(i));
+                Assert.assertEquals(atoms[i], outgoingList.getAtom(as,i));
             }
         });
     }
-
 }
