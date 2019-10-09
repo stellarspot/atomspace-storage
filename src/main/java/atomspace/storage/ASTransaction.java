@@ -3,6 +3,15 @@ package atomspace.storage;
 import java.io.Closeable;
 import java.util.Iterator;
 
+/**
+ * ASTransaction contains main methods to create and query atoms
+ * from underlined storage.
+ * <p>
+ * Note: depending on the underlined storage some methods may not be
+ * supported and they throw UnsupportedOperationException
+ *
+ * @see UnsupportedOperationException
+ */
 public interface ASTransaction extends Closeable {
 
     /**
