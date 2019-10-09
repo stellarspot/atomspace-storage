@@ -2,6 +2,7 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
 import java.util.Iterator;
@@ -23,6 +24,11 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     static final String INSERT_ATOM = String.format(
             "INSERT INTO %s (type, value, size, ids) values (?, ?, ?, ?)",
             TABLE_ATOMS);
+
+    static final String QUERY_IDS = String.format(
+            "SELECT ids from %s where id = ?",
+            TABLE_ATOMS);
+
 
     static final String UPDATE_INCOMING_SET = String.format(
             "INSERT INTO %s (id, type_arity_pos, parent_id) values (?, ?, ?)",
@@ -53,7 +59,7 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
 
-        long[] ids = getIds(atoms);
+        long[] ids = AtomspaceStorageUtils.getIds(atoms);
         long id = get(type, "", atoms.length, ids);
         return new ASRelationalDBLink(connection, id, type, atoms);
     }
@@ -123,6 +129,56 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
             statement.executeBatch();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ASAtom get(long id) {
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_ATOM)) {
+
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+
+                    String type = resultSet.getString(1);
+                    int arity = resultSet.getInt(3);
+
+                    if (arity == 0) {
+                        String value = resultSet.getString("value");
+                        return new ASRelationalDBNode(connection, id, type, value);
+                    } else {
+                        String childIds = resultSet.getString("ids");
+                        long[] ids = AtomspaceStorageUtils.getIds(childIds);
+                        return new ASRelationalDBLink(connection, id, type, ids);
+                    }
+                }
+
+                String msg = String.format("Atom with id %d was not found!", id);
+                throw new RuntimeException(msg);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public long[] getIds(long id) {
+
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_IDS)) {
+
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+
+                    String childIds = resultSet.getString("ids");
+                    return AtomspaceStorageUtils.getIds(childIds);
+                }
+
+                String msg = String.format("Atom with id %d was not found!", id);
+                throw new RuntimeException(msg);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
