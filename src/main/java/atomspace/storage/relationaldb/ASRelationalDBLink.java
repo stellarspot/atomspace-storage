@@ -70,7 +70,7 @@ public class ASRelationalDBLink extends ASRelationalDBAtom implements ASLink {
         @Override
         public ASAtom getAtom(AtomspaceStorageTransaction tx, int index) {
             if (!isInitialized) {
-                ids = tx.getIds(id);
+                ids = tx.getOutgoingListIds(id);
                 atoms = new ASAtom[arity];
                 isInitialized = true;
             }

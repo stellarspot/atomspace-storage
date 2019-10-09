@@ -77,7 +77,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
         }
 
         @Override
-        public int getIncomingSetArity(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public int getIncomingSetSize(AtomspaceStorageTransaction tx, String type, int arity, int position) {
 
             // TBD: use the count store
             int s = 0;

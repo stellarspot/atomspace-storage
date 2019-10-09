@@ -183,7 +183,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
     static int getCost(AtomspaceStorageTransaction tx, ASAtom atom, String type, int size, int position) {
         ASIncomingSet incomingSet = atom.getIncomingSet();
-        return incomingSet.getIncomingSetArity(tx, type, size, position);
+        return incomingSet.getIncomingSetSize(tx, type, size, position);
     }
 
 

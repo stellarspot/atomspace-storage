@@ -1,11 +1,14 @@
 package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
+import atomspace.storage.ASLink;
 import atomspace.storage.AtomspaceStorageTransaction;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_ATOMS;
 import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_INCOMING_SET;
@@ -164,7 +167,7 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
     }
 
     @Override
-    public long[] getIds(long id) {
+    public long[] getOutgoingListIds(long id) {
 
         try (PreparedStatement statement = connection.prepareStatement(QUERY_IDS)) {
 
@@ -182,6 +185,44 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int getIncomingSetSize(long id, String type, int arity, int position) {
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INCOMING_SET_ARITY)) {
+
+            String key = getKey(type, arity, position);
+            statement.setLong(1, id);
+            statement.setString(2, key);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
+        List<ASLink> links = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INCOMING_SET)) {
+
+            String key = AtomspaceStorageUtils.getKey(type, arity, position);
+            statement.setLong(1, id);
+            statement.setString(2, key);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    long parentId = resultSet.getLong(1);
+                    links.add(new ASRelationalDBLink(connection, parentId, type, arity));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return links.iterator();
     }
 
     @Override

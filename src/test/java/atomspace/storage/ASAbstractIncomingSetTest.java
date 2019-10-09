@@ -135,7 +135,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
                                           int arity,
                                           int position,
                                           ASLink... links) {
-        Assert.assertEquals(links.length, incomingSet.getIncomingSetArity(tx, type, arity, position));
+        Assert.assertEquals(links.length, incomingSet.getIncomingSetSize(tx, type, arity, position));
         Iterator<ASLink> iter = incomingSet.getIncomingSet(tx, type, arity, position);
         ASTestUtils.assertIteratorEquals(iter, links);
     }

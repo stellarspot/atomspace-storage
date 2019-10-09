@@ -63,7 +63,7 @@ public abstract class ASMemoryAtom implements ASAtom {
         }
 
         @Override
-        public int getIncomingSetArity(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public int getIncomingSetSize(AtomspaceStorageTransaction tx, String type, int arity, int position) {
             Set<ASLink> set = getSet(type, arity, position);
             return (set == null) ? 0 : set.size();
         }
