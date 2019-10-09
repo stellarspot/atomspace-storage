@@ -7,9 +7,9 @@ import org.janusgraph.core.JanusGraphFactory;
 public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper {
 
 
-    private final AtomspaceJanusGraphStorageTransaction tx;
+    private final ASJanusGraphTransaction tx;
 
-    public AtomspaceJanusGraphStorageHelper(AtomspaceJanusGraphStorageTransaction tx) {
+    public AtomspaceJanusGraphStorageHelper(ASJanusGraphTransaction tx) {
         this.tx = tx;
     }
 

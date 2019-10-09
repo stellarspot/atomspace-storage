@@ -3,7 +3,7 @@ package atomspace.storage.memory;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 
 public class ASMemoryLink extends ASMemoryAtom implements ASLink {
 
@@ -32,12 +32,12 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
         }
 
         @Override
-        public int getArity(AtomspaceStorageTransaction tx) {
+        public int getArity(ASTransaction tx) {
             return atoms.length;
         }
 
         @Override
-        public ASAtom getAtom(AtomspaceStorageTransaction tx, int index) {
+        public ASAtom getAtom(ASTransaction tx, int index) {
             return atoms[index];
         }
 

@@ -7,7 +7,7 @@ import atomspace.query.ASQueryEngine.ASQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
 import atomspace.storage.ASAtom;
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.performance.PerformanceModel;
 
@@ -41,7 +41,7 @@ public class RandomTreeModel implements PerformanceModel {
     @Override
     public void createAtoms(AtomspaceStorage atomspace) throws IOException {
 
-        try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
+        try (ASTransaction tx = atomspace.getTx()) {
 
             int iterations = 0;
             int commits = 0;
@@ -62,7 +62,7 @@ public class RandomTreeModel implements PerformanceModel {
         }
     }
 
-    private ASAtom createAtom(AtomspaceStorageTransaction tx, RandomNode node) {
+    private ASAtom createAtom(ASTransaction tx, RandomNode node) {
 
         int n = node.children.length;
 
@@ -81,7 +81,7 @@ public class RandomTreeModel implements PerformanceModel {
     @Override
     public void queryAtoms(AtomspaceStorage atomspace, ASQueryEngine queryEngine) throws Exception {
 
-        try (AtomspaceStorageTransaction tx = atomspace.getTx()) {
+        try (ASTransaction tx = atomspace.getTx()) {
             for (NodeWithQuery pair : queries) {
                 ASAtom query = createAtom(tx, pair.query);
                 Iterator<ASQueryResult> results = queryEngine.match(tx, query);
@@ -310,7 +310,7 @@ public class RandomTreeModel implements PerformanceModel {
         model.dump();
 
         try (AtomspaceStorage atomspace = new AtomspaceMemoryStorage();
-             AtomspaceStorageTransaction tx = atomspace.getTx()) {
+             ASTransaction tx = atomspace.getTx()) {
 
             ASQueryEngine queryEngine = new ASBasicQueryEngine();
             model.createAtoms(atomspace);

@@ -120,7 +120,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
         });
     }
 
-    private static void assertIncomingSet(AtomspaceStorageTransaction tx,
+    private static void assertIncomingSet(ASTransaction tx,
                                           ASAtom atom,
                                           String type,
                                           int arity,
@@ -129,7 +129,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
         assertIncomingSet(tx, atom.getIncomingSet(), type, arity, position, links);
     }
 
-    private static void assertIncomingSet(AtomspaceStorageTransaction tx,
+    private static void assertIncomingSet(ASTransaction tx,
                                           ASIncomingSet incomingSet,
                                           String type,
                                           int arity,

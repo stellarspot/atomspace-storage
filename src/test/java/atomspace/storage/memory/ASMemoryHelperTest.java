@@ -2,7 +2,7 @@ package atomspace.storage.memory;
 
 import atomspace.storage.ASAbstractHelperTest;
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
 public class ASMemoryHelperTest extends ASAbstractHelperTest {
@@ -13,7 +13,7 @@ public class ASMemoryHelperTest extends ASAbstractHelperTest {
     }
 
     @Override
-    public AtomspaceStorageHelper getHelper(AtomspaceStorageTransaction tx) {
-        return ASMemoryTestUtils.getStorageHelper((AtomspaceMemoryStorageTransaction) tx);
+    public AtomspaceStorageHelper getHelper(ASTransaction tx) {
+        return ASMemoryTestUtils.getStorageHelper((ASMemoryTransaction) tx);
     }
 }

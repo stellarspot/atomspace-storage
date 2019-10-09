@@ -5,9 +5,9 @@ import atomspace.storage.util.AtomspaceStorageHelper;
 public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper {
 
 
-    private final AtomspaceMemoryStorageTransaction tx;
+    private final ASMemoryTransaction tx;
 
-    public AtomspaceMemoryStorageHelper(AtomspaceMemoryStorageTransaction tx) {
+    public AtomspaceMemoryStorageHelper(ASMemoryTransaction tx) {
         this.tx = tx;
     }
 

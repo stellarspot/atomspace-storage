@@ -3,7 +3,7 @@ package atomspace.performance.tree;
 import atomspace.performance.PerformanceModelParameters;
 import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import atomspace.performance.PerformanceModelConfiguration;
 
 public class RandomTreeCreateProfile {
@@ -25,7 +25,7 @@ public class RandomTreeCreateProfile {
         RandomTreeModel model = new RandomTreeModel(config, params, treeParameters);
 
         try (AtomspaceStorage atomspace = getStorage();
-             AtomspaceStorageTransaction tx = atomspace.getTx()) {
+             ASTransaction tx = atomspace.getTx()) {
 
             // Wait console input
             AtomspaceStoragePerformanceUtils.waitForProfiler();

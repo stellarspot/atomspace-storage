@@ -3,7 +3,7 @@ package atomspace.storage.relationaldb;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 
 import java.sql.Connection;
 import java.util.Iterator;
@@ -59,13 +59,13 @@ public abstract class ASRelationalDBAtom implements ASAtom {
     class ASRelationalDBIncomingSet implements ASIncomingSet {
 
         @Override
-        public int getIncomingSetSize(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public int getIncomingSetSize(ASTransaction tx, String type, int arity, int position) {
             long id = ASRelationalDBAtom.this.getId();
             return tx.getIncomingSetSize(id, type, arity, position);
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public Iterator<ASLink> getIncomingSet(ASTransaction tx, String type, int arity, int position) {
             long id = ASRelationalDBAtom.this.getId();
             return tx.getIncomingSet(id, type, arity, position);
         }

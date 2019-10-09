@@ -18,8 +18,8 @@ public class AtomspaceNeo4jStorage implements AtomspaceStorage {
     }
 
     @Override
-    public AtomspaceNeo4jStorageTransaction getTx() {
-        return new AtomspaceNeo4jStorageTransaction(graph);
+    public ASNeo4jTransaction getTx() {
+        return new ASNeo4jTransaction(graph);
     }
 
     @Override

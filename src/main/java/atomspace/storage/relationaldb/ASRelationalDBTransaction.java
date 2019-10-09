@@ -2,7 +2,7 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
@@ -14,7 +14,7 @@ import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_
 import static atomspace.storage.relationaldb.AtomspaceRelationalDBStorage.TABLE_INCOMING_SET;
 import static atomspace.storage.util.AtomspaceStorageUtils.*;
 
-public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorageTransaction {
+public class ASRelationalDBTransaction implements ASTransaction {
 
     static final String QUERY_ATOM_ID = String.format(
             "SELECT id from %s where type = ? and value = ? and size = ? and ids = ?",
@@ -48,7 +48,7 @@ public class AtomspaceRelationalDBStorageTransaction implements AtomspaceStorage
 
     final Connection connection;
 
-    public AtomspaceRelationalDBStorageTransaction(Connection connection) {
+    public ASRelationalDBTransaction(Connection connection) {
         this.connection = connection;
     }
 

@@ -6,7 +6,7 @@ public class ASMemoryTestUtils {
         return new AtomspaceMemoryStorage();
     }
 
-    public static AtomspaceMemoryStorageHelper getStorageHelper(AtomspaceMemoryStorageTransaction tx) {
+    public static AtomspaceMemoryStorageHelper getStorageHelper(ASMemoryTransaction tx) {
         return new AtomspaceMemoryStorageHelper(tx);
     }
 }

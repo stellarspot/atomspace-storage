@@ -3,15 +3,15 @@ package atomspace.storage.memory;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 
 import java.util.*;
 
-public class AtomspaceMemoryStorageTransaction implements AtomspaceStorageTransaction {
+public class ASMemoryTransaction implements ASTransaction {
 
     private final AtomspaceMemoryStorage storage;
 
-    public AtomspaceMemoryStorageTransaction(AtomspaceMemoryStorage storage) {
+    public ASMemoryTransaction(AtomspaceMemoryStorage storage) {
         this.storage = storage;
     }
 

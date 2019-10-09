@@ -5,9 +5,9 @@ import atomspace.storage.util.AtomspaceStorageHelper;
 public class AtomspaceNeo4jStorageHelper implements AtomspaceStorageHelper {
 
 
-    private final AtomspaceNeo4jStorageTransaction tx;
+    private final ASNeo4jTransaction tx;
 
-    public AtomspaceNeo4jStorageHelper(AtomspaceNeo4jStorageTransaction tx) {
+    public AtomspaceNeo4jStorageHelper(ASNeo4jTransaction tx) {
         this.tx = tx;
     }
 

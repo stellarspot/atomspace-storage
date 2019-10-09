@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelper {
 
 
-    private final AtomspaceRelationalDBStorageTransaction tx;
+    private final ASRelationalDBTransaction tx;
 
-    public AtomspaceRelationalDBStorageHelper(AtomspaceRelationalDBStorageTransaction tx) {
+    public AtomspaceRelationalDBStorageHelper(ASRelationalDBTransaction tx) {
         this.tx = tx;
     }
 

@@ -27,7 +27,7 @@ public class ASRelationalDBTestUtils {
     }
 
     private static void resetStorage() {
-        try (AtomspaceRelationalDBStorageTransaction tx = RELATIONALDB_STORAGE_STORAGE.getTx()) {
+        try (ASRelationalDBTransaction tx = RELATIONALDB_STORAGE_STORAGE.getTx()) {
             AtomspaceStorageHelper helper = new AtomspaceRelationalDBStorageHelper(tx);
             helper.reset();
         } catch (Exception e) {

@@ -12,12 +12,12 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
 
         AtomspaceStorage storage = getStorage();
 
-        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+        try (ASTransaction tx = storage.getTx()) {
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertFalse(iter.hasNext());
         }
 
-        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+        try (ASTransaction tx = storage.getTx()) {
             tx.get("Node", "value");
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertTrue(iter.hasNext());
@@ -26,7 +26,7 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
             Assert.assertFalse(iter.hasNext());
         }
 
-        try (AtomspaceStorageTransaction tx = storage.getTx()) {
+        try (ASTransaction tx = storage.getTx()) {
             tx.get("Node", "value");
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertTrue(iter.hasNext());

@@ -3,7 +3,7 @@ package atomspace.storage.relationaldb;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 
 import java.sql.Connection;
 
@@ -63,12 +63,12 @@ public class ASRelationalDBLink extends ASRelationalDBAtom implements ASLink {
         }
 
         @Override
-        public int getArity(AtomspaceStorageTransaction tx) {
+        public int getArity(ASTransaction tx) {
             return arity;
         }
 
         @Override
-        public ASAtom getAtom(AtomspaceStorageTransaction tx, int index) {
+        public ASAtom getAtom(ASTransaction tx, int index) {
             if (!isInitialized) {
                 ids = tx.getOutgoingListIds(id);
                 atoms = new ASAtom[arity];

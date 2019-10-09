@@ -26,12 +26,12 @@ public class ASJanusGraphTestUtils {
         return JANUS_GRAPHJ_STORAGE;
     }
 
-    public static AtomspaceJanusGraphStorageHelper getStorageHelper(AtomspaceJanusGraphStorageTransaction tx) {
+    public static AtomspaceJanusGraphStorageHelper getStorageHelper(ASJanusGraphTransaction tx) {
         return new AtomspaceJanusGraphStorageHelper(tx);
     }
 
     private static void resetStorage() {
-        try (AtomspaceJanusGraphStorageTransaction tx = JANUS_GRAPHJ_STORAGE.getTx()) {
+        try (ASJanusGraphTransaction tx = JANUS_GRAPHJ_STORAGE.getTx()) {
             AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
             helper.reset();
         } catch (Exception e) {

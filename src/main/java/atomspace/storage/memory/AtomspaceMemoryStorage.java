@@ -12,10 +12,10 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
     final Map<String, ASNode> nodesInverseIndex = new HashMap<>();
     final Map<String, ASLink> linksInverseIndex = new HashMap<>();
 
-    private final AtomspaceMemoryStorageTransaction tx = new AtomspaceMemoryStorageTransaction(this);
+    private final ASMemoryTransaction tx = new ASMemoryTransaction(this);
 
     @Override
-    public AtomspaceStorageTransaction getTx() {
+    public ASTransaction getTx() {
         return tx;
     }
 

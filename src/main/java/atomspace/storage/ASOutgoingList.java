@@ -2,9 +2,9 @@ package atomspace.storage;
 
 public interface ASOutgoingList {
 
-    int getArity(AtomspaceStorageTransaction tx);
+    int getArity(ASTransaction tx);
 
-    ASAtom getAtom(AtomspaceStorageTransaction tx, int index);
+    ASAtom getAtom(ASTransaction tx, int index);
 
     default String toString(ASAtom... atoms) {
 

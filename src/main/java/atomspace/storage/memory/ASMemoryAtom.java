@@ -3,7 +3,7 @@ package atomspace.storage.memory;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 
 import java.util.*;
 
@@ -63,13 +63,13 @@ public abstract class ASMemoryAtom implements ASAtom {
         }
 
         @Override
-        public int getIncomingSetSize(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public int getIncomingSetSize(ASTransaction tx, String type, int arity, int position) {
             Set<ASLink> set = getSet(type, arity, position);
             return (set == null) ? 0 : set.size();
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public Iterator<ASLink> getIncomingSet(ASTransaction tx, String type, int arity, int position) {
             Set<ASLink> set = getSet(type, arity, position);
             return (set == null) ? Collections.emptyIterator() : set.iterator();
         }

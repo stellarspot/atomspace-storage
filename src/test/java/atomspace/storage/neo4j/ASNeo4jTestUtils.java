@@ -19,7 +19,7 @@ public class ASNeo4jTestUtils {
         return NEO4J_STORAGE;
     }
 
-    public static AtomspaceNeo4jStorageHelper getStorageHelper(AtomspaceNeo4jStorageTransaction tx) {
+    public static AtomspaceNeo4jStorageHelper getStorageHelper(ASNeo4jTransaction tx) {
         return new AtomspaceNeo4jStorageHelper(tx);
     }
 
@@ -30,7 +30,7 @@ public class ASNeo4jTestUtils {
     }
 
     private static void resetStorage() {
-        AtomspaceNeo4jStorageTransaction tx = NEO4J_STORAGE.getTx();
+        ASNeo4jTransaction tx = NEO4J_STORAGE.getTx();
         AtomspaceStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
         helper.reset();
     }

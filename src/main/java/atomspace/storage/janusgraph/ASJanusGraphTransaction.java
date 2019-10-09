@@ -3,7 +3,7 @@ package atomspace.storage.janusgraph;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.T;
@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AtomspaceJanusGraphStorageTransaction implements AtomspaceStorageTransaction {
+public class ASJanusGraphTransaction implements ASTransaction {
 
     final AtomspaceJanusGraphStorage storage;
     final JanusGraph graph;
     final Transaction tx;
     final GraphTraversalSource g;
 
-    public AtomspaceJanusGraphStorageTransaction(AtomspaceJanusGraphStorage storage) {
+    public ASJanusGraphTransaction(AtomspaceJanusGraphStorage storage) {
         this.storage = storage;
         this.graph = storage.graph;
         this.tx = graph.newTransaction();

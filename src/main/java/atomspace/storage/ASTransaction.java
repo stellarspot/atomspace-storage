@@ -3,7 +3,7 @@ package atomspace.storage;
 import java.io.Closeable;
 import java.util.Iterator;
 
-public interface AtomspaceStorageTransaction extends Closeable {
+public interface ASTransaction extends Closeable {
 
     /**
      * Gets or create Node

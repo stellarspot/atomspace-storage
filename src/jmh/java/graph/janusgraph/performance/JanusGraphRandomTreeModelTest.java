@@ -2,7 +2,7 @@ package graph.janusgraph.performance;
 
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
-import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageTransaction;
+import atomspace.storage.janusgraph.ASJanusGraphTransaction;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.performance.PerformanceModelParameters;
 import atomspace.performance.tree.RandomTreeModel;
@@ -23,7 +23,7 @@ public class JanusGraphRandomTreeModelTest {
 //        model.dump();
 
         try (AtomspaceJanusGraphStorage atomspace = AtomspaceStoragePerformanceUtils.getCleanJanusGraphStorage()) {
-            try (AtomspaceJanusGraphStorageTransaction tx = atomspace.getTx()) {
+            try (ASJanusGraphTransaction tx = atomspace.getTx()) {
 
                 long time = System.currentTimeMillis();
                 model.createAtoms(atomspace);
@@ -34,7 +34,7 @@ public class JanusGraphRandomTreeModelTest {
     }
 
     private static void printStatistics(AtomspaceJanusGraphStorage atomspace, String msg) {
-        try (AtomspaceJanusGraphStorageTransaction tx = atomspace.getTx()) {
+        try (ASJanusGraphTransaction tx = atomspace.getTx()) {
             AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
             helper.printStatistics(msg);
         }

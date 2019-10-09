@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public abstract class ASAbstractHelperTest extends ASAbstractTest {
 
-    public abstract AtomspaceStorageHelper getHelper(AtomspaceStorageTransaction tx);
+    public abstract AtomspaceStorageHelper getHelper(ASTransaction tx);
 
     @Test
     public void testResetNode() throws Exception {

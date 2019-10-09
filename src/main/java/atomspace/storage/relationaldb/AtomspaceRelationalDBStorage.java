@@ -44,8 +44,8 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
     }
 
     @Override
-    public AtomspaceRelationalDBStorageTransaction getTx() {
-        return new AtomspaceRelationalDBStorageTransaction(connection);
+    public ASRelationalDBTransaction getTx() {
+        return new ASRelationalDBTransaction(connection);
     }
 
     @Override

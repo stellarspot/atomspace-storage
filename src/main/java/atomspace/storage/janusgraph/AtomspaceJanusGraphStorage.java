@@ -22,8 +22,8 @@ public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
     }
 
     @Override
-    public AtomspaceJanusGraphStorageTransaction getTx() {
-        return new AtomspaceJanusGraphStorageTransaction(this);
+    public ASJanusGraphTransaction getTx() {
+        return new ASJanusGraphTransaction(this);
     }
 
     @Override

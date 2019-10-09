@@ -20,7 +20,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
     private static final int UNDEFINED_DIRECTION = -2;
 
     @Override
-    public <T> Iterator<T> match(AtomspaceStorageTransaction tx, ASAtom query, Function<ASQueryResult, T> mapper) {
+    public <T> Iterator<T> match(ASTransaction tx, ASAtom query, Function<ASQueryResult, T> mapper) {
 
         LOG.trace("query {}", query);
 
@@ -82,12 +82,12 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return results.iterator();
     }
 
-    QueryTreeNode findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode root) {
+    QueryTreeNode findStartNode(ASTransaction tx, QueryTreeNode root) {
         NodeWithCost startNodeWithCost = findStartNode(tx, root, null, -1, -1);
         return startNodeWithCost.node;
     }
 
-    NodeWithCost findStartNode(AtomspaceStorageTransaction tx, QueryTreeNode node, String parentType, int parentSize, int position) {
+    NodeWithCost findStartNode(ASTransaction tx, QueryTreeNode node, String parentType, int parentSize, int position) {
 
         if (node.isVariable) {
             return new NodeWithCost(node, MAX_COST);
@@ -116,7 +116,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return new NodeWithCost(currentNode, currentCost);
     }
 
-    boolean matchSubTree(AtomspaceStorageTransaction tx, QueryMatcherNode match) {
+    boolean matchSubTree(ASTransaction tx, QueryMatcherNode match) {
 
         ASAtom rightAtom = match.rightAtom;
         ASAtom leftAtom = match.leftTreeNode.atom;
@@ -181,7 +181,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
         return TYPE_NODE_VARIABLE.equals(type);
     }
 
-    static int getCost(AtomspaceStorageTransaction tx, ASAtom atom, String type, int size, int position) {
+    static int getCost(ASTransaction tx, ASAtom atom, String type, int size, int position) {
         ASIncomingSet incomingSet = atom.getIncomingSet();
         return incomingSet.getIncomingSetSize(tx, type, size, position);
     }
@@ -269,7 +269,7 @@ public class ASBasicQueryEngine implements ASQueryEngine {
 
         private static final QueryTreeNode[] EMPTY_CHILDREN = new QueryTreeNode[0];
 
-        public QueryTreeNode(AtomspaceStorageTransaction tx, QueryTreeNode parent, ASAtom atom, int parentPosition) {
+        public QueryTreeNode(ASTransaction tx, QueryTreeNode parent, ASAtom atom, int parentPosition) {
             this.parent = parent;
             this.atom = atom;
             this.parentPosition = parentPosition;

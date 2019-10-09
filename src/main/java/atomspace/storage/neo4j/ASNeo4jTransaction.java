@@ -1,19 +1,19 @@
 package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AtomspaceNeo4jStorageTransaction implements AtomspaceStorageTransaction {
+public class ASNeo4jTransaction implements ASTransaction {
 
     final GraphDatabaseService graph;
     private final Transaction tx;
 
-    public AtomspaceNeo4jStorageTransaction(GraphDatabaseService graph) {
+    public ASNeo4jTransaction(GraphDatabaseService graph) {
         this.graph = graph;
         this.tx = graph.beginTx();
     }

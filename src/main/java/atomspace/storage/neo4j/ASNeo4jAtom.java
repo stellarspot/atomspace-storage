@@ -3,7 +3,7 @@ package atomspace.storage.neo4j;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
-import atomspace.storage.AtomspaceStorageTransaction;
+import atomspace.storage.ASTransaction;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
         }
 
         @Override
-        public int getIncomingSetSize(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public int getIncomingSetSize(ASTransaction tx, String type, int arity, int position) {
 
             // TBD: use the count store
             int s = 0;
@@ -88,7 +88,7 @@ public abstract class ASNeo4jAtom implements ASAtom {
         }
 
         @Override
-        public Iterator<ASLink> getIncomingSet(AtomspaceStorageTransaction tx, String type, int arity, int position) {
+        public Iterator<ASLink> getIncomingSet(ASTransaction tx, String type, int arity, int position) {
 
             List<ASLink> links = new ArrayList<>();
             for (Relationship r : getSet(type, arity, position)) {

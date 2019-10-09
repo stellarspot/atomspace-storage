@@ -2,11 +2,11 @@ package atomspace.storage.memory
 
 import atomspace.storage.ASAtom
 import atomspace.storage.AtomspaceStorage
-import atomspace.storage.AtomspaceStorageTransaction
+import atomspace.storage.ASTransaction
 
 class SampleAtomSpaceRunner(val atomspace: AtomspaceStorage) {
 
-    var tx: AtomspaceStorageTransaction? = null
+    var tx: ASTransaction? = null
 
     fun run(block: SampleAtomSpaceRunner.() -> Unit) {
         tx = atomspace.tx
