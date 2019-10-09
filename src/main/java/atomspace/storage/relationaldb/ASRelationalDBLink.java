@@ -5,24 +5,22 @@ import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
 import atomspace.storage.ASTransaction;
 
-import java.sql.Connection;
-
 public class ASRelationalDBLink extends ASRelationalDBAtom implements ASLink {
 
     final ASRelationalDBOutgoingList outgoingList;
 
-    public ASRelationalDBLink(Connection connection, long id, String type, int arity) {
-        super(connection, id, type);
+    public ASRelationalDBLink(long id, String type, int arity) {
+        super(id, type);
         this.outgoingList = new ASRelationalDBOutgoingList(id, arity);
     }
 
-    public ASRelationalDBLink(Connection connection, long id, String type, long... ids) {
-        super(connection, id, type);
+    public ASRelationalDBLink(long id, String type, long... ids) {
+        super(id, type);
         this.outgoingList = new ASRelationalDBOutgoingList(id, ids);
     }
 
-    public ASRelationalDBLink(Connection connection, long id, String type, ASAtom... atoms) {
-        super(connection, id, type);
+    public ASRelationalDBLink(long id, String type, ASAtom... atoms) {
+        super(id, type);
         this.outgoingList = new ASRelationalDBOutgoingList(id, atoms);
     }
 

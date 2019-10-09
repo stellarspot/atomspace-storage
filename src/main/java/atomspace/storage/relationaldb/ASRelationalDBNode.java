@@ -10,8 +10,8 @@ public class ASRelationalDBNode extends ASRelationalDBAtom implements ASNode {
 
     final String value;
 
-    public ASRelationalDBNode(Connection connection, long id, String type, String value) {
-        super(connection, id, type);
+    public ASRelationalDBNode(long id, String type, String value) {
+        super(id, type);
         this.value = value;
     }
 

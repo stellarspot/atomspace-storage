@@ -54,17 +54,15 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     @Override
     public ASAtom get(String type, String value) {
-
         long id = get(type, value, 0);
-        return new ASRelationalDBNode(connection, id, type, value);
+        return new ASRelationalDBNode(id, type, value);
     }
 
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
-
         long[] ids = AtomspaceStorageUtils.getIds(atoms);
         long id = get(type, "", atoms.length, ids);
-        return new ASRelationalDBLink(connection, id, type, atoms);
+        return new ASRelationalDBLink(id, type, atoms);
     }
 
     private long get(String type, String value, int size, long... ids) {
@@ -150,11 +148,11 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
                     if (arity == 0) {
                         String value = resultSet.getString("value");
-                        return new ASRelationalDBNode(connection, id, type, value);
+                        return new ASRelationalDBNode(id, type, value);
                     } else {
                         String childIds = resultSet.getString("ids");
                         long[] ids = AtomspaceStorageUtils.getIds(childIds);
-                        return new ASRelationalDBLink(connection, id, type, ids);
+                        return new ASRelationalDBLink(id, type, ids);
                     }
                 }
 
@@ -216,7 +214,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     long parentId = resultSet.getLong(1);
-                    links.add(new ASRelationalDBLink(connection, parentId, type, arity));
+                    links.add(new ASRelationalDBLink(parentId, type, arity));
                 }
             }
         } catch (SQLException e) {

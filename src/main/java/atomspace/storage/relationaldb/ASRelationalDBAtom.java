@@ -5,19 +5,16 @@ import atomspace.storage.ASIncomingSet;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASTransaction;
 
-import java.sql.Connection;
 import java.util.Iterator;
 
 
 public abstract class ASRelationalDBAtom implements ASAtom {
 
-    final Connection connection;
     final long id;
     final String type;
     final ASIncomingSet incomingSet = new ASRelationalDBIncomingSet();
 
-    public ASRelationalDBAtom(Connection connection, long id, String type) {
-        this.connection = connection;
+    public ASRelationalDBAtom(long id, String type) {
         this.id = id;
         this.type = type;
     }
