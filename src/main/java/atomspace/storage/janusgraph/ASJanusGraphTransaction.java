@@ -92,6 +92,27 @@ public class ASJanusGraphTransaction implements ASTransaction {
     }
 
     @Override
+    public ASAtom get(long id) {
+        throw new UnsupportedOperationException("Get atom by id.");
+    }
+
+    @Override
+    public long[] getOutgoingListIds(long id) {
+        throw new UnsupportedOperationException("Get ids by id.");
+    }
+
+    @Override
+    public int getIncomingSetSize(long id, String type, int arity, int position) {
+        throw new UnsupportedOperationException("Get incoming set arity by id.");
+    }
+
+    @Override
+    public Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
+        throw new UnsupportedOperationException("Get incoming set by id.");
+    }
+
+
+    @Override
     public Iterator<ASAtom> getAtoms() {
 
         List<ASAtom> atoms = new ArrayList<>();

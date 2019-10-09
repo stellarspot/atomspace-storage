@@ -29,9 +29,7 @@ public interface ASTransaction extends Closeable {
      * @param id
      * @return
      */
-    default ASAtom get(long id) {
-        throw new UnsupportedOperationException("Get atom by id.");
-    }
+    ASAtom get(long id);
 
     /**
      * Gets ids of the atom outgoing list by the given atom id
@@ -39,9 +37,7 @@ public interface ASTransaction extends Closeable {
      * @param id
      * @return
      */
-    default long[] getOutgoingListIds(long id) {
-        throw new UnsupportedOperationException("Get ids by id.");
-    }
+    long[] getOutgoingListIds(long id);
 
     /**
      * Gets size of the atom incoming set by the given id
@@ -52,9 +48,7 @@ public interface ASTransaction extends Closeable {
      * @param position
      * @return
      */
-    default int getIncomingSetSize(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set arity by id.");
-    }
+    int getIncomingSetSize(long id, String type, int arity, int position);
 
     /**
      * Gets the atom incoming set by the given id
@@ -65,9 +59,7 @@ public interface ASTransaction extends Closeable {
      * @param position
      * @return
      */
-    default Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set by id.");
-    }
+    Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position);
 
     /**
      * Returns all atoms

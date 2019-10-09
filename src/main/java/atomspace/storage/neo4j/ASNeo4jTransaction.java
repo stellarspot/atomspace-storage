@@ -1,6 +1,7 @@
 package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
+import atomspace.storage.ASLink;
 import atomspace.storage.ASTransaction;
 import org.neo4j.graphdb.*;
 
@@ -76,6 +77,26 @@ public class ASNeo4jTransaction implements ASTransaction {
         }
 
         return new ASNeo4jLink(node);
+    }
+
+    @Override
+    public ASAtom get(long id) {
+        throw new UnsupportedOperationException("Get atom by id.");
+    }
+
+    @Override
+    public long[] getOutgoingListIds(long id) {
+        throw new UnsupportedOperationException("Get ids by id.");
+    }
+
+    @Override
+    public int getIncomingSetSize(long id, String type, int arity, int position) {
+        throw new UnsupportedOperationException("Get incoming set arity by id.");
+    }
+
+    @Override
+    public Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
+        throw new UnsupportedOperationException("Get incoming set by id.");
     }
 
     @Override
