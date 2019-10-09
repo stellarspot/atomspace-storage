@@ -3,11 +3,15 @@ package atomspace.storage.neo4j;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASTransaction;
+import atomspace.storage.base.ASBaseLink;
+import atomspace.storage.base.ASBaseNode;
 import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASNeo4jTransaction implements ASTransaction {
 
@@ -41,7 +45,7 @@ public class ASNeo4jTransaction implements ASTransaction {
             node.setProperty("value", value);
         }
 
-        return new ASNeo4jNode(node);
+        return new ASBaseNode(node.getId(), type, value);
     }
 
     @Override
@@ -67,37 +71,76 @@ public class ASNeo4jTransaction implements ASTransaction {
             node.setProperty("type", type);
             node.setProperty("ids", ids);
 
-            ASNeo4jLink link = new ASNeo4jLink(node);
-            int size = atoms.length;
-            for (int i = 0; i < size; i++) {
-                ((ASNeo4jAtom.ASNeo4jIncomingSet) atoms[i].getIncomingSet()).add(link, size, i);
+            ASLink link = new ASBaseLink(node.getId(), type, atoms);
+
+            // Update incoming set
+            int arity = atoms.length;
+            for (int i = 0; i < arity; i++) {
+                String key = getKey(type, arity, i);
+                Node childNode = graph.getNodeById(atoms[i].getId());
+                childNode.createRelationshipTo(node, RelationshipType.withName(key));
             }
 
             return link;
         }
 
-        return new ASNeo4jLink(node);
+        return new ASBaseLink(node.getId(), type, atoms);
     }
 
     @Override
     public ASAtom get(long id) {
-        throw new UnsupportedOperationException("Get atom by id.");
+
+        Node node = graph.getNodeById(id);
+        String kind = node.getProperty("kind").toString();
+        String type = node.getProperty("type").toString();
+
+        if ("Node".equals(kind)) {
+            String value = node.getProperty("value").toString();
+            return new ASBaseNode(id, type, value);
+        }
+
+        if ("Link".equals(kind)) {
+            long[] ids = (long[]) node.getProperty("ids");
+            return new ASBaseLink(id, type, ids);
+        }
+
+        String msg = String.format("Unknown kind: %s%n", kind);
+        throw new RuntimeException(msg);
     }
 
     @Override
     public long[] getOutgoingListIds(long id) {
-        throw new UnsupportedOperationException("Get ids by id.");
+        Node node = graph.getNodeById(id);
+        return (long[]) node.getProperty("ids");
     }
 
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set arity by id.");
+        // TBD: use the count store
+        int s = 0;
+        for (Relationship r : getIncomingRelationships(id, type, arity, position)) {
+            s++;
+        }
+        return s;
     }
 
     @Override
     public Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set by id.");
+        List<ASLink> links = new ArrayList<>();
+        for (Relationship r : getIncomingRelationships(id, type, arity, position)) {
+            Node parent = r.getEndNode();
+            links.add(new ASBaseLink(parent.getId(), type, arity));
+        }
+
+        return links.iterator();
     }
+
+    private Iterable<Relationship> getIncomingRelationships(long id, String type, int size, int position) {
+        String key = getKey(type, size, position);
+        Node node = graph.getNodeById(id);
+        return node.getRelationships(RelationshipType.withName(key), Direction.OUTGOING);
+    }
+
 
     @Override
     public Iterator<ASAtom> getAtoms() {
@@ -106,13 +149,13 @@ public class ASNeo4jTransaction implements ASTransaction {
         Iterator<Node> nodes = graph.findNodes(Label.label("Node"));
 
         while (nodes.hasNext()) {
-            atoms.add(new ASNeo4jNode(nodes.next()));
+            atoms.add(get(nodes.next().getId()));
         }
 
         Iterator<Node> links = graph.findNodes(Label.label("Link"));
 
         while (links.hasNext()) {
-            atoms.add(new ASNeo4jLink(links.next()));
+            atoms.add(get(links.next().getId()));
         }
 
         return atoms.iterator();

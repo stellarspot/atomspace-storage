@@ -15,7 +15,7 @@ public class AtomspaceStorageUtils {
         return String.format("%s_%d_%d", type, arity, position);
     }
 
-    public static long[] getIds(ASAtom... atoms) {
+    public static long[] toIds(ASAtom... atoms) {
         long[] ids = new long[atoms.length];
 
         for (int i = 0; i < atoms.length; i++) {
@@ -24,7 +24,7 @@ public class AtomspaceStorageUtils {
         return ids;
     }
 
-    public static long[] getIds(String str) {
+    public static long[] toIds(String str) {
         String[] split = str.split(":");
 
         long[] ids = new long[split.length];

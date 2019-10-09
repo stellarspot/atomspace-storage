@@ -62,7 +62,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     @Override
     public ASAtom get(String type, ASAtom... atoms) {
-        long[] ids = AtomspaceStorageUtils.getIds(atoms);
+        long[] ids = AtomspaceStorageUtils.toIds(atoms);
         long id = get(type, "", atoms.length, ids);
         return new ASBaseLink(id, type, atoms);
     }
@@ -153,7 +153,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                         return new ASBaseNode(id, type, value);
                     } else {
                         String childIds = resultSet.getString("ids");
-                        long[] ids = AtomspaceStorageUtils.getIds(childIds);
+                        long[] ids = AtomspaceStorageUtils.toIds(childIds);
                         return new ASBaseLink(id, type, ids);
                     }
                 }
@@ -176,7 +176,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                 if (resultSet.next()) {
 
                     String childIds = resultSet.getString("ids");
-                    return AtomspaceStorageUtils.getIds(childIds);
+                    return AtomspaceStorageUtils.toIds(childIds);
                 }
 
                 String msg = String.format("Atom with id %d was not found!", id);
