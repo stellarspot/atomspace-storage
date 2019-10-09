@@ -2,21 +2,19 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASIncomingSet;
-import atomspace.storage.ASLink;
-import atomspace.storage.ASTransaction;
-
-import java.util.Iterator;
+import atomspace.storage.basic.ASBasicIncomingSet;
 
 
 public abstract class ASRelationalDBAtom implements ASAtom {
 
     final long id;
     final String type;
-    final ASIncomingSet incomingSet = new ASRelationalDBIncomingSet();
+    final ASIncomingSet incomingSet;
 
     public ASRelationalDBAtom(long id, String type) {
         this.id = id;
         this.type = type;
+        this.incomingSet = new ASBasicIncomingSet(id);
     }
 
     @Override
@@ -51,20 +49,5 @@ public abstract class ASRelationalDBAtom implements ASAtom {
     @Override
     public int hashCode() {
         return Long.hashCode(getId());
-    }
-
-    class ASRelationalDBIncomingSet implements ASIncomingSet {
-
-        @Override
-        public int getIncomingSetSize(ASTransaction tx, String type, int arity, int position) {
-            long id = ASRelationalDBAtom.this.getId();
-            return tx.getIncomingSetSize(id, type, arity, position);
-        }
-
-        @Override
-        public Iterator<ASLink> getIncomingSet(ASTransaction tx, String type, int arity, int position) {
-            long id = ASRelationalDBAtom.this.getId();
-            return tx.getIncomingSet(id, type, arity, position);
-        }
     }
 }
