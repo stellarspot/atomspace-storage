@@ -29,6 +29,83 @@ Supported backing storages:
   * [Neo4j](src/main/java/atomspace/storage/neo4j)
   * [JanusGraph](src/main/java/atomspace/storage/janusgraph)
 
+# Example
+
+An example which demonstrates simple facts creation:
+* Alice likes apple
+* Alice likes orange
+* Alice dislikes pear
+* Bob likes apple
+
+and queries:
+* What does Alice like?
+* Who likes apple?
+
+```kotlin
+    val runner = SampleAtomspaceRunner(AtomspaceMemoryStorage())
+
+    init(runner) {
+
+        LikesLink(
+                PersonNode("Alice"),
+                ItemNode("apple")
+        )
+
+        LikesLink(
+                PersonNode("Alice"),
+                ItemNode("orange")
+        )
+
+        DislikesLink(
+                PersonNode("Alice"),
+                ItemNode("pear")
+        )
+
+        LikesLink(
+                PersonNode("Bob"),
+                ItemNode("apple")
+        )
+    }
+
+    // What does Alice like?
+    val aliceLikes = query(runner) {
+        LikesLink(
+                PersonNode("Alice"),
+                VariableNode("WHAT")
+        )
+    }
+
+    println("What does Alice like?")
+    aliceLikes.variables("WHAT").nodes().forEach {
+        println("Alice likes ${it.value}.")
+    }
+
+    // Who likes apple?
+    val likesApple = query(runner) {
+        LikesLink(
+                VariableNode("WHO"),
+                ItemNode("apple")
+        )
+    }
+
+    println("Who likes apples?")
+    likesApple.variables("WHO").nodes().forEach {
+        println("${it.value} likes apple.")
+    }
+```
+The output is:
+```text
+What does Alice like?
+Alice likes apple.
+Alice likes orange.
+
+Who likes apples?
+Alice likes apple.
+Bob likes apple.
+```
+
+For more details see [AtomspaceRunner](src/main/kotlin/atomspace/runner)
+
 # Building
 
 Build project:

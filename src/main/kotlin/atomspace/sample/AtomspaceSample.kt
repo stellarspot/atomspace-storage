@@ -47,14 +47,29 @@ fun main() {
         )
     }
 
-    val results = query(runner) {
+    // What does Alice like?
+    val aliceLikes = query(runner) {
         LikesLink(
                 PersonNode("Alice"),
                 VariableNode("WHAT")
         )
     }
 
-    results.variables("WHAT").nodes().forEach {
-        println("Alice likes ${it.value}")
+    println("What does Alice like?")
+    aliceLikes.variables("WHAT").nodes().forEach {
+        println("Alice likes ${it.value}.")
+    }
+
+    // Who likes apple?
+    val likesApple = query(runner) {
+        LikesLink(
+                VariableNode("WHO"),
+                ItemNode("apple")
+        )
+    }
+
+    println("Who likes apples?")
+    likesApple.variables("WHO").nodes().forEach {
+        println("${it.value} likes apple.")
     }
 }
