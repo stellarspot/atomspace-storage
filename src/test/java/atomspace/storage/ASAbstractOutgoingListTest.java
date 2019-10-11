@@ -11,7 +11,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
     public void testEmptyOutgoingList() throws Exception {
         testAtomspaceStorage(as -> {
 
-            ASLink link = (ASLink) as.get("Link");
+            ASLink link = as.get("Link");
             ASOutgoingList outgoingList = link.getOutgoingList();
 
             Assert.assertEquals(0, outgoingList.getArity(as));
@@ -23,7 +23,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
         testAtomspaceStorage(as -> {
 
             ASAtom node = as.get("Node", "value");
-            ASLink link = (ASLink) as.get("Link", node);
+            ASLink link = as.get("Link", node);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
             Assert.assertEquals(1, outgoingList.getArity(as));
@@ -37,7 +37,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
 
             ASAtom node1 = as.get("Node1", "value1");
             ASAtom node2 = as.get("Node2", "value2");
-            ASLink link = (ASLink) as.get("Link", node1, node2);
+            ASLink link = as.get("Link", node1, node2);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
             Assert.assertEquals(2, outgoingList.getArity(as));
@@ -57,7 +57,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
             for (int i = 0; i < n; i++) {
                 atoms[i] = as.get("Node", Integer.toString(i));
             }
-            ASLink link = (ASLink) as.get("Link", atoms);
+            ASLink link = as.get("Link", atoms);
             ASOutgoingList outgoingList = link.getOutgoingList();
 
             Assert.assertEquals(n, outgoingList.getArity(as));

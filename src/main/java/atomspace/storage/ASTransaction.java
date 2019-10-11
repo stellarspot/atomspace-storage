@@ -15,22 +15,22 @@ import java.util.Iterator;
 public interface ASTransaction extends Closeable {
 
     /**
-     * Gets or creates Node by the given type and value.
+     * Gets or creates Node by given type and value.
      *
      * @param type  the type of the atom
      * @param value the value of the atom
      * @return Node
      */
-    ASAtom get(String type, String value);
+    ASNode get(String type, String value);
 
     /**
-     * Gets or creates Link by the given type and outgoing list.
+     * Gets or creates Link by given type and outgoing list.
      *
      * @param type  the type of the atom
      * @param atoms the outgoing list of the atom
      * @return List
      */
-    ASAtom get(String type, ASAtom... atoms);
+    ASLink get(String type, ASAtom... atoms);
 
     /**
      * Gets the atom by for the unique identifier.
@@ -73,7 +73,7 @@ public interface ASTransaction extends Closeable {
     /**
      * Returns all atoms
      *
-     * @return
+     * @return all atoms from the underlined storage
      */
     Iterator<ASAtom> getAtoms();
 

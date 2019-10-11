@@ -2,6 +2,7 @@ package atomspace.storage.neo4j;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
+import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
@@ -25,7 +26,7 @@ public class ASNeo4jTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, String value) {
+    public ASNode get(String type, String value) {
 
         Label nodeLabel = Label.label("Node");
         Iterator<Node> nodes = graph.findNodes(nodeLabel,
@@ -50,7 +51,7 @@ public class ASNeo4jTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, ASAtom... atoms) {
+    public ASLink get(String type, ASAtom... atoms) {
 
         Label linkLabel = Label.label("Link");
         long[] ids = getIds(atoms);

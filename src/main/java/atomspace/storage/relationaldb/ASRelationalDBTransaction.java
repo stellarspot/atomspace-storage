@@ -2,6 +2,7 @@ package atomspace.storage.relationaldb;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
+import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
@@ -55,13 +56,13 @@ public class ASRelationalDBTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, String value) {
+    public ASNode get(String type, String value) {
         long id = get(type, value, 0);
         return new ASBaseNode(id, type, value);
     }
 
     @Override
-    public ASAtom get(String type, ASAtom... atoms) {
+    public ASLink get(String type, ASAtom... atoms) {
         long[] ids = AtomspaceStorageUtils.toIds(atoms);
         long id = get(type, "", atoms.length, ids);
         return new ASBaseLink(id, type, atoms);

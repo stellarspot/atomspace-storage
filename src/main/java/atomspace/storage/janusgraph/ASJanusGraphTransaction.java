@@ -2,6 +2,7 @@ package atomspace.storage.janusgraph;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
+import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
@@ -37,7 +38,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, String value) {
+    public ASNode get(String type, String value) {
 
         GraphTraversal<Vertex, Vertex> iter = g
                 .V()
@@ -63,7 +64,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, ASAtom... atoms) {
+    public ASLink get(String type, ASAtom... atoms) {
 
         long[] ids = getIds(atoms);
 

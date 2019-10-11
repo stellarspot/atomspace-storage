@@ -14,7 +14,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
         testAtomspaceStorage(as -> {
 
-            ASAtom node = as.get("Node", "value");
+            ASNode node = as.get("Node", "value");
             assertIncomingSet(as, node, "Node", 0, 0);
             assertIncomingSet(as, node, "Node", 1, 0);
             assertIncomingSet(as, node, "Node", 1, 1);
@@ -27,8 +27,8 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
         testAtomspaceStorage(as -> {
 
-            ASAtom node = as.get("Node", "value");
-            ASLink link = (ASLink) as.get("Link", node);
+            ASNode node = as.get("Node", "value");
+            ASLink link = as.get("Link", node);
 
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
             assertIncomingSet(as, nodeIncomingSet, "Node", 0, 0);
@@ -44,8 +44,8 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
         testAtomspaceStorage(as -> {
 
-            ASAtom node = as.get("Node", "value");
-            ASLink link = (ASLink) as.get("Link", node, node);
+            ASNode node = as.get("Node", "value");
+            ASLink link = as.get("Link", node, node);
 
             ASIncomingSet nodeIncomingSet = node.getIncomingSet();
             assertIncomingSet(as, nodeIncomingSet, "Link", 0, 0);
@@ -63,9 +63,9 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
         testAtomspaceStorage(as -> {
 
-            ASAtom node1 = as.get("Node1", "value");
-            ASAtom node2 = as.get("Node2", "value");
-            ASLink link = (ASLink) as.get("Link", node1, node2);
+            ASNode node1 = as.get("Node1", "value");
+            ASNode node2 = as.get("Node2", "value");
+            ASLink link = as.get("Link", node1, node2);
 
             // node1
             ASIncomingSet nodeIncomingSet1 = node1.getIncomingSet();
@@ -89,8 +89,8 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
         testAtomspaceStorage(as -> {
 
             ASAtom node = as.get("Node", "value");
-            ASLink link1 = (ASLink) as.get("Link1", node);
-            ASLink link2 = (ASLink) as.get("Link2", node);
+            ASLink link1 = as.get("Link1", node);
+            ASLink link2 = as.get("Link2", node);
 
             ASIncomingSet incomingSet = node.getIncomingSet();
 
@@ -106,17 +106,17 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
 
         testAtomspaceStorage(as -> {
 
-            ASAtom link1 = as.get("Link",
+            ASLink link1 = as.get("Link",
                     as.get("SubjectNode", "subject"),
                     as.get("ObjectNode", "object1"));
 
-            ASAtom link2 = as.get("Link",
+            ASLink link2 = as.get("Link",
                     as.get("SubjectNode", "subject"),
                     as.get("ObjectNode", "object2"));
 
             ASIncomingSet incomingSet = as.get("SubjectNode", "subject").getIncomingSet();
 
-            assertIncomingSet(as, incomingSet, "Link", 2, 0, (ASLink) link1, (ASLink) link2);
+            assertIncomingSet(as, incomingSet, "Link", 2, 0, link1, link2);
         });
     }
 

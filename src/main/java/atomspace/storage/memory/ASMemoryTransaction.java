@@ -16,7 +16,7 @@ public class ASMemoryTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, String value) {
+    public ASNode get(String type, String value) {
 
         String key = getNodeKey(type, value);
         ASNode node = storage.nodesInverseIndex.get(key);
@@ -30,7 +30,7 @@ public class ASMemoryTransaction implements ASTransaction {
     }
 
     @Override
-    public ASAtom get(String type, ASAtom... atoms) {
+    public ASLink get(String type, ASAtom... atoms) {
 
         String key = getListKey(type, atoms);
         ASLink link = storage.linksInverseIndex.get(key);
