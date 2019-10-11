@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Iterator;
 
 public class AtomspaceStorageUtils {
 
@@ -51,6 +52,14 @@ public class AtomspaceStorageUtils {
                 return builder.toString();
             }
         }
+    }
+
+    public static <T> int count(Iterator<T> iter) {
+        int s = 0;
+        for (; iter.hasNext(); iter.next()) {
+            s++;
+        }
+        return s;
     }
 
     public static void removeDirectory(String directory) {

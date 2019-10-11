@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static atomspace.storage.util.AtomspaceStorageUtils.count;
 import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASJanusGraphTransaction implements ASTransaction {
@@ -125,12 +126,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
         // TBD: use the count store
-        int s = 0;
-        Iterator<Edge> iter = getSet(id, type, arity, position);
-        for (; iter.hasNext(); iter.next()) {
-            s++;
-        }
-        return s;
+        return count(getSet(id, type, arity, position));
     }
 
     @Override

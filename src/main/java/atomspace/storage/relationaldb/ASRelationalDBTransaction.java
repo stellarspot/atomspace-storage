@@ -39,7 +39,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
             "INSERT INTO %s (id, type_arity_pos, parent_id) values (?, ?, ?)",
             TABLE_INCOMING_SET);
 
-    static final String QUERY_INCOMING_SET_ARITY = String.format(
+    static final String QUERY_INCOMING_SET_SIZE = String.format(
             "SELECT count(*) as total from %s where id = ? and type_arity_pos = ?",
             TABLE_INCOMING_SET);
 
@@ -189,7 +189,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_INCOMING_SET_ARITY)) {
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_INCOMING_SET_SIZE)) {
 
             String key = getKey(type, arity, position);
             statement.setLong(1, id);

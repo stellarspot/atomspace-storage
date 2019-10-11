@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static atomspace.storage.util.AtomspaceStorageUtils.count;
 import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASNeo4jTransaction implements ASTransaction {
@@ -114,11 +115,7 @@ public class ASNeo4jTransaction implements ASTransaction {
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
         // TBD: use the count store
-        int s = 0;
-        for (Relationship r : getIncomingRelationships(id, type, arity, position)) {
-            s++;
-        }
-        return s;
+        return count(getIncomingRelationships(id, type, arity, position).iterator());
     }
 
     @Override
