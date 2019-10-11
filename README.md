@@ -1,6 +1,13 @@
+The main of the project is investigation of a simple AtomSpace implementation on top of different (including relational
+and graph) backing storages.
 
-The aim of the project is to try a simple Atomspace implementation with basic Query Engine
-with different backing storages.
+# Description
+
+Main modules:
+* [Atomspace Storage](src/main/java/atomspace/storage)
+* [Query Engine](src/main/java/atomspace/query)
+
+# Current status
 
 What is implemented:
 * Atoms creation
@@ -13,16 +20,14 @@ What is not implemented:
 * Querying typed atoms
 * Querying atoms which contains only variable nodes
 
-# Description
-
-Main modules:
-* [Atomspace Storage](src/main/java/atomspace/storage)
-* [Query Engine](src/main/java/atomspace/query)
-
-Backing Storages:
-* [Memory](src/main/java/atomspace/storage/memory)
-* [Neo4j](src/main/java/atomspace/storage/neo4j)
-* [JanusGraph](src/main/java/atomspace/storage/janusgraph)
+Supported backing storages:
+* InMemory
+  * [Memory](src/main/java/atomspace/storage/memory)
+* Relational DB
+  * [Derby](src/main/java/atomspace/storage/relationaldb)
+* Property Graph
+  * [Neo4j](src/main/java/atomspace/storage/neo4j)
+  * [JanusGraph](src/main/java/atomspace/storage/janusgraph)
 
 # Building
 
