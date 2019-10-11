@@ -2,18 +2,24 @@ package atomspace.storage.janusgraph;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
-import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
+import atomspace.storage.base.ASBaseLink;
+import atomspace.storage.base.ASBaseNode;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
+import org.janusgraph.core.JanusGraphVertex;
 import org.janusgraph.core.Transaction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASJanusGraphTransaction implements ASTransaction {
 
@@ -52,7 +58,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
                     .property("value", value).next();
         }
 
-        return new ASJanusGraphNode(vertex);
+        return new ASBaseNode(id(vertex), type, value);
     }
 
     @Override
@@ -79,38 +85,71 @@ public class ASJanusGraphTransaction implements ASTransaction {
                     .property("type", type)
                     .property("ids", ids).next();
 
-            ASJanusGraphLink link = new ASJanusGraphLink(vertex);
-            int size = atoms.length;
-            for (int i = 0; i < size; i++) {
-                ((ASJanusGraphAtom.ASJanusGraphIncomingSet)atoms[i].getIncomingSet()).add(link, size, i);
+            // Update incoming set
+            int arity = atoms.length;
+            for (int i = 0; i < arity; i++) {
+                String key = getKey(type, arity, i);
+                Vertex childVertex = g.V(atoms[i].getId()).next();
+                childVertex.addEdge(key, vertex);
             }
-
-            return link;
         }
 
-        return new ASJanusGraphNode(vertex);
+        return new ASBaseLink(id(vertex), type, atoms);
     }
 
     @Override
     public ASAtom get(long id) {
-        throw new UnsupportedOperationException("Get atom by id.");
+        Vertex vertex = vertex(id);
+        String kind = vertex.property("kind").value().toString();
+        String type = vertex.property("type").value().toString();
+
+        if ("Node".equals(kind)) {
+            String value = vertex.property("value").value().toString();
+            return new ASBaseNode(id, type, value);
+        }
+
+        if ("Link".equals(kind)) {
+            long[] ids = (long[]) vertex.property("ids").value();
+            return new ASBaseLink(id, type, ids);
+        }
+
+        String msg = String.format("Unknown kind: %s%n", kind);
+        throw new RuntimeException(msg);
     }
 
     @Override
     public long[] getOutgoingListIds(long id) {
-        throw new UnsupportedOperationException("Get ids by id.");
+        return (long[]) vertex(id).property("ids").value();
     }
 
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set arity by id.");
+        // TBD: use the count store
+        int s = 0;
+        Iterator<Edge> iter = getSet(id, type, arity, position);
+        for (; iter.hasNext(); iter.next()) {
+            s++;
+        }
+        return s;
     }
 
     @Override
     public Iterator<ASLink> getIncomingSet(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set by id.");
+        List<ASLink> links = new ArrayList<>();
+        Iterator<Edge> iter = getSet(id, type, arity, position);
+        while (iter.hasNext()) {
+            JanusGraphVertex parent = (JanusGraphVertex) iter.next().inVertex();
+            links.add(new ASBaseLink(id(parent), type, arity));
+        }
+
+        return links.iterator();
     }
 
+    private Iterator<Edge> getSet(long id, String type, int size, int position) {
+        Vertex vertex = g.V(id).next();
+        String key = getKey(type, size, position);
+        return vertex.edges(Direction.OUT, key);
+    }
 
     @Override
     public Iterator<ASAtom> getAtoms() {
@@ -120,14 +159,14 @@ public class ASJanusGraphTransaction implements ASTransaction {
         GraphTraversal<Vertex, Vertex> nodes = g.V().has("kind", "Node");
 
         while (nodes.hasNext()) {
-            ASNode node = new ASJanusGraphNode(nodes.next());
+            ASAtom node = get(id(nodes.next()));
             atoms.add(node);
         }
 
         GraphTraversal<Vertex, Vertex> links = g.V().has("kind", "Link");
 
         while (links.hasNext()) {
-            ASLink link = new ASJanusGraphLink(links.next());
+            ASAtom link = get(id(links.next()));
             atoms.add(link);
         }
 
@@ -143,6 +182,13 @@ public class ASJanusGraphTransaction implements ASTransaction {
         tx.close();
     }
 
+    private static long id(Vertex v) {
+        return (long) v.id();
+    }
+
+    private Vertex vertex(long id) {
+        return g.V(id).next();
+    }
 
     private static long[] getIds(ASAtom... atoms) {
         long[] ids = new long[atoms.length];

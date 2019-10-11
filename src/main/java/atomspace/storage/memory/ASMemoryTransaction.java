@@ -60,7 +60,7 @@ public class ASMemoryTransaction implements ASTransaction {
 
     @Override
     public int getIncomingSetSize(long id, String type, int arity, int position) {
-        throw new UnsupportedOperationException("Get incoming set arity by id.");
+        throw new UnsupportedOperationException("Get incoming set size by id.");
     }
 
     @Override

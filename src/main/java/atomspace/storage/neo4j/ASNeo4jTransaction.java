@@ -71,8 +71,6 @@ public class ASNeo4jTransaction implements ASTransaction {
             node.setProperty("type", type);
             node.setProperty("ids", ids);
 
-            ASLink link = new ASBaseLink(node.getId(), type, atoms);
-
             // Update incoming set
             int arity = atoms.length;
             for (int i = 0; i < arity; i++) {
@@ -81,7 +79,6 @@ public class ASNeo4jTransaction implements ASTransaction {
                 childNode.createRelationshipTo(node, RelationshipType.withName(key));
             }
 
-            return link;
         }
 
         return new ASBaseLink(node.getId(), type, atoms);
