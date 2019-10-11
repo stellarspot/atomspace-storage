@@ -24,7 +24,7 @@ fun main() {
 
     val runner = SampleAtomspaceRunner(AtomspaceMemoryStorage())
 
-    run(runner) {
+    init(runner) {
 
         LikesLink(
                 PersonNode("Alice"),

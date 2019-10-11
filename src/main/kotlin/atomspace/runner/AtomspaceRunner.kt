@@ -24,7 +24,7 @@ open class AtomspaceRunner(open val atomspace: AtomspaceStorage) {
     }
 }
 
-fun <ASRunner : AtomspaceRunner> run(runner: ASRunner, block: ASRunner.() -> Unit) {
+fun <ASRunner : AtomspaceRunner> init(runner: ASRunner, block: ASRunner.() -> Unit) {
     val tx = runner.openTx()
     runner.tx = tx
     runner.block()
