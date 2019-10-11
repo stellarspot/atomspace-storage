@@ -8,9 +8,10 @@ What is implemented:
 
 What is not implemented:
 * Atoms removing
+* Atoms key-value properties
 * Child atomspaces
-* Querying atoms which contains only variable nodes
 * Querying typed atoms
+* Querying atoms which contains only variable nodes
 
 # Description
 
