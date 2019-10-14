@@ -2,21 +2,21 @@ package atomspace.storage.memory;
 
 import atomspace.storage.util.AtomspaceStorageHelper;
 
-public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper {
+public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper<ASMemoryTransaction> {
 
 
-    private final ASMemoryTransaction tx;
+    private final AtomspaceMemoryStorage storage;
 
-    public AtomspaceMemoryStorageHelper(ASMemoryTransaction tx) {
-        this.tx = tx;
+    public AtomspaceMemoryStorageHelper(AtomspaceMemoryStorage storage) {
+        this.storage = storage;
     }
 
     @Override
-    public void dump() {
+    public void dump(ASMemoryTransaction tx) {
     }
 
     @Override
-    public void reset() {
+    public void reset(ASMemoryTransaction tx) {
         tx.reset();
     }
 }

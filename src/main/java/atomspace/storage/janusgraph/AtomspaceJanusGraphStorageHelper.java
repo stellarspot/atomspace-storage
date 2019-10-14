@@ -4,26 +4,26 @@ import atomspace.storage.util.AtomspaceStorageHelper;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 
-public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper {
+public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper<ASJanusGraphTransaction> {
 
 
-    private final ASJanusGraphTransaction tx;
+    private final AtomspaceJanusGraphStorage storage;
 
-    public AtomspaceJanusGraphStorageHelper(ASJanusGraphTransaction tx) {
-        this.tx = tx;
+    public AtomspaceJanusGraphStorageHelper(AtomspaceJanusGraphStorage storage) {
+        this.storage = storage;
     }
 
     @Override
-    public void dump() {
+    public void dump(ASJanusGraphTransaction tx) {
     }
 
     @Override
-    public void reset() {
+    public void reset(ASJanusGraphTransaction tx) {
         tx.reset();
     }
 
     @Override
-    public void printStatistics(String msg) {
+    public void printStatistics(ASJanusGraphTransaction tx, String msg) {
         long vertices = tx.g.V().count().next();
         long edges = tx.g.E().count().next();
         System.out.printf("%s vertices: %s, edges: %s%n", msg, vertices, edges);

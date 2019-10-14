@@ -180,6 +180,7 @@ public class RandomTreeModelTest {
     static class RelationalDBStorageWrapper implements StorageWrapper {
 
         AtomspaceRelationalDBStorage storage = getRelationalDBStorage();
+        AtomspaceRelationalDBStorageHelper helper = new AtomspaceRelationalDBStorageHelper(storage);
 
         @Override
         public String getName() {
@@ -194,8 +195,7 @@ public class RandomTreeModelTest {
         @Override
         public void clean() {
             try (ASRelationalDBTransaction tx = storage.getTx()) {
-                AtomspaceRelationalDBStorageHelper helper = new AtomspaceRelationalDBStorageHelper(tx);
-                helper.reset();
+                helper.reset(tx);
             }
         }
     }
@@ -203,6 +203,7 @@ public class RandomTreeModelTest {
     static class Neo4jStorageWrapper implements StorageWrapper {
 
         AtomspaceNeo4jStorage storage = getNeo4jStorage();
+        AtomspaceNeo4jStorageHelper helper = new AtomspaceNeo4jStorageHelper(storage);
 
         @Override
         public String getName() {
@@ -217,8 +218,7 @@ public class RandomTreeModelTest {
         @Override
         public void clean() {
             try (ASNeo4jTransaction tx = storage.getTx()) {
-                AtomspaceNeo4jStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
-                helper.reset();
+                helper.reset(tx);
             }
         }
     }
@@ -226,6 +226,7 @@ public class RandomTreeModelTest {
     static class JanusGraphStorageWrapper implements StorageWrapper {
 
         AtomspaceJanusGraphStorage storage = getJanusGraphStorage();
+        AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(storage);
 
         @Override
         public String getName() {
@@ -240,8 +241,7 @@ public class RandomTreeModelTest {
         @Override
         public void clean() {
             try (ASJanusGraphTransaction tx = storage.getTx()) {
-                AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
-                helper.reset();
+                helper.reset(tx);
             }
         }
     }

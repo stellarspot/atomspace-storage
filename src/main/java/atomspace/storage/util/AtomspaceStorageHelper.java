@@ -1,12 +1,14 @@
 package atomspace.storage.util;
 
-public interface AtomspaceStorageHelper {
+import atomspace.storage.ASTransaction;
 
-    void dump();
+public interface AtomspaceStorageHelper<Transaction extends ASTransaction> {
 
-    void reset();
+    void dump(Transaction tx);
 
-    default void printStatistics(String msg) {
+    void reset(Transaction tx);
+
+    default void printStatistics(Transaction tx, String msg) {
         System.out.printf("Print statistics is not implemented!%n");
     }
 }
