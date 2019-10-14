@@ -200,4 +200,21 @@ public class ASJanusGraphTransaction implements ASTransaction {
         g.E().drop().iterate();
         g.V().drop().iterate();
     }
+
+    void printStatistics(String msg) {
+        long vertices = g.V().count().next();
+        long edges = g.E().count().next();
+        System.out.printf("%s vertices: %s, edges: %s%n", msg, vertices, edges);
+    }
+
+    void dump() {
+        System.out.printf("--- Dump JanusGraph ---%n");
+        Iterator<Vertex> iter = g.V();
+        while (iter.hasNext()) {
+            Vertex v = iter.next();
+            String type = v.property("type").value().toString();
+            System.out.printf("type: %s%n", type);
+        }
+        System.out.printf("--- --------------- ---%n");
+    }
 }

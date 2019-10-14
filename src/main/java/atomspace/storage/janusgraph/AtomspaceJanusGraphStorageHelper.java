@@ -1,8 +1,11 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.storage.util.AtomspaceStorageHelper;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
+
+import java.util.Iterator;
 
 public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper<ASJanusGraphTransaction> {
 
@@ -15,6 +18,7 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper<
 
     @Override
     public void dump(ASJanusGraphTransaction tx) {
+        tx.dump();
     }
 
     @Override
@@ -24,9 +28,7 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper<
 
     @Override
     public void printStatistics(ASJanusGraphTransaction tx, String msg) {
-        long vertices = tx.g.V().count().next();
-        long edges = tx.g.E().count().next();
-        System.out.printf("%s vertices: %s, edges: %s%n", msg, vertices, edges);
+        tx.printStatistics(msg);
     }
 
     public static AtomspaceJanusGraphStorage getJanusGraphInMemoryStorage() {

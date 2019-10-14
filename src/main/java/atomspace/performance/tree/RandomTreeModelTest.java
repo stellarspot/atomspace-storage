@@ -9,7 +9,9 @@ import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.janusgraph.ASJanusGraphTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
+import atomspace.storage.memory.ASMemoryTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
+import atomspace.storage.memory.AtomspaceMemoryStorageHelper;
 import atomspace.storage.neo4j.ASNeo4jTransaction;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
@@ -60,12 +62,13 @@ public class RandomTreeModelTest {
         // performance measurement
         for (int x : xs) {
             model = runner.getModel(x);
-            System.out.printf("x: %d, model: %s%n", x, model);
+            System.out.printf("x: %d, %s%n", x, model);
             for (StorageWrapper wrapper : wrappers) {
                 runner.init(model, wrapper);
                 long time = System.currentTimeMillis();
                 runner.run(model, wrapper);
                 long elapsedTime = System.currentTimeMillis() - time;
+                wrapper.printStatistics();
 
                 List<Long> ys = map.computeIfAbsent(wrapper.getName(), (key) -> new LinkedList<>());
                 ys.add(elapsedTime);
@@ -100,6 +103,10 @@ public class RandomTreeModelTest {
         AtomspaceStorageUtils.removeDirectory(dir);
         return new AtomspaceNeo4jStorage(dir);
     }
+
+//    private static AtomspaceJanusGraphStorage getJanusGraphStorage() {
+//        return AtomspaceJanusGraphStorageHelper.getJanusGraphInMemoryStorage();
+//    }
 
     private static AtomspaceJanusGraphStorage getJanusGraphStorage() {
         String dir = "/tmp/atomspace-storage/performance/janusgraph";
@@ -155,12 +162,17 @@ public class RandomTreeModelTest {
 
         void clean();
 
+        void printStatistics();
+
         default void close() throws Exception {
             getStorage().close();
         }
     }
 
     static class MemoryStorageWrapper implements StorageWrapper {
+
+        AtomspaceMemoryStorage storage = new AtomspaceMemoryStorage();
+        AtomspaceMemoryStorageHelper helper = new AtomspaceMemoryStorageHelper(storage);
 
         @Override
         public String getName() {
@@ -169,11 +181,21 @@ public class RandomTreeModelTest {
 
         @Override
         public AtomspaceStorage getStorage() {
-            return new AtomspaceMemoryStorage();
+            return storage;
+        }
+
+        @Override
+        public void printStatistics() {
+            try (ASMemoryTransaction tx = storage.getTx()) {
+                helper.printStatistics(tx, "memory");
+            }
         }
 
         @Override
         public void clean() {
+            try (ASMemoryTransaction tx = storage.getTx()) {
+                helper.reset(tx);
+            }
         }
     }
 
@@ -190,6 +212,13 @@ public class RandomTreeModelTest {
         @Override
         public AtomspaceStorage getStorage() {
             return storage;
+        }
+
+        @Override
+        public void printStatistics() {
+            try (ASRelationalDBTransaction tx = storage.getTx()) {
+                helper.printStatistics(tx, "relational db");
+            }
         }
 
         @Override
@@ -216,6 +245,13 @@ public class RandomTreeModelTest {
         }
 
         @Override
+        public void printStatistics() {
+            try (ASNeo4jTransaction tx = storage.getTx()) {
+                helper.printStatistics(tx, "neo4j");
+            }
+        }
+
+        @Override
         public void clean() {
             try (ASNeo4jTransaction tx = storage.getTx()) {
                 helper.reset(tx);
@@ -236,6 +272,14 @@ public class RandomTreeModelTest {
         @Override
         public AtomspaceStorage getStorage() {
             return storage;
+        }
+
+        @Override
+        public void printStatistics() {
+            try (ASJanusGraphTransaction tx = storage.getTx()) {
+                helper.printStatistics(tx, "janusgraph");
+                helper.dump(tx);
+            }
         }
 
         @Override

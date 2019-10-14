@@ -15,7 +15,7 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
     private final ASMemoryTransaction tx = new ASMemoryTransaction(this);
 
     @Override
-    public ASTransaction getTx() {
+    public ASMemoryTransaction getTx() {
         return tx;
     }
 
