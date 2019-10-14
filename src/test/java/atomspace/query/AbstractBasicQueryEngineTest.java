@@ -14,7 +14,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
     @Test
     // Use Typed variables
     public void test0() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom atom = as.get("Node", "value");
             ASAtom query = as.get("VariableNode", "$VALUE");
@@ -27,7 +27,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
     @Test
     public void test1() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom atom = as.get("PredicateLink",
                     as.get("SubjectNode", "subject"),
@@ -46,7 +46,7 @@ public abstract class AbstractBasicQueryEngineTest extends ASAbstractTest {
 
     @Test
     public void test2() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom atom1 = as.get("PredicateLink",
                     as.get("SubjectNode", "subject"),

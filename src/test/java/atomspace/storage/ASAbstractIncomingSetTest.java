@@ -12,7 +12,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testEmptyIncomingSet() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASNode node = as.get("Node", "value");
             assertIncomingSet(as, node, "Node", 0, 0);
@@ -25,7 +25,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testIncomingSet1() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASNode node = as.get("Node", "value");
             ASLink link = as.get("Link", node);
@@ -42,7 +42,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testIncomingSet11() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASNode node = as.get("Node", "value");
             ASLink link = as.get("Link", node, node);
@@ -61,7 +61,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testIncomingSet12() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASNode node1 = as.get("Node1", "value");
             ASNode node2 = as.get("Node2", "value");
@@ -86,7 +86,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testIncomingSetLinks12() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom node = as.get("Node", "value");
             ASLink link1 = as.get("Link1", node);
@@ -104,7 +104,7 @@ public abstract class ASAbstractIncomingSetTest extends ASAbstractTest {
     @Test
     public void testIncomingSetCommonChild() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASLink link1 = as.get("Link",
                     as.get("SubjectNode", "subject"),

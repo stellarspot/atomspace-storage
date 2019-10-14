@@ -1,6 +1,7 @@
 package atomspace.storage.janusgraph;
 
 import atomspace.ASTestUtils;
+import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
 import java.io.IOException;
@@ -26,14 +27,14 @@ public class ASJanusGraphTestUtils {
         return JANUS_GRAPHJ_STORAGE;
     }
 
-    public static AtomspaceJanusGraphStorageHelper getStorageHelper(ASJanusGraphTransaction tx) {
-        return new AtomspaceJanusGraphStorageHelper(tx);
+    public static AtomspaceJanusGraphStorageHelper getStorageHelper(AtomspaceStorage storage) {
+        return new AtomspaceJanusGraphStorageHelper((AtomspaceJanusGraphStorage) storage);
     }
 
     private static void resetStorage() {
         try (ASJanusGraphTransaction tx = JANUS_GRAPHJ_STORAGE.getTx()) {
-            AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
-            helper.reset();
+            AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(JANUS_GRAPHJ_STORAGE);
+            helper.reset(tx);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

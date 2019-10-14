@@ -8,7 +8,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     @Test
     public void testNotNull() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertNotNull(
                         as.get("Link",
                                 as.get("Node1", "value1"),
@@ -18,7 +18,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     @Test
     public void testEquals() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
@@ -31,7 +31,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     @Test
     public void testIdEquals() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
@@ -44,7 +44,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     @Test
     public void testHashcode() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Link",
                                 as.get("Node1", "value1"),
@@ -57,7 +57,7 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
     @Test
     public void testToString() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         "Link(Node1('value1'),Node2('value2'))",
                         as.get("Link",

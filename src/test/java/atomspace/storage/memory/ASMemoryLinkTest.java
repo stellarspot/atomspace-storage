@@ -15,7 +15,7 @@ public class ASMemoryLinkTest extends ASAbstractLinkTest {
     @Test
     public void testSame() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertSame(
                         as.get("Link",
                                 as.get("Node1", "value1"),

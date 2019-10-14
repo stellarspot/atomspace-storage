@@ -1,6 +1,7 @@
 package atomspace.storage.neo4j;
 
 import atomspace.ASTestUtils;
+import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
 public class ASNeo4jTestUtils {
@@ -19,8 +20,8 @@ public class ASNeo4jTestUtils {
         return NEO4J_STORAGE;
     }
 
-    public static AtomspaceNeo4jStorageHelper getStorageHelper(ASNeo4jTransaction tx) {
-        return new AtomspaceNeo4jStorageHelper(tx);
+    public static AtomspaceNeo4jStorageHelper getStorageHelper(AtomspaceStorage storage) {
+        return new AtomspaceNeo4jStorageHelper((AtomspaceNeo4jStorage) storage);
     }
 
     private static void addShutdownHook() {
@@ -31,7 +32,7 @@ public class ASNeo4jTestUtils {
 
     private static void resetStorage() {
         ASNeo4jTransaction tx = NEO4J_STORAGE.getTx();
-        AtomspaceStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
-        helper.reset();
+        AtomspaceStorageHelper helper = getStorageHelper(NEO4J_STORAGE);
+        helper.reset(tx);
     }
 }

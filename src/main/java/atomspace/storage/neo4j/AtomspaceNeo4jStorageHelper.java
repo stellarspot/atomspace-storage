@@ -1,8 +1,9 @@
 package atomspace.storage.neo4j;
 
+import atomspace.storage.ASTransaction;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
-public class AtomspaceNeo4jStorageHelper implements AtomspaceStorageHelper<ASNeo4jTransaction> {
+public class AtomspaceNeo4jStorageHelper implements AtomspaceStorageHelper {
 
     private final AtomspaceNeo4jStorage storage;
 
@@ -11,11 +12,11 @@ public class AtomspaceNeo4jStorageHelper implements AtomspaceStorageHelper<ASNeo
     }
 
     @Override
-    public void dump(ASNeo4jTransaction tx) {
+    public void dump(ASTransaction tx) {
     }
 
     @Override
-    public void reset(ASNeo4jTransaction tx) {
-        tx.reset();
+    public void reset(ASTransaction tx) {
+        ((ASNeo4jTransaction) tx).reset();
     }
 }

@@ -10,7 +10,7 @@ public abstract class AbstractBasicQueryEngineRegressionTest extends ASAbstractT
     @Test
     public void testMatchSubTreeWithDifferentSize() throws Exception {
 
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             // Link1(
             //  Node1("value1"),

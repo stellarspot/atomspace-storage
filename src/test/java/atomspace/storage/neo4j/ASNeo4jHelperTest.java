@@ -13,7 +13,7 @@ public class ASNeo4jHelperTest extends ASAbstractHelperTest {
     }
 
     @Override
-    public AtomspaceStorageHelper getHelper(ASTransaction tx) {
-        return ASNeo4jTestUtils.getStorageHelper((ASNeo4jTransaction) tx);
+    public AtomspaceStorageHelper getHelper(AtomspaceStorage storage) {
+        return ASNeo4jTestUtils.getStorageHelper(storage);
     }
 }

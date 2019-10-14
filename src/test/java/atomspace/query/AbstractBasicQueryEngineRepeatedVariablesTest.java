@@ -16,7 +16,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
     @Ignore
     // Scan whole atomspace
     public void test1() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom atom = as.get("Link",
                     as.get("Node", "value"),
@@ -36,7 +36,7 @@ public abstract class AbstractBasicQueryEngineRepeatedVariablesTest extends ASAb
 
     @Test
     public void test2() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom atom1 = as.get("Link",
                     as.get("Node", "A"),

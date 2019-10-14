@@ -1,8 +1,9 @@
 package atomspace.storage.memory;
 
+import atomspace.storage.ASTransaction;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
-public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper<ASMemoryTransaction> {
+public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper {
 
 
     private final AtomspaceMemoryStorage storage;
@@ -12,11 +13,11 @@ public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper<ASMe
     }
 
     @Override
-    public void dump(ASMemoryTransaction tx) {
+    public void dump(ASTransaction tx) {
     }
 
     @Override
-    public void reset(ASMemoryTransaction tx) {
-        tx.reset();
+    public void reset(ASTransaction tx) {
+        ((ASMemoryTransaction) tx).reset();
     }
 }

@@ -8,14 +8,14 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     @Test
     public void testNotNull() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertNotNull(as.get("Node", "value")));
     }
 
     @Test
     public void testEquals() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Node", "value"),
                         as.get("Node", "value")));
@@ -24,7 +24,7 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     @Test
     public void testIdEquals() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Node", "value").getId(),
                         as.get("Node", "value").getId()));
@@ -33,7 +33,7 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     @Test
     public void testHashcode() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         as.get("Node", "value").hashCode(),
                         as.get("Node", "value").hashCode()));
@@ -42,7 +42,7 @@ public abstract class ASAbstractNodeTest extends ASAbstractTest {
     @Test
     public void testToString() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertEquals(
                         "Node('value')",
                         as.get("Node", "value").toString()));

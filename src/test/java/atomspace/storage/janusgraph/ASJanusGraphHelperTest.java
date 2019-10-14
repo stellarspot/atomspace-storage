@@ -13,7 +13,7 @@ public class ASJanusGraphHelperTest extends ASAbstractHelperTest {
     }
 
     @Override
-    public AtomspaceStorageHelper getHelper(ASTransaction tx) {
-        return ASJanusGraphTestUtils.getStorageHelper((ASJanusGraphTransaction) tx);
+    public AtomspaceStorageHelper getHelper(AtomspaceStorage storage) {
+        return ASJanusGraphTestUtils.getStorageHelper(storage);
     }
 }

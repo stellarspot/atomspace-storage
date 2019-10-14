@@ -1,10 +1,11 @@
 package atomspace.storage.relationaldb;
 
+import atomspace.storage.ASTransaction;
 import atomspace.storage.util.AtomspaceStorageHelper;
 
 import java.sql.SQLException;
 
-public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelper<ASRelationalDBTransaction> {
+public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelper {
 
 
     private final AtomspaceRelationalDBStorage storage;
@@ -14,9 +15,9 @@ public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelpe
     }
 
     @Override
-    public void dump(ASRelationalDBTransaction tx) {
+    public void dump(ASTransaction tx) {
         try {
-            tx.dump();
+            ((ASRelationalDBTransaction) tx).dump();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -24,9 +25,9 @@ public class AtomspaceRelationalDBStorageHelper implements AtomspaceStorageHelpe
 
 
     @Override
-    public void reset(ASRelationalDBTransaction tx) {
+    public void reset(ASTransaction tx) {
         try {
-            tx.reset();
+            ((ASRelationalDBTransaction) tx).reset();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

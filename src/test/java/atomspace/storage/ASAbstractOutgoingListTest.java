@@ -9,7 +9,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
 
     @Test
     public void testEmptyOutgoingList() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASLink link = as.get("Link");
             ASOutgoingList outgoingList = link.getOutgoingList();
@@ -20,7 +20,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
 
     @Test
     public void testOutgoingList1() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom node = as.get("Node", "value");
             ASLink link = as.get("Link", node);
@@ -33,7 +33,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
 
     @Test
     public void testOutgoingList2() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom node1 = as.get("Node1", "value1");
             ASAtom node2 = as.get("Node2", "value2");
@@ -48,7 +48,7 @@ public abstract class ASAbstractOutgoingListTest extends ASAbstractTest {
 
     @Test
     public void testOutgoingListN() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             final int max_values = 100;
             int n = new Random().nextInt(max_values);

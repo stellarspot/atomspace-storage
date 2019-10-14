@@ -15,7 +15,7 @@ public class ASMemoryNodeTest extends ASAbstractNodeTest {
     @Test
     public void testSame() throws Exception {
 
-        testAtomspaceStorage(as ->
+        testAtomspaceTransaction(as ->
                 Assert.assertSame(
                         as.get("Node", "value"),
                         as.get("Node", "value")));

@@ -13,7 +13,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
     @Test
     public void test1() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom link = as.get("EvaluationLink",
                     as.get("PredicateNode", "predicate"),
@@ -37,7 +37,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
     @Test
     public void test2() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom link1 = as.get("EvaluationLink",
                     as.get("PredicateNode", "predicate"),
@@ -67,7 +67,7 @@ public abstract class AbstractBasicQueryEngineEvaluationTest extends ASAbstractT
 
     @Test
     public void test3() throws Exception {
-        testAtomspaceStorage(as -> {
+        testAtomspaceTransaction(as -> {
 
             ASAtom link1 = as.get("EvaluationLink",
                     as.get("PredicateNode", "predicate"),

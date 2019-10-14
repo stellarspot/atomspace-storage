@@ -12,8 +12,9 @@ public class ASMemoryHelperTest extends ASAbstractHelperTest {
         return ASMemoryTestUtils.getTestStorage();
     }
 
+
     @Override
-    public AtomspaceStorageHelper getHelper(ASTransaction tx) {
-        return ASMemoryTestUtils.getStorageHelper((ASMemoryTransaction) tx);
+    public AtomspaceStorageHelper getHelper(AtomspaceStorage storage) {
+        return ASMemoryTestUtils.getStorageHelper((AtomspaceMemoryStorage) storage);
     }
 }
