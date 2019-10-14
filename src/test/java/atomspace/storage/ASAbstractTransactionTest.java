@@ -21,18 +21,24 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
             tx.get("Node", "value");
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertTrue(iter.hasNext());
-            ASAtom atom = iter.next();
-            Assert.assertEquals("Node", atom.getType());
+            checkNode(iter.next(), "Node", "value");
             Assert.assertFalse(iter.hasNext());
         }
 
         try (ASTransaction tx = storage.getTx()) {
-            tx.get("Node", "value");
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertTrue(iter.hasNext());
-            ASAtom atom = iter.next();
-            Assert.assertEquals("Node", atom.getType());
+            checkNode(iter.next(), "Node", "value");
             Assert.assertFalse(iter.hasNext());
         }
+    }
+
+    static void checkNode(ASAtom atom, String type, String value) {
+
+        Assert.assertEquals(type, atom.getType());
+
+        Assert.assertTrue("Atom is not a Node!", atom instanceof ASNode);
+        ASNode node = (ASNode) atom;
+        Assert.assertEquals(value, node.getValue());
     }
 }

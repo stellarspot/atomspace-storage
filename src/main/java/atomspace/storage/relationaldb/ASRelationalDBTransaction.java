@@ -6,6 +6,8 @@ import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
+import atomspace.storage.memory.ASMemoryLink;
+import atomspace.storage.memory.ASMemoryNode;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
@@ -48,6 +50,10 @@ public class ASRelationalDBTransaction implements ASTransaction {
             "SELECT parent_id from %s where id = ? and type_arity_pos = ?",
             TABLE_INCOMING_SET);
 
+    static final String QUERY_ALL_ATOMS = String.format(
+            "SELECT id, type, value, size, ids from %s",
+            TABLE_ATOMS);
+
 
     final Connection connection;
 
@@ -68,13 +74,13 @@ public class ASRelationalDBTransaction implements ASTransaction {
         return new ASBaseLink(id, type, atoms);
     }
 
-    private long get(String type, String value, int size, long... ids) {
+    private long get(String type, String value, int arity, long... ids) {
 
         try (PreparedStatement statement = connection.prepareStatement(QUERY_ATOM_ID)) {
 
             statement.setString(1, type);
             statement.setString(2, value);
-            statement.setInt(3, size);
+            statement.setInt(3, arity);
             statement.setString(4, idsToString(ids));
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -93,7 +99,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
             statement.setString(1, type);
             statement.setString(2, value);
-            statement.setInt(3, size);
+            statement.setInt(3, arity);
             statement.setString(4, idsToString(ids));
 
             statement.executeUpdate();
@@ -102,7 +108,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                 generatedKeys.next();
                 long id = generatedKeys.getLong(1);
 
-                if (size > 0) {
+                if (arity > 0) {
                     updateIncomingSet(id, type, ids);
                 }
 
@@ -228,7 +234,33 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     @Override
     public Iterator<ASAtom> getAtoms() {
-        return null;
+
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(QUERY_ALL_ATOMS)) {
+
+                List<ASAtom> atoms = new ArrayList<>();
+
+                if (resultSet.next()) {
+                    long id = resultSet.getLong("id");
+                    String type = resultSet.getString("type");
+                    int arity = resultSet.getInt("size");
+
+                    if (arity == 0) {
+                        String value = resultSet.getString("value");
+                        ASNode node = new ASBaseNode(id, type, value);
+                        atoms.add(node);
+                    } else {
+                        String ids = resultSet.getString("ids");
+                        ASLink node = new ASBaseLink(id, type, toIds(ids));
+                        atoms.add(node);
+                    }
+                }
+
+                return atoms.iterator();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
