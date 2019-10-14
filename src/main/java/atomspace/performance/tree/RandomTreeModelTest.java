@@ -32,7 +32,7 @@ public class RandomTreeModelTest {
                 new MemoryStorageWrapper(),
                 new RelationalDBStorageWrapper(),
                 new Neo4jStorageWrapper(),
-                new JanusGraphStorageWrapper()
+                new JanusGraphStorageWrapper(),
         };
 
         int[] statements = {100, 200, 300, 400, 500};
@@ -195,6 +195,7 @@ public class RandomTreeModelTest {
         public void clean() {
             try (ASMemoryTransaction tx = storage.getTx()) {
                 helper.reset(tx);
+                tx.commit();
             }
         }
     }
@@ -225,6 +226,7 @@ public class RandomTreeModelTest {
         public void clean() {
             try (ASRelationalDBTransaction tx = storage.getTx()) {
                 helper.reset(tx);
+                tx.commit();
             }
         }
     }
@@ -255,6 +257,7 @@ public class RandomTreeModelTest {
         public void clean() {
             try (ASNeo4jTransaction tx = storage.getTx()) {
                 helper.reset(tx);
+                tx.commit();
             }
         }
     }
@@ -278,7 +281,6 @@ public class RandomTreeModelTest {
         public void printStatistics() {
             try (ASJanusGraphTransaction tx = storage.getTx()) {
                 helper.printStatistics(tx, "janusgraph");
-                helper.dump(tx);
             }
         }
 
@@ -286,6 +288,7 @@ public class RandomTreeModelTest {
         public void clean() {
             try (ASJanusGraphTransaction tx = storage.getTx()) {
                 helper.reset(tx);
+                tx.commit();
             }
         }
     }
@@ -315,7 +318,7 @@ public class RandomTreeModelTest {
         @Override
         public PerformanceModel getModel(int statements) {
             PerformanceModelConfiguration config = new PerformanceModelConfiguration(maxTypes, maxTypes, maxTypes, true);
-            PerformanceModelParameters params = new PerformanceModelParameters(statements, -1, 100);
+            PerformanceModelParameters params = new PerformanceModelParameters(statements, -1, 10);
             RandomTreeModelParameters treeParams = new RandomTreeModelParameters(randomTreeSize, randomTreeSize, maxVariables);
             return new RandomTreeModel(config, params, treeParams);
         }

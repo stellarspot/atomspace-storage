@@ -177,9 +177,15 @@ public class ASNeo4jTransaction implements ASTransaction {
         }
     }
 
-    private static long[] getIds(ASAtom... atoms) {
-        long[] ids = new long[atoms.length];
+    void printStatics(String msg) {
+        int nodes = count(graph.findNodes(Label.label("Node")));
+        int links = count(graph.findNodes(Label.label("Link")));
+        System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
+    }
 
+    private static long[] getIds(ASAtom... atoms) {
+
+        long[] ids = new long[atoms.length];
         for (int i = 0; i < atoms.length; i++) {
             ids[i] = atoms[i].getId();
         }

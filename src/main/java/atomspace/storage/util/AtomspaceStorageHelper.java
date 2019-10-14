@@ -8,7 +8,5 @@ public interface AtomspaceStorageHelper {
 
     void reset(ASTransaction tx);
 
-    default void printStatistics(ASTransaction tx, String msg) {
-        System.out.printf("Print statistics is not implemented!%n");
-    }
+    void printStatistics(ASTransaction tx, String msg);
 }

@@ -19,4 +19,9 @@ public class AtomspaceNeo4jStorageHelper implements AtomspaceStorageHelper {
     public void reset(ASTransaction tx) {
         ((ASNeo4jTransaction) tx).reset();
     }
+
+    @Override
+    public void printStatistics(ASTransaction tx, String msg) {
+        ((ASNeo4jTransaction) tx).printStatics(msg);
+    }
 }

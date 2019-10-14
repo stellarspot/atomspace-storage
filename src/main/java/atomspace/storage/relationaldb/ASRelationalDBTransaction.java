@@ -6,8 +6,6 @@ import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
-import atomspace.storage.memory.ASMemoryLink;
-import atomspace.storage.memory.ASMemoryNode;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.sql.*;
@@ -52,6 +50,14 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     static final String QUERY_ALL_ATOMS = String.format(
             "SELECT id, type, value, arity, ids from %s",
+            TABLE_ATOMS);
+
+    static final String COUNT_NODES = String.format(
+            "SELECT count(*) as total from %s where arity = -1",
+            TABLE_ATOMS);
+
+    static final String COUNT_LINKS = String.format(
+            "SELECT count(*) as total from %s where arity <> -1",
             TABLE_ATOMS);
 
 
@@ -298,6 +304,25 @@ public class ASRelationalDBTransaction implements ASTransaction {
             }
         }
     }
+
+    void printStatics(String msg) throws SQLException {
+        int nodes = count(COUNT_NODES);
+        long links = count(COUNT_LINKS);
+        System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
+    }
+
+    public int count(String sql) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+                return 0;
+            }
+        }
+    }
+
 
     void dump(String msg, Object... args) {
         System.out.printf(msg, args);

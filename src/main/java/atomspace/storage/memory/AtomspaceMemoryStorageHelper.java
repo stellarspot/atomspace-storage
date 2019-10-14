@@ -20,4 +20,9 @@ public class AtomspaceMemoryStorageHelper implements AtomspaceStorageHelper {
     public void reset(ASTransaction tx) {
         ((ASMemoryTransaction) tx).reset();
     }
+
+    @Override
+    public void printStatistics(ASTransaction tx, String msg) {
+        storage.printStatics(msg);
+    }
 }

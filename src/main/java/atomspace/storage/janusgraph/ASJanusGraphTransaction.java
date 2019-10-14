@@ -206,9 +206,9 @@ public class ASJanusGraphTransaction implements ASTransaction {
     }
 
     void printStatistics(String msg) {
-        long vertices = g.V().count().next();
-        long edges = g.E().count().next();
-        System.out.printf("%s vertices: %s, edges: %s%n", msg, vertices, edges);
+        long nodes = g.V().has("as_kind", "Node").count().next();
+        long links = g.V().has("as_kind", "Link").count().next();
+        System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
     }
 
     void dump() {

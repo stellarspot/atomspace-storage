@@ -32,4 +32,10 @@ public class AtomspaceMemoryStorage implements AtomspaceStorage {
         linksInverseIndex.clear();
         UNIQUE_ID = 0;
     }
+
+    void printStatics(String msg) {
+        int nodes = nodesInverseIndex.size();
+        long links = linksInverseIndex.size();
+        System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
+    }
 }
