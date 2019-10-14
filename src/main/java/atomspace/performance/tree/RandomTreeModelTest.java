@@ -60,6 +60,7 @@ public class RandomTreeModelTest {
         // performance measurement
         for (int x : xs) {
             model = runner.getModel(x);
+            System.out.printf("x: %d, model: %s%n", x, model);
             for (StorageWrapper wrapper : wrappers) {
                 runner.init(model, wrapper);
                 long time = System.currentTimeMillis();
@@ -69,6 +70,10 @@ public class RandomTreeModelTest {
                 List<Long> ys = map.computeIfAbsent(wrapper.getName(), (key) -> new LinkedList<>());
                 ys.add(elapsedTime);
             }
+        }
+
+        for (StorageWrapper wrapper : wrappers) {
+            wrapper.close();
         }
 
         double[] xsd = Arrays.stream(xs).mapToDouble(x -> x).toArray();

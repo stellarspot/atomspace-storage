@@ -49,7 +49,7 @@ public class RandomTreeModel implements PerformanceModel {
             for (NodeWithQuery nodeWithQuery : statements) {
                 createAtom(tx, nodeWithQuery.node);
 
-                if(iterations++>= params.iterationsBeforeCommit) {
+                if (iterations++ >= params.iterationsBeforeCommit) {
                     tx.commit();
                     iterations = 0;
                     commits++;
@@ -229,6 +229,11 @@ public class RandomTreeModel implements PerformanceModel {
             System.out.printf("%s%n", pair.query);
         }
         System.out.printf("--- ---- ---%n");
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Random tree model statements: %d, queries: %d%n", statements.size(), queries.size());
     }
 
     private static class QueryItem {
