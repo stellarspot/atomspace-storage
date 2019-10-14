@@ -64,4 +64,13 @@ public abstract class ASAbstractLinkTest extends ASAbstractTest {
                                 as.get("Node1", "value1"),
                                 as.get("Node2", "value2")).toString()));
     }
+
+    @Test
+    public void testZeroArity() throws Exception {
+
+        testAtomspaceTransaction(as -> {
+            ASLink link = as.get("Link");
+            Assert.assertEquals(link, as.get("Link"));
+        });
+    }
 }

@@ -63,7 +63,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
 
     @Override
     public ASNode get(String type, String value) {
-        long id = get(type, value, 0);
+        long id = get(type, value, -1);
         return new ASBaseNode(id, type, value);
     }
 
@@ -108,7 +108,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                 generatedKeys.next();
                 long id = generatedKeys.getLong(1);
 
-                if (arity > 0) {
+                if (isLink(arity)) {
                     updateIncomingSet(id, type, ids);
                 }
 
@@ -155,7 +155,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                     String type = resultSet.getString(1);
                     int arity = resultSet.getInt(3);
 
-                    if (arity == 0) {
+                    if (isNode(arity)) {
                         String value = resultSet.getString("value");
                         return new ASBaseNode(id, type, value);
                     } else {
@@ -245,7 +245,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                     String type = resultSet.getString("type");
                     int arity = resultSet.getInt("arity");
 
-                    if (arity == 0) {
+                    if (isNode(arity)) {
                         String value = resultSet.getString("value");
                         ASNode node = new ASBaseNode(id, type, value);
                         atoms.add(node);
@@ -261,6 +261,14 @@ public class ASRelationalDBTransaction implements ASTransaction {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean isNode(int arity) {
+        return arity == -1;
+    }
+
+    private static boolean isLink(int arity) {
+        return !isNode(arity);
     }
 
     @Override
