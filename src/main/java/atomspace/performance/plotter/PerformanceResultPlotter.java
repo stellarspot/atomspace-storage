@@ -1,4 +1,4 @@
-package atomspace.performance.utils;
+package atomspace.performance.plotter;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -260,6 +260,15 @@ public class PerformanceResultPlotter extends Application {
             props.sameChart = false;
             props.measurements = measurements;
             return props;
+        }
+
+        public static List<PointDouble> toPointList(double[] xs, double[] ys) {
+            List<PointDouble> points = new ArrayList<>(xs.length);
+
+            for (int i = 0; i < xs.length; i++) {
+                points.add(new PointDouble(xs[i], ys[i]));
+            }
+            return points;
         }
     }
 }

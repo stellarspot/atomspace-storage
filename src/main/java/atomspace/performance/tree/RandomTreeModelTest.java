@@ -3,8 +3,16 @@ package atomspace.performance.tree;
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.performance.PerformanceModelParameters;
+import atomspace.performance.plotter.PerformanceResultPlotter;
+import atomspace.performance.plotter.PerformanceResultPlotter.PointDouble;
 import atomspace.storage.AtomspaceStorage;
+import atomspace.storage.janusgraph.ASJanusGraphTransaction;
+import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
+import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
+import atomspace.storage.neo4j.ASNeo4jTransaction;
+import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
+import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
 import atomspace.storage.relationaldb.ASRelationalDBTransaction;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
@@ -12,16 +20,20 @@ import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.util.*;
 
+import static atomspace.performance.plotter.PerformanceResultPlotter.PlotterProperties.toPointList;
+
 public class RandomTreeModelTest {
 
     public static void main(String[] args) throws Exception {
 
         StorageWrapper[] wrappers = {
                 new MemoryStorageWrapper(),
-                new RelationalDBStorageWrapper()
+                new RelationalDBStorageWrapper(),
+                new Neo4jStorageWrapper(),
+                new JanusGraphStorageWrapper()
         };
 
-        int[] statements = {10, 20};
+        int[] statements = {100, 200, 300, 400, 500};
 
         ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2);
 
@@ -30,14 +42,24 @@ public class RandomTreeModelTest {
         for (Measurement result : results) {
             System.out.printf("result: %s%n", result);
         }
+
+        showPlotter(results);
     }
 
     public static List<Measurement> measure(ModelRunner runner, StorageWrapper[] wrappers, int[] xs) throws Exception {
 
         Map<String, List<Long>> map = new HashMap<>();
 
+        // warmup
+        PerformanceModel model = runner.getModel(10);
+        for (StorageWrapper wrapper : wrappers) {
+            runner.init(model, wrapper);
+            runner.run(model, wrapper);
+        }
+
+        // performance measurement
         for (int x : xs) {
-            PerformanceModel model = runner.getModel(x);
+            model = runner.getModel(x);
             for (StorageWrapper wrapper : wrappers) {
                 runner.init(model, wrapper);
                 long time = System.currentTimeMillis();
@@ -66,6 +88,30 @@ public class RandomTreeModelTest {
         String dir = "/tmp/atomspace-storage/performance/relationaldb";
         AtomspaceStorageUtils.removeDirectory(dir);
         return AtomspaceRelationalDBStorageHelper.getInMemoryStorage(dir);
+    }
+
+    private static AtomspaceNeo4jStorage getNeo4jStorage() {
+        String dir = "/tmp/atomspace-storage/performance/neo4j";
+        AtomspaceStorageUtils.removeDirectory(dir);
+        return new AtomspaceNeo4jStorage(dir);
+    }
+
+    private static AtomspaceJanusGraphStorage getJanusGraphStorage() {
+        String dir = "/tmp/atomspace-storage/performance/janusgraph";
+        AtomspaceStorageUtils.removeDirectory(dir);
+        return AtomspaceJanusGraphStorageHelper.getJanusGraphBerkeleyDBStorage(dir);
+    }
+
+    private static void showPlotter(List<Measurement> measurements) {
+        Map<String, List<PointDouble>> map = new HashMap<>();
+        for (Measurement measurement : measurements) {
+            double[] xs = measurement.xs;
+            double[] ys = measurement.ys;
+            map.put(measurement.name, toPointList(xs, ys));
+        }
+
+        PerformanceResultPlotter.PlotterProperties properties = PerformanceResultPlotter.PlotterProperties.differentCharts(map);
+        PerformanceResultPlotter.showMeasurements(properties);
     }
 
     static class Measurement {
@@ -113,7 +159,7 @@ public class RandomTreeModelTest {
 
         @Override
         public String getName() {
-            return "Memory";
+            return "create1Memory";
         }
 
         @Override
@@ -132,7 +178,7 @@ public class RandomTreeModelTest {
 
         @Override
         public String getName() {
-            return "RelationalDB";
+            return "create2RelationalDB";
         }
 
         @Override
@@ -144,6 +190,52 @@ public class RandomTreeModelTest {
         public void clean() {
             try (ASRelationalDBTransaction tx = storage.getTx()) {
                 AtomspaceRelationalDBStorageHelper helper = new AtomspaceRelationalDBStorageHelper(tx);
+                helper.reset();
+            }
+        }
+    }
+
+    static class Neo4jStorageWrapper implements StorageWrapper {
+
+        AtomspaceNeo4jStorage storage = getNeo4jStorage();
+
+        @Override
+        public String getName() {
+            return "create3Neo4j";
+        }
+
+        @Override
+        public AtomspaceStorage getStorage() {
+            return storage;
+        }
+
+        @Override
+        public void clean() {
+            try (ASNeo4jTransaction tx = storage.getTx()) {
+                AtomspaceNeo4jStorageHelper helper = new AtomspaceNeo4jStorageHelper(tx);
+                helper.reset();
+            }
+        }
+    }
+
+    static class JanusGraphStorageWrapper implements StorageWrapper {
+
+        AtomspaceJanusGraphStorage storage = getJanusGraphStorage();
+
+        @Override
+        public String getName() {
+            return "create4JanusGraph";
+        }
+
+        @Override
+        public AtomspaceStorage getStorage() {
+            return storage;
+        }
+
+        @Override
+        public void clean() {
+            try (ASJanusGraphTransaction tx = storage.getTx()) {
+                AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(tx);
                 helper.reset();
             }
         }

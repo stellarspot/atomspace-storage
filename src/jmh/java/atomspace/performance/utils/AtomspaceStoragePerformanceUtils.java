@@ -1,5 +1,6 @@
 package atomspace.performance.utils;
 
+import atomspace.performance.plotter.PerformanceResultPlotter;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
@@ -20,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static atomspace.performance.utils.PerformanceResultPlotter.PointDouble;
+import static atomspace.performance.plotter.PerformanceResultPlotter.PointDouble;
 
 
 public class AtomspaceStoragePerformanceUtils {
