@@ -22,15 +22,15 @@ import static atomspace.storage.util.AtomspaceStorageUtils.*;
 public class ASRelationalDBTransaction implements ASTransaction {
 
     static final String QUERY_ATOM_ID = String.format(
-            "SELECT id from %s where type = ? and value = ? and size = ? and ids = ?",
+            "SELECT id from %s where type = ? and value = ? and arity = ? and ids = ?",
             TABLE_ATOMS);
 
     static final String QUERY_ATOM = String.format(
-            "SELECT type, value, size, ids from %s where id = ?",
+            "SELECT type, value, arity, ids from %s where id = ?",
             TABLE_ATOMS);
 
     static final String INSERT_ATOM = String.format(
-            "INSERT INTO %s (type, value, size, ids) values (?, ?, ?, ?)",
+            "INSERT INTO %s (type, value, arity, ids) values (?, ?, ?, ?)",
             TABLE_ATOMS);
 
     static final String QUERY_IDS = String.format(
@@ -51,7 +51,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
             TABLE_INCOMING_SET);
 
     static final String QUERY_ALL_ATOMS = String.format(
-            "SELECT id, type, value, size, ids from %s",
+            "SELECT id, type, value, arity, ids from %s",
             TABLE_ATOMS);
 
 
@@ -243,7 +243,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
                 if (resultSet.next()) {
                     long id = resultSet.getLong("id");
                     String type = resultSet.getString("type");
-                    int arity = resultSet.getInt("size");
+                    int arity = resultSet.getInt("arity");
 
                     if (arity == 0) {
                         String value = resultSet.getString("value");

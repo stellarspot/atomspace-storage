@@ -15,7 +15,7 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
                     "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
                     "type VARCHAR(255)," +
                     "value VARCHAR(255)," +
-                    "size INTEGER NOT NULL," +
+                    "arity INTEGER NOT NULL," +
                     "ids VARCHAR(1024)" + // Use LONG VARCHAR
                     ")",
             TABLE_ATOMS);
@@ -29,7 +29,7 @@ public class AtomspaceRelationalDBStorage implements AtomspaceStorage {
             TABLE_INCOMING_SET);
 
     static final String CREATE_INDEX_ATOM = String.format(
-            "CREATE UNIQUE INDEX atoms_index on %s(type, value, size, ids)",
+            "CREATE UNIQUE INDEX atoms_index on %s(type, value, arity, ids)",
             TABLE_ATOMS);
 
     static final String CREATE_INDEX_INCOMING_SET = String.format(
