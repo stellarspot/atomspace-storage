@@ -15,6 +15,7 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
         try (ASTransaction tx = storage.getTx()) {
             Iterator<ASAtom> iter = tx.getAtoms();
             Assert.assertFalse(iter.hasNext());
+            tx.commit();
         }
 
         try (ASTransaction tx = storage.getTx()) {
@@ -23,6 +24,7 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
             Assert.assertTrue(iter.hasNext());
             checkNode(iter.next(), "Node", "value");
             Assert.assertFalse(iter.hasNext());
+            tx.commit();
         }
 
         try (ASTransaction tx = storage.getTx()) {
@@ -30,6 +32,7 @@ public abstract class ASAbstractTransactionTest extends ASAbstractTest {
             Assert.assertTrue(iter.hasNext());
             checkNode(iter.next(), "Node", "value");
             Assert.assertFalse(iter.hasNext());
+            tx.commit();
         }
     }
 

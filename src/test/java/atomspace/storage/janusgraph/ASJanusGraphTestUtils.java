@@ -35,6 +35,7 @@ public class ASJanusGraphTestUtils {
         try (ASJanusGraphTransaction tx = JANUS_GRAPHJ_STORAGE.getTx()) {
             AtomspaceStorageHelper helper = new AtomspaceJanusGraphStorageHelper(JANUS_GRAPHJ_STORAGE);
             helper.reset(tx);
+            tx.commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
