@@ -1,6 +1,7 @@
 package atomspace.performance.tree;
 
 import atomspace.performance.PerformanceModelParameters;
+import atomspace.performance.runner.Measurement;
 import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorage;

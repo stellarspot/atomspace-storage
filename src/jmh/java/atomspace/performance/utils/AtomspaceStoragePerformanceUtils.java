@@ -1,6 +1,6 @@
 package atomspace.performance.utils;
 
-import atomspace.performance.plotter.PerformanceResultPlotter;
+import atomspace.performance.runner.ResultPlotter;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static atomspace.performance.plotter.PerformanceResultPlotter.PointDouble;
+import static atomspace.performance.runner.ResultPlotter.PointDouble;
 
 
 public class AtomspaceStoragePerformanceUtils {
@@ -78,13 +78,13 @@ public class AtomspaceStoragePerformanceUtils {
             list.add(new PointDouble(Integer.parseInt(param), score));
         }
 
-        PerformanceResultPlotter.PlotterProperties props = new PerformanceResultPlotter.PlotterProperties();
+        ResultPlotter.PlotterProperties props = new ResultPlotter.PlotterProperties();
 
         props.timeUnits = "ms";
         props.sameChart = false;
         props.measurements = measurements;
 
-        PerformanceResultPlotter.showMeasurements(props);
+        ResultPlotter.showMeasurements(props);
     }
 
     public static void waitForProfiler() {

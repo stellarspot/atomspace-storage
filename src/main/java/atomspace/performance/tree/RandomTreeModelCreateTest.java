@@ -3,8 +3,7 @@ package atomspace.performance.tree;
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.performance.PerformanceModelParameters;
-import atomspace.performance.plotter.PerformanceResultPlotter;
-import atomspace.performance.plotter.PerformanceResultPlotter.PointDouble;
+import atomspace.performance.runner.*;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.janusgraph.ASJanusGraphTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
@@ -22,9 +21,7 @@ import atomspace.storage.util.AtomspaceStorageUtils;
 
 import java.util.*;
 
-import static atomspace.performance.plotter.PerformanceResultPlotter.PlotterProperties.toPointList;
-
-public class RandomTreeModelTest {
+public class RandomTreeModelCreateTest {
 
     public static void main(String[] args) throws Exception {
 
@@ -39,57 +36,13 @@ public class RandomTreeModelTest {
 
         ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2);
 
-        List<Measurement> results = measure(runner, wrappers, statements);
+        List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements);
 
         for (Measurement result : results) {
             System.out.printf("result: %s%n", result);
         }
 
-        showPlotter(results);
-    }
-
-    public static List<Measurement> measure(ModelRunner runner, StorageWrapper[] wrappers, int[] xs) throws Exception {
-
-        Map<String, List<Long>> map = new HashMap<>();
-
-        // warmup
-        PerformanceModel model = runner.getModel(10);
-        for (StorageWrapper wrapper : wrappers) {
-            runner.init(model, wrapper);
-            runner.run(model, wrapper);
-        }
-
-        // performance measurement
-        for (int x : xs) {
-            model = runner.getModel(x);
-            System.out.printf("x: %d, %s%n", x, model);
-            for (StorageWrapper wrapper : wrappers) {
-                runner.init(model, wrapper);
-                long time = System.currentTimeMillis();
-                runner.run(model, wrapper);
-                long elapsedTime = System.currentTimeMillis() - time;
-                wrapper.printStatistics();
-
-                List<Long> ys = map.computeIfAbsent(wrapper.getName(), (key) -> new LinkedList<>());
-                ys.add(elapsedTime);
-            }
-        }
-
-        for (StorageWrapper wrapper : wrappers) {
-            wrapper.close();
-        }
-
-        double[] xsd = Arrays.stream(xs).mapToDouble(x -> x).toArray();
-        List<Measurement> measurements = new ArrayList<>(wrappers.length);
-
-        for (Map.Entry<String, List<Long>> entry : map.entrySet()) {
-            String name = entry.getKey();
-            double[] ysd = entry.getValue().stream().mapToDouble(y -> y).toArray();
-            Measurement measurement = new Measurement(name, xsd, ysd);
-            measurements.add(measurement);
-        }
-
-        return measurements;
+        RunnerUtils.showPlotter(results);
     }
 
     private static AtomspaceRelationalDBStorage getRelationalDBStorage() {
@@ -112,61 +65,6 @@ public class RandomTreeModelTest {
         String dir = "/tmp/atomspace-storage/performance/janusgraph";
         AtomspaceStorageUtils.removeDirectory(dir);
         return AtomspaceJanusGraphStorageHelper.getJanusGraphBerkeleyDBStorage(dir);
-    }
-
-    private static void showPlotter(List<Measurement> measurements) {
-        Map<String, List<PointDouble>> map = new HashMap<>();
-        for (Measurement measurement : measurements) {
-            double[] xs = measurement.xs;
-            double[] ys = measurement.ys;
-            map.put(measurement.name, toPointList(xs, ys));
-        }
-
-        PerformanceResultPlotter.PlotterProperties properties = PerformanceResultPlotter.PlotterProperties.differentCharts(map);
-        PerformanceResultPlotter.showMeasurements(properties);
-    }
-
-    static class Measurement {
-
-        public final String name;
-        public final double[] xs;
-        public final double[] ys;
-
-        public Measurement(String name, double[] xs, double[] ys) {
-            this.name = name;
-            this.xs = xs;
-            this.ys = ys;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append(name);
-            for (int i = 0; i < xs.length; i++) {
-                builder
-                        .append(" (")
-                        .append(xs[i])
-                        .append(", ")
-                        .append(ys[i])
-                        .append(")");
-            }
-            return builder.toString();
-        }
-    }
-
-    interface StorageWrapper {
-
-        String getName();
-
-        AtomspaceStorage getStorage();
-
-        void clean();
-
-        void printStatistics();
-
-        default void close() throws Exception {
-            getStorage().close();
-        }
     }
 
     static class MemoryStorageWrapper implements StorageWrapper {
@@ -291,15 +189,6 @@ public class RandomTreeModelTest {
                 tx.commit();
             }
         }
-    }
-
-    interface ModelRunner {
-
-        PerformanceModel getModel(int param);
-
-        void init(PerformanceModel model, StorageWrapper wrapper) throws Exception;
-
-        void run(PerformanceModel model, StorageWrapper wrapper) throws Exception;
     }
 
     static class RandomTreeCreateModelRunner implements ModelRunner {

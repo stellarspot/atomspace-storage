@@ -1,4 +1,4 @@
-package atomspace.performance.plotter;
+package atomspace.performance.runner;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-public class PerformanceResultPlotter extends Application {
+public class ResultPlotter extends Application {
 
     // Platform.startup(...) method is not available in JDK 8.
     private static PlotterProperties PROPS;

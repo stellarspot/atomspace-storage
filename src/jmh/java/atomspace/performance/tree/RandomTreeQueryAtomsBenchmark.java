@@ -1,6 +1,7 @@
 package atomspace.performance.tree;
 
 import atomspace.performance.PerformanceModelParameters;
+import atomspace.performance.runner.Measurement;
 import atomspace.performance.utils.AtomspaceStoragePerformanceUtils;
 import atomspace.query.ASQueryEngine;
 import atomspace.query.basic.ASBasicQueryEngine;
