@@ -52,8 +52,8 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
                 .set("index.search.directory", String.format("%s/index", storageDirectory))
                 .set("graph.set-vertex-id", "true")
                 //.set("ids.block-size", "100000")
-                //.set("ids.authority.wait-time", "15")
-                //.set("ids.renew-timeout", "50")
+                .set("ids.authority.wait-time", "5")
+                //.set("ids.renew-timeout", "15")
                 //.set("query.force-index", true)
                 .open();
         return new AtomspaceJanusGraphStorage(graph);

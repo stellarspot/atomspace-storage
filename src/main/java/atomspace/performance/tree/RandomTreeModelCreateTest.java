@@ -33,10 +33,10 @@ public class RandomTreeModelCreateTest {
         };
 
         int[] statements = {100, 200, 300, 400, 500};
-
         ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2);
+        WarmupProperties warmup = new WarmupProperties(1, statements[2]);
 
-        List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements);
+        List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements, warmup);
 
         for (Measurement result : results) {
             System.out.printf("result: %s%n", result);

@@ -9,21 +9,25 @@ import static atomspace.performance.runner.ResultPlotter.PlotterProperties.toPoi
 
 public class RunnerUtils {
 
-    public static List<Measurement> measure(ModelRunner runner, StorageWrapper[] wrappers, int[] xs) throws Exception {
+    public static List<Measurement> measure(ModelRunner runner, StorageWrapper[] wrappers, int[] xs, WarmupProperties warmup) throws Exception {
 
         Map<String, List<Long>> map = new HashMap<>();
 
         // warmup
-        PerformanceModel model = runner.getModel(10);
-        for (StorageWrapper wrapper : wrappers) {
-            runner.init(model, wrapper);
-            runner.run(model, wrapper);
+        PerformanceModel model = runner.getModel(warmup.value);
+        for (int i = 0; i < warmup.iterations; i++) {
+            System.out.printf("Warmup%n");
+            for (StorageWrapper wrapper : wrappers) {
+                runner.init(model, wrapper);
+                runner.run(model, wrapper);
+                wrapper.printStatistics();
+            }
         }
 
         // performance measurement
         for (int x : xs) {
             model = runner.getModel(x);
-            System.out.printf("x: %d, %s%n", x, model);
+            System.out.printf("Measure results x: %d, %s%n", x, model);
             for (StorageWrapper wrapper : wrappers) {
                 runner.init(model, wrapper);
                 long time = System.currentTimeMillis();
