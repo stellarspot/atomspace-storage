@@ -233,7 +233,7 @@ public class RandomTreeModel implements PerformanceModel {
 
     @Override
     public String toString() {
-        return String.format("Random tree model statements: %d, queries: %d%n", statements.size(), queries.size());
+        return String.format("Random tree model statements: %d, queries: %d", statements.size(), queries.size());
     }
 
     private static class QueryItem {

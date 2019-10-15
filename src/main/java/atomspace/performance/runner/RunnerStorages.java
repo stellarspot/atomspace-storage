@@ -20,13 +20,13 @@ public class RunnerStorages {
     }
 
     public static AtomspaceRelationalDBStorage getRelationalDBStorage() {
-        String dir = "/tmp/atomspace-storage/performance/relationaldb";
+        String dir = getTestStorageDir("relationaldb");
         AtomspaceStorageUtils.removeDirectory(dir);
         return AtomspaceRelationalDBStorageHelper.getInMemoryStorage(dir);
     }
 
     public static AtomspaceNeo4jStorage getNeo4jStorage() {
-        String dir = "/tmp/atomspace-storage/performance/neo4j";
+        String dir = getTestStorageDir("neo4j");
         AtomspaceStorageUtils.removeDirectory(dir);
         return new AtomspaceNeo4jStorage(dir);
     }
@@ -36,9 +36,13 @@ public class RunnerStorages {
 //    }
 
     public static AtomspaceJanusGraphStorage getJanusGraphStorage() {
-        String dir = "/tmp/atomspace-storage/performance/janusgraph";
+        String dir = getTestStorageDir("janusgraph");
         AtomspaceStorageUtils.removeDirectory(dir);
         return AtomspaceJanusGraphStorageHelper.getJanusGraphBerkeleyDBStorage(dir);
+    }
+
+    private static String getTestStorageDir(String name) {
+        return String.format("/tmp/atomspace-storage/performance/%s", name);
     }
 
     public static class DefaultStorageWrapper implements StorageWrapper {

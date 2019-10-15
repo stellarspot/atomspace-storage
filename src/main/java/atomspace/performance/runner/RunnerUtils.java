@@ -27,7 +27,7 @@ public class RunnerUtils {
         // performance measurement
         for (int x : xs) {
             model = runner.getModel(x);
-            System.out.printf("Measure results x: %d, %s%n", x, model);
+            System.out.printf("%nMeasure results x: %d, %s%n", x, model);
             for (StorageWrapper wrapper : wrappers) {
                 runner.init(model, wrapper);
                 long time = System.currentTimeMillis();
