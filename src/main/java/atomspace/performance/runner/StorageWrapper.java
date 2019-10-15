@@ -8,9 +8,9 @@ public interface StorageWrapper {
 
     AtomspaceStorage getStorage();
 
-    void clean();
+    void clean() throws Exception;
 
-    void printStatistics();
+    void printStatistics() throws Exception;
 
     default void close() throws Exception {
         getStorage().close();

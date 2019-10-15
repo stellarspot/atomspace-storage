@@ -4,9 +4,6 @@ import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.performance.PerformanceModelParameters;
 import atomspace.performance.runner.*;
-import atomspace.performance.runner.RunnerStorages.JanusGraphStorageWrapper;
-import atomspace.performance.runner.RunnerStorages.MemoryStorageWrapper;
-import atomspace.performance.runner.RunnerStorages.Neo4jStorageWrapper;
 import atomspace.query.ASQueryEngine;
 import atomspace.query.basic.ASBasicQueryEngine;
 
@@ -18,18 +15,20 @@ public class RandomTreeModelQueryTest {
 
     public static void main(String[] args) throws Exception {
 
+        String prefix = "query";
+
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                new MemoryStorageWrapper(),
-                new RelationalDBStorageWrapper(),
-                new Neo4jStorageWrapper(),
-                new JanusGraphStorageWrapper(),
+                getMemoryStorageWrapper(prefix),
+                getRelationalDBStorageWrapper(prefix),
+                getNeo4jStorageWrapper(prefix),
+                getJanusGraphStorageWrapper(prefix),
         };
 
-        int[] statements = {100, 200, 300, 400, 500};
-        ModelRunner runner = new RandomTreeQueryModelRunner(3, 3, 3, 200);
-        WarmupProperties warmup = new WarmupProperties(1, statements[2]);
+        int[] queries = {100, 200, 300, 400, 500};
+        ModelRunner runner = new RandomTreeQueryModelRunner(3, 3, 3, 10);
+        WarmupProperties warmup = new WarmupProperties(1, queries[2]);
 
-        List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements, warmup);
+        List<Measurement> results = RunnerUtils.measure(runner, wrappers, queries, warmup);
 
         for (Measurement result : results) {
             System.out.printf("result: %s%n", result);

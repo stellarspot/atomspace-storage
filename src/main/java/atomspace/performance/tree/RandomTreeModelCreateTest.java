@@ -1,27 +1,25 @@
 package atomspace.performance.tree;
 
-import java.util.List;
-
 import atomspace.performance.PerformanceModel;
 import atomspace.performance.PerformanceModelConfiguration;
 import atomspace.performance.PerformanceModelParameters;
 import atomspace.performance.runner.*;
-import atomspace.performance.runner.RunnerStorages.JanusGraphStorageWrapper;
-import atomspace.performance.runner.RunnerStorages.MemoryStorageWrapper;
-import atomspace.performance.runner.RunnerStorages.Neo4jStorageWrapper;
+
+import java.util.List;
 
 import static atomspace.performance.runner.RunnerStorages.*;
-
 
 public class RandomTreeModelCreateTest {
 
     public static void main(String[] args) throws Exception {
 
+        String prefix = "create";
+
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                new MemoryStorageWrapper(),
-                new RelationalDBStorageWrapper(),
-                new Neo4jStorageWrapper(),
-                new JanusGraphStorageWrapper(),
+                getMemoryStorageWrapper(prefix),
+                getRelationalDBStorageWrapper(prefix),
+                getNeo4jStorageWrapper(prefix),
+                getJanusGraphStorageWrapper(prefix),
         };
 
         int[] statements = {100, 200, 300, 400, 500};
@@ -59,7 +57,7 @@ public class RandomTreeModelCreateTest {
         }
 
         @Override
-        public void init(PerformanceModel model, StorageWrapper wrapper) {
+        public void init(PerformanceModel model, StorageWrapper wrapper) throws Exception {
             wrapper.clean();
         }
 

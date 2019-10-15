@@ -1,18 +1,16 @@
 package atomspace.performance.runner;
 
+import atomspace.storage.ASTransaction;
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.janusgraph.ASJanusGraphTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
-import atomspace.storage.memory.ASMemoryTransaction;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.storage.memory.AtomspaceMemoryStorageHelper;
-import atomspace.storage.neo4j.ASNeo4jTransaction;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorage;
 import atomspace.storage.neo4j.AtomspaceNeo4jStorageHelper;
-import atomspace.storage.relationaldb.ASRelationalDBTransaction;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
+import atomspace.storage.util.AtomspaceStorageHelper;
 import atomspace.storage.util.AtomspaceStorageUtils;
 
 public class RunnerStorages {
@@ -43,14 +41,30 @@ public class RunnerStorages {
         return AtomspaceJanusGraphStorageHelper.getJanusGraphBerkeleyDBStorage(dir);
     }
 
-    public static class MemoryStorageWrapper implements StorageWrapper {
+    public static class DefaultStorageWrapper implements StorageWrapper {
 
-        AtomspaceMemoryStorage storage = getMemoryStorage();
-        AtomspaceMemoryStorageHelper helper = new AtomspaceMemoryStorageHelper(storage);
+        final String prefix;
+        final int order;
+        final String name;
+        final AtomspaceStorage storage;
+        final AtomspaceStorageHelper helper;
+
+
+        public DefaultStorageWrapper(String prefix,
+                                     int order,
+                                     String name,
+                                     AtomspaceStorage storage,
+                                     AtomspaceStorageHelper helper) {
+            this.prefix = prefix;
+            this.order = order;
+            this.name = name;
+            this.storage = storage;
+            this.helper = helper;
+        }
 
         @Override
         public String getName() {
-            return "create1Memory";
+            return String.format("%s%d%s", prefix, order, name);
         }
 
         @Override
@@ -59,112 +73,42 @@ public class RunnerStorages {
         }
 
         @Override
-        public void printStatistics() {
-            try (ASMemoryTransaction tx = storage.getTx()) {
+        public void printStatistics() throws Exception {
+            try (ASTransaction tx = storage.getTx()) {
                 helper.printStatistics(tx, "memory");
             }
         }
 
         @Override
-        public void clean() {
-            try (ASMemoryTransaction tx = storage.getTx()) {
+        public void clean() throws Exception {
+            try (ASTransaction tx = storage.getTx()) {
                 helper.reset(tx);
                 tx.commit();
             }
         }
     }
 
-    public static class RelationalDBStorageWrapper implements StorageWrapper {
+    public static StorageWrapper getMemoryStorageWrapper(String prefix) {
+        AtomspaceMemoryStorage storage = getMemoryStorage();
+        AtomspaceMemoryStorageHelper helper = new AtomspaceMemoryStorageHelper(storage);
+        return new DefaultStorageWrapper(prefix, 1, "Memory", storage, helper);
+    }
 
+    public static StorageWrapper getRelationalDBStorageWrapper(String prefix) {
         AtomspaceRelationalDBStorage storage = getRelationalDBStorage();
         AtomspaceRelationalDBStorageHelper helper = new AtomspaceRelationalDBStorageHelper(storage);
-
-        @Override
-        public String getName() {
-            return "create2RelationalDB";
-        }
-
-        @Override
-        public AtomspaceStorage getStorage() {
-            return storage;
-        }
-
-        @Override
-        public void printStatistics() {
-            try (ASRelationalDBTransaction tx = storage.getTx()) {
-                helper.printStatistics(tx, "relational db");
-            }
-        }
-
-        @Override
-        public void clean() {
-            try (ASRelationalDBTransaction tx = storage.getTx()) {
-                helper.reset(tx);
-                tx.commit();
-            }
-        }
+        return new DefaultStorageWrapper(prefix, 2, "RelationalDB", storage, helper);
     }
 
-    public static class Neo4jStorageWrapper implements StorageWrapper {
-
+    public static StorageWrapper getNeo4jStorageWrapper(String prefix) {
         AtomspaceNeo4jStorage storage = getNeo4jStorage();
         AtomspaceNeo4jStorageHelper helper = new AtomspaceNeo4jStorageHelper(storage);
-
-        @Override
-        public String getName() {
-            return "create3Neo4j";
-        }
-
-        @Override
-        public AtomspaceStorage getStorage() {
-            return storage;
-        }
-
-        @Override
-        public void printStatistics() {
-            try (ASNeo4jTransaction tx = storage.getTx()) {
-                helper.printStatistics(tx, "neo4j");
-            }
-        }
-
-        @Override
-        public void clean() {
-            try (ASNeo4jTransaction tx = storage.getTx()) {
-                helper.reset(tx);
-                tx.commit();
-            }
-        }
+        return new DefaultStorageWrapper(prefix, 3, "Neo4j", storage, helper);
     }
 
-    public static class JanusGraphStorageWrapper implements StorageWrapper {
-
+    public static StorageWrapper getJanusGraphStorageWrapper(String prefix) {
         AtomspaceJanusGraphStorage storage = getJanusGraphStorage();
         AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(storage);
-
-        @Override
-        public String getName() {
-            return "create4JanusGraph";
-        }
-
-        @Override
-        public AtomspaceStorage getStorage() {
-            return storage;
-        }
-
-        @Override
-        public void printStatistics() {
-            try (ASJanusGraphTransaction tx = storage.getTx()) {
-                helper.printStatistics(tx, "janusgraph");
-            }
-        }
-
-        @Override
-        public void clean() {
-            try (ASJanusGraphTransaction tx = storage.getTx()) {
-                helper.reset(tx);
-                tx.commit();
-            }
-        }
+        return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
     }
-
 }
