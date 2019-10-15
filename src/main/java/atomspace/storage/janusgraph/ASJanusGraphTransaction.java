@@ -26,6 +26,15 @@ import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASJanusGraphTransaction implements ASTransaction {
 
+    // "type" is a reserved property name in JanusGraph
+    static final String KIND = "as_kind";
+    static final String TYPE = "as_type";
+    static final String VALUE = "as_value";
+    static final String IDS = "as_ids";
+
+    static final String LABEL_NODE = "Node";
+    static final String LABEL_LINK = "Link";
+
     final AtomspaceJanusGraphStorage storage;
     final JanusGraph graph;
     final JanusGraphTransaction tx;
@@ -43,9 +52,9 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
         GraphTraversal<Vertex, Vertex> iter = g
                 .V()
-                .hasLabel("Node")
-                .has("as_type", type)
-                .has("as_value", value);
+                .hasLabel(LABEL_NODE)
+                .has(TYPE, type)
+                .has(VALUE, value);
 
         Vertex vertex = null;
         if (iter.hasNext()) {
@@ -54,11 +63,11 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
         if (vertex == null) {
             vertex = g
-                    .addV("Node")
+                    .addV(LABEL_NODE)
                     .property(T.id, storage.getNextId())
-                    .property("as_kind", "Node")
-                    .property("as_type", type)
-                    .property("as_value", value)
+                    .property(KIND, LABEL_NODE)
+                    .property(TYPE, type)
+                    .property(VALUE, value)
                     .next();
         }
 
@@ -72,9 +81,9 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
         GraphTraversal<Vertex, Vertex> iter = g
                 .V()
-                .hasLabel("Link")
-                .has("as_type", type)
-                .has("as_ids", ids);
+                .hasLabel(LABEL_LINK)
+                .has(TYPE, type)
+                .has(IDS, ids);
 
         Vertex vertex = null;
         if (iter.hasNext()) {
@@ -83,11 +92,11 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
         if (vertex == null) {
             vertex = g
-                    .addV("Link")
+                    .addV(LABEL_LINK)
                     .property(T.id, storage.getNextId())
-                    .property("as_kind", "Link")
-                    .property("as_type", type)
-                    .property("as_ids", ids).next();
+                    .property(KIND, LABEL_LINK)
+                    .property(TYPE, type)
+                    .property(IDS, ids).next();
 
             // Update incoming set
             int arity = atoms.length;
@@ -104,16 +113,16 @@ public class ASJanusGraphTransaction implements ASTransaction {
     @Override
     public ASAtom get(long id) {
         Vertex vertex = vertex(id);
-        String kind = vertex.property("as_kind").value().toString();
-        String type = vertex.property("as_type").value().toString();
+        String kind = vertex.property(KIND).value().toString();
+        String type = vertex.property(TYPE).value().toString();
 
-        if ("Node".equals(kind)) {
-            String value = vertex.property("as_value").value().toString();
+        if (LABEL_NODE.equals(kind)) {
+            String value = vertex.property(VALUE).value().toString();
             return new ASBaseNode(id, type, value);
         }
 
-        if ("Link".equals(kind)) {
-            long[] ids = (long[]) vertex.property("as_ids").value();
+        if (LABEL_LINK.equals(kind)) {
+            long[] ids = (long[]) vertex.property(IDS).value();
             return new ASBaseLink(id, type, ids);
         }
 
@@ -123,7 +132,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
     @Override
     public long[] getOutgoingListIds(long id) {
-        return (long[]) vertex(id).property("as_ids").value();
+        return (long[]) vertex(id).property(IDS).value();
     }
 
     @Override
@@ -156,14 +165,14 @@ public class ASJanusGraphTransaction implements ASTransaction {
 
         List<ASAtom> atoms = new ArrayList<>();
 
-        GraphTraversal<Vertex, Vertex> nodes = g.V().has("as_kind", "Node");
+        GraphTraversal<Vertex, Vertex> nodes = g.V().has(KIND, LABEL_NODE);
 
         while (nodes.hasNext()) {
             ASAtom node = get(id(nodes.next()));
             atoms.add(node);
         }
 
-        GraphTraversal<Vertex, Vertex> links = g.V().has("as_kind", "Link");
+        GraphTraversal<Vertex, Vertex> links = g.V().has(KIND, LABEL_LINK);
 
         while (links.hasNext()) {
             ASAtom link = get(id(links.next()));
@@ -206,8 +215,8 @@ public class ASJanusGraphTransaction implements ASTransaction {
     }
 
     void printStatistics(String msg) {
-        long nodes = g.V().has("as_kind", "Node").count().next();
-        long links = g.V().has("as_kind", "Link").count().next();
+        long nodes = g.V().has(KIND, LABEL_NODE).count().next();
+        long links = g.V().has(KIND, LABEL_LINK).count().next();
         System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
     }
 
@@ -216,7 +225,7 @@ public class ASJanusGraphTransaction implements ASTransaction {
         Iterator<Vertex> iter = g.V();
         while (iter.hasNext()) {
             Vertex v = iter.next();
-            String type = v.property("as_type").value().toString();
+            String type = v.property(TYPE).value().toString();
             System.out.printf("type: %s%n", type);
         }
         System.out.printf("--- --------------- ---%n");

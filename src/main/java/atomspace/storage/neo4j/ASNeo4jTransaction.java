@@ -17,6 +17,14 @@ import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 
 public class ASNeo4jTransaction implements ASTransaction {
 
+    static final String KIND = "kind";
+    static final String TYPE = "type";
+    static final String VALUE = "value";
+    static final String IDS = "ids";
+
+    static final Label LABEL_NODE = Label.label("Node");
+    static final Label LABEL_LINK = Label.label("Link");
+
     final GraphDatabaseService graph;
     private final Transaction tx;
 
@@ -28,10 +36,10 @@ public class ASNeo4jTransaction implements ASTransaction {
     @Override
     public ASNode get(String type, String value) {
 
-        Label nodeLabel = Label.label("Node");
-        Iterator<Node> nodes = graph.findNodes(nodeLabel,
-                "type", type,
-                "value", value);
+        Iterator<Node> nodes = graph.findNodes(
+                LABEL_NODE,
+                TYPE, type,
+                VALUE, value);
 
         Node node = null;
 
@@ -41,10 +49,10 @@ public class ASNeo4jTransaction implements ASTransaction {
 
         if (node == null) {
             node = graph.createNode();
-            node.addLabel(nodeLabel);
-            node.setProperty("kind", "Node");
-            node.setProperty("type", type);
-            node.setProperty("value", value);
+            node.addLabel(LABEL_NODE);
+            node.setProperty(KIND, LABEL_NODE.name());
+            node.setProperty(TYPE, type);
+            node.setProperty(VALUE, value);
         }
 
         return new ASBaseNode(node.getId(), type, value);
@@ -53,11 +61,11 @@ public class ASNeo4jTransaction implements ASTransaction {
     @Override
     public ASLink get(String type, ASAtom... atoms) {
 
-        Label linkLabel = Label.label("Link");
         long[] ids = getIds(atoms);
-        Iterator<Node> nodes = graph.findNodes(linkLabel,
-                "type", type,
-                "ids", ids);
+        Iterator<Node> nodes = graph.findNodes(
+                LABEL_LINK,
+                TYPE, type,
+                IDS, ids);
 
         Node node = null;
 
@@ -68,10 +76,10 @@ public class ASNeo4jTransaction implements ASTransaction {
         if (node == null) {
 
             node = graph.createNode();
-            node.addLabel(linkLabel);
-            node.setProperty("kind", "Link");
-            node.setProperty("type", type);
-            node.setProperty("ids", ids);
+            node.addLabel(LABEL_LINK);
+            node.setProperty(KIND, LABEL_LINK.name());
+            node.setProperty(TYPE, type);
+            node.setProperty(IDS, ids);
 
             // Update incoming set
             int arity = atoms.length;
@@ -90,16 +98,16 @@ public class ASNeo4jTransaction implements ASTransaction {
     public ASAtom get(long id) {
 
         Node node = graph.getNodeById(id);
-        String kind = node.getProperty("kind").toString();
-        String type = node.getProperty("type").toString();
+        String kind = node.getProperty(KIND).toString();
+        String type = node.getProperty(TYPE).toString();
 
-        if ("Node".equals(kind)) {
+        if (LABEL_NODE.name().equals(kind)) {
             String value = node.getProperty("value").toString();
             return new ASBaseNode(id, type, value);
         }
 
-        if ("Link".equals(kind)) {
-            long[] ids = (long[]) node.getProperty("ids");
+        if (LABEL_LINK.name().equals(kind)) {
+            long[] ids = (long[]) node.getProperty(IDS);
             return new ASBaseLink(id, type, ids);
         }
 
@@ -110,7 +118,7 @@ public class ASNeo4jTransaction implements ASTransaction {
     @Override
     public long[] getOutgoingListIds(long id) {
         Node node = graph.getNodeById(id);
-        return (long[]) node.getProperty("ids");
+        return (long[]) node.getProperty(IDS);
     }
 
     @Override
@@ -141,13 +149,13 @@ public class ASNeo4jTransaction implements ASTransaction {
     public Iterator<ASAtom> getAtoms() {
         List<ASAtom> atoms = new ArrayList<>();
 
-        Iterator<Node> nodes = graph.findNodes(Label.label("Node"));
+        Iterator<Node> nodes = graph.findNodes(LABEL_NODE);
 
         while (nodes.hasNext()) {
             atoms.add(get(nodes.next().getId()));
         }
 
-        Iterator<Node> links = graph.findNodes(Label.label("Link"));
+        Iterator<Node> links = graph.findNodes(LABEL_LINK);
 
         while (links.hasNext()) {
             atoms.add(get(links.next().getId()));
@@ -178,8 +186,8 @@ public class ASNeo4jTransaction implements ASTransaction {
     }
 
     void printStatics(String msg) {
-        int nodes = count(graph.findNodes(Label.label("Node")));
-        int links = count(graph.findNodes(Label.label("Link")));
+        int nodes = count(graph.findNodes(LABEL_NODE));
+        int links = count(graph.findNodes(LABEL_LINK));
         System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
     }
 

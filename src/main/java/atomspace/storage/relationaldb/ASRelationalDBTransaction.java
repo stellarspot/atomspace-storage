@@ -19,6 +19,12 @@ import static atomspace.storage.util.AtomspaceStorageUtils.*;
 
 public class ASRelationalDBTransaction implements ASTransaction {
 
+    static final String ID = "id";
+    static final String TYPE = "type";
+    static final String VALUE = "value";
+    static final String ARITY = "arity";
+    static final String IDS = "ids";
+
     static final String QUERY_ATOM_ID = String.format(
             "SELECT id from %s where type = ? and value = ? and arity = ? and ids = ?",
             TABLE_ATOMS);
@@ -162,10 +168,10 @@ public class ASRelationalDBTransaction implements ASTransaction {
                     int arity = resultSet.getInt(3);
 
                     if (isNode(arity)) {
-                        String value = resultSet.getString("value");
+                        String value = resultSet.getString(VALUE);
                         return new ASBaseNode(id, type, value);
                     } else {
-                        String childIds = resultSet.getString("ids");
+                        String childIds = resultSet.getString(IDS);
                         long[] ids = AtomspaceStorageUtils.toIds(childIds);
                         return new ASBaseLink(id, type, ids);
                     }
@@ -188,7 +194,7 @@ public class ASRelationalDBTransaction implements ASTransaction {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
 
-                    String childIds = resultSet.getString("ids");
+                    String childIds = resultSet.getString(IDS);
                     return AtomspaceStorageUtils.toIds(childIds);
                 }
 
@@ -247,16 +253,16 @@ public class ASRelationalDBTransaction implements ASTransaction {
                 List<ASAtom> atoms = new ArrayList<>();
 
                 if (resultSet.next()) {
-                    long id = resultSet.getLong("id");
-                    String type = resultSet.getString("type");
-                    int arity = resultSet.getInt("arity");
+                    long id = resultSet.getLong(ID);
+                    String type = resultSet.getString(TYPE);
+                    int arity = resultSet.getInt(ARITY);
 
                     if (isNode(arity)) {
-                        String value = resultSet.getString("value");
+                        String value = resultSet.getString(VALUE);
                         ASNode node = new ASBaseNode(id, type, value);
                         atoms.add(node);
                     } else {
-                        String ids = resultSet.getString("ids");
+                        String ids = resultSet.getString(IDS);
                         ASLink node = new ASBaseLink(id, type, toIds(ids));
                         atoms.add(node);
                     }
