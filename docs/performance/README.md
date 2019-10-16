@@ -123,14 +123,13 @@ Created Nodes and Links:
 
 # Query atoms
 
-## Max tree width 3 and height 3
-
 Max RandomTreeModel parameters:
 
-|                       |     |
-|-----------------------|-----|
 | variables             |   3 |
+|-----------------------|-----|
 | statements            | 200 |
+
+## Max tree width 3 and height 3
 
 Max tree width and height:
 
@@ -184,3 +183,56 @@ Created Nodes and Links:
 | Links      | 674 | 763 | 815 | 848 | 876 |
 
 ![creeate_all_3_30](../images/perfomance/query_all_3_30.png)
+
+## Max tree width 5 and height 5
+
+Max tree width and height:
+
+| width   |  5 |
+|---------|----|
+| height  |  5 |
+
+Max types and values:
+
+| types   |  10 |
+|---------|-----|
+| values  |  10 |
+
+Created Nodes and Links:
+
+| Queries    | 100 | 200 | 300 | 400 | 500 |
+|------------|-----|-----|-----|-----|-----|
+| Nodes      |  185|  194|  198|  199|  199|
+| Links      | 1715| 1847| 1975| 2033| 2077|
+
+![creeate_all_5_10](../images/perfomance/query_all_5_10.png)
+
+Max types and values:
+
+| types   |  20 |
+|---------|-----|
+| values  |  20 |
+
+Created Nodes and Links:
+
+| Queries    | 100 | 200 | 300 | 400 | 500 |
+|------------|-----|-----|-----|-----|-----|
+| Nodes      |  567|  616|  652|  668|  676|
+| Links      | 1772| 1904| 2033| 2091| 2136|
+
+![creeate_all_5_20](../images/perfomance/query_all_5_20.png)
+
+Max types and values:
+
+| types   |  30 |
+|---------|-----|
+| values  |  30 |
+
+Created Nodes and Links:
+
+| Queries    | 100 | 200 | 300 | 400 | 500 |
+|------------|-----|-----|-----|-----|-----|
+| Nodes      | 1000| 1077| 1146| 1168| 1190|
+| Links      | 1777| 1910| 2040| 2098| 2143|
+
+![creeate_all_5_30](../images/perfomance/query_all_5_30.png)
