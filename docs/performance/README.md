@@ -2,6 +2,11 @@
 
 See [RandomTreeModel](/src/main/java/atomspace/performance/tree)
 
+RandomTreeModel has the following base parameters:
+* max tree width and height
+* max types and values
+* max variables
+
 # Create atoms
 
 ## Max tree width 3 and height 3
