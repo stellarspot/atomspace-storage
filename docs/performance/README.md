@@ -4,12 +4,22 @@ See [RandomTreeModel](/src/main/java/atomspace/performance/tree)
 
 # Create atoms
 
-Max RandomTreeModel parameters:
+## Max tree width 3 and height 3
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  3 |
-| types and values      | 10 |
+RandomTreeModel parameters.
+
+Max tree width and height:
+
+| width   |  3 |
+|---------|----|
+| height  |  3 |
+
+Max types and values:
+
+| types   |  10 |
+|---------|-----|
+| values  |  10 |
+
 
 Created Nodes and Links:
 
@@ -20,12 +30,11 @@ Created Nodes and Links:
 
 ![creeate_all_3_10](../images/perfomance/create_all_3_10.png)
 
-Max RandomTreeModel parameters:
+Max types and values:
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  3 |
-| types and values      | 20 |
+| types   |  20 |
+|---------|-----|
+| values  |  20 |
 
 Created Nodes and Links:
 
@@ -36,12 +45,11 @@ Created Nodes and Links:
 
 ![creeate_all_3_20](../images/perfomance/create_all_3_20.png)
 
-Max RandomTreeModel parameters:
+Max types and values:
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  3 |
-| types and values      | 30 |
+| types   |  30 |
+|---------|-----|
+| values  |  30 |
 
 Created Nodes and Links:
 
@@ -52,12 +60,21 @@ Created Nodes and Links:
 
 ![creeate_all_3_30](../images/perfomance/create_all_3_30.png)
 
-Max RandomTreeModel parameters:
+## Max tree width 5 and height 5
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  5 |
-| types and values      | 10 |
+RandomTreeModel parameters.
+
+Max tree width and height:
+
+| width   |  5 |
+|---------|----|
+| height  |  5 |
+
+Max types and values:
+
+| types   |  10 |
+|---------|-----|
+| values  |  10 |
 
 Created Nodes and Links:
 
@@ -66,14 +83,13 @@ Created Nodes and Links:
 | Nodes      | 100 | 100 | 100 | 100 | 100 |
 | Links      | 701 |1392 |2048 |2601 |3191 |
 
-![creeate_all_3_10](../images/perfomance/create_all_5_10.png)
+![creeate_all_5_10](../images/perfomance/create_all_5_10.png)
 
-Max RandomTreeModel parameters:
+Max types and values:
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  5 |
-| types and values      | 20 |
+| types   |  20 |
+|---------|-----|
+| values  |  20 |
 
 Created Nodes and Links:
 
@@ -82,13 +98,13 @@ Created Nodes and Links:
 | Nodes      | 375 | 396 | 400 | 400 | 400 |
 | Links      | 715 |1440 |2141 |2753 |3427 |
 
-![creeate_all_3_10](../images/perfomance/create_all_5_20.png)
-Max RandomTreeModel parameters:
+![creeate_all_5_10](../images/perfomance/create_all_5_20.png)
 
-|                       |    |
-|-----------------------|----|
-| tree width and height |  5 |
-| types and values      | 30 |
+Max types and values:
+
+| types   |  30 |
+|---------|-----|
+| values  |  30 |
 
 Created Nodes and Links:
 
@@ -97,9 +113,11 @@ Created Nodes and Links:
 | Nodes      | 652 | 835 | 879 | 898 | 899 |
 | Links      | 716 |1441 |2151 |2774 |3462 |
 
-![creeate_all_3_10](../images/perfomance/create_all_5_30.png)
+![creeate_all_5_10](../images/perfomance/create_all_5_30.png)
 
 # Query atoms
+
+## Max tree width 3 and height 3
 
 Max RandomTreeModel parameters:
 
@@ -107,8 +125,18 @@ Max RandomTreeModel parameters:
 |-----------------------|-----|
 | variables             |   3 |
 | statements            | 200 |
-| tree width and height |   3 |
-| types and values      |  10 |
+
+Max tree width and height:
+
+| width   |  3 |
+|---------|----|
+| height  |  3 |
+
+Max types and values:
+
+| types   |  10 |
+|---------|-----|
+| values  |  10 |
 
 Created Nodes and Links:
 
@@ -118,3 +146,35 @@ Created Nodes and Links:
 | Links      | 669 | 758 | 810 | 843 | 871 |
 
 ![creeate_all_3_10](../images/perfomance/query_all_3_10.png)
+
+Max RandomTreeModel parameters:
+
+Max types and values:
+
+| types   |  20 |
+|---------|-----|
+| values  |  20 |
+
+Created Nodes and Links:
+
+| Queries    | 100 | 200 | 300 | 400 | 500 |
+|------------|-----|-----|-----|-----|-----|
+| Nodes      | 473 | 534 | 558 | 577 | 590 |
+| Links      | 673 | 762 | 814 | 847 | 875 |
+
+![creeate_all_3_20](../images/perfomance/query_all_3_20.png)
+
+Max RandomTreeModel parameters:
+
+| types   |  30 |
+|---------|-----|
+| values  |  30 |
+
+Created Nodes and Links:
+
+| Queries    | 100 | 200 | 300 | 400 | 500 |
+|------------|-----|-----|-----|-----|-----|
+| Nodes      | 683 | 753 | 787 | 804 | 827 |
+| Links      | 674 | 763 | 815 | 848 | 876 |
+
+![creeate_all_3_30](../images/perfomance/query_all_3_30.png)
