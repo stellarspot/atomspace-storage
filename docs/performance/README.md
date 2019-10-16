@@ -109,11 +109,11 @@ Example of a random tree with max width 5 and height 5:
 Link3(
  Link4(
   Link2(
-   VariableNode('$NODE3_VALUE0'))
+   Node3('Value0'))
   Link4(
    Node3('Value4')
-   VariableNode('$NODE3_VALUE1')
-   VariableNode('$NODE3_VALUE1'))
+   Node3('Value1')
+   Node3('Value1'))
   Link2(
    Node4('Value0')))
  Link0(
