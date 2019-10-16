@@ -20,12 +20,39 @@ Max tree width and height:
 |---------|----|
 | height  |  3 |
 
+Example of random trees with max width 3 and height 3:
+```scheme
+Link0(
+ Link1(
+  Node2('Value0')
+  Node0('Value2'))
+ Link0(
+  Node2('Value0'))
+ Link0(
+  Node0('Value1')))
+
+Link0(
+ Node2('Value2')
+ Node1('Value2'))
+
+Link2(
+ Link0(
+  Node2('Value0')
+  Node1('Value2')
+  Node2('Value0'))
+ Link2(
+  Node1('Value0')
+  Node2('Value2')
+  Node2('Value1'))
+ Link0(
+  Node2('Value2')))
+```
+
 Max types and values:
 
 | types   |  10 |
 |---------|-----|
 | values  |  10 |
-
 
 Created Nodes and Links:
 
@@ -34,7 +61,7 @@ Created Nodes and Links:
 | Nodes      |  99 | 100 | 100 | 100 | 100 |
 | Links      | 250 | 492 | 731 | 970 |1210 |
 
-![creeate_all_3_10](../images/perfomance/create_all_3_10.png)
+![create_all_3_10](../images/perfomance/create_all_3_10.png)
 
 Max types and values:
 
@@ -49,7 +76,7 @@ Created Nodes and Links:
 | Nodes      | 252 | 345 | 375 | 393 | 398 |
 | Links      | 253 | 498 | 744 | 995 |1250 |
 
-![creeate_all_3_20](../images/perfomance/create_all_3_20.png)
+![create_all_3_20](../images/perfomance/create_all_3_20.png)
 
 Max types and values:
 
@@ -64,7 +91,7 @@ Created Nodes and Links:
 | Nodes      | 323 | 524 | 654 | 724 | 785 |
 | Links      | 253 | 499 | 745 | 996 |1251 |
 
-![creeate_all_3_30](../images/perfomance/create_all_3_30.png)
+![create_all_3_30](../images/perfomance/create_all_3_30.png)
 
 ## Max tree width 5 and height 5
 
@@ -75,6 +102,43 @@ Max tree width and height:
 | width   |  5 |
 |---------|----|
 | height  |  5 |
+
+Example of a random tree with max width 5 and height 5:
+
+```scheme
+Link3(
+ Link4(
+  Link2(
+   VariableNode('$NODE3_VALUE0'))
+  Link4(
+   Node3('Value4')
+   VariableNode('$NODE3_VALUE1')
+   VariableNode('$NODE3_VALUE1'))
+  Link2(
+   Node4('Value0')))
+ Link0(
+  Link3(
+   Node3('Value3'))
+  Link1(
+   Node3('Value4')))
+ Link4(
+  Link0(
+   Node2('Value0')
+   Node2('Value1'))
+  Link4(
+   Node4('Value4')))
+ Link4(
+  Node4('Value3')
+  Node0('Value3')
+  Node2('Value1')
+  Node0('Value2'))
+ Link0(
+  Link4(
+   Node4('Value2'))
+  Link2(
+   Node4('Value1')
+   Node3('Value4'))))
+```
 
 Max types and values:
 
@@ -89,7 +153,7 @@ Created Nodes and Links:
 | Nodes      | 100 | 100 | 100 | 100 | 100 |
 | Links      | 701 |1392 |2048 |2601 |3191 |
 
-![creeate_all_5_10](../images/perfomance/create_all_5_10.png)
+![create_all_5_10](../images/perfomance/create_all_5_10.png)
 
 Max types and values:
 
@@ -104,7 +168,7 @@ Created Nodes and Links:
 | Nodes      | 375 | 396 | 400 | 400 | 400 |
 | Links      | 715 |1440 |2141 |2753 |3427 |
 
-![creeate_all_5_10](../images/perfomance/create_all_5_20.png)
+![create_all_5_20](../images/perfomance/create_all_5_20.png)
 
 Max types and values:
 
@@ -119,7 +183,7 @@ Created Nodes and Links:
 | Nodes      | 652 | 835 | 879 | 898 | 899 |
 | Links      | 716 |1441 |2151 |2774 |3462 |
 
-![creeate_all_5_10](../images/perfomance/create_all_5_30.png)
+![creeate_all_5_30](../images/perfomance/create_all_5_30.png)
 
 # Query atoms
 
@@ -136,6 +200,27 @@ Max tree width and height:
 | width   |  3 |
 |---------|----|
 | height  |  3 |
+
+Example of query random trees with max width 3, height 3, and variables 3:
+
+```scheme
+Link2(
+ Link1(
+  VariableNode('$NODE0_VALUE2')
+  VariableNode('$NODE1_VALUE1'))
+ Link0(
+  Node1('Value1')))
+
+Link1(
+ Link2(
+  VariableNode('$NODE0_VALUE1'))
+ Link0(
+  VariableNode('$NODE1_VALUE2'))
+ Link2(
+  VariableNode('$NODE0_VALUE1')
+  Node0('Value0')
+  Node1('Value0')))
+ ```
 
 Max types and values:
 
@@ -182,7 +267,7 @@ Created Nodes and Links:
 | Nodes      | 683 | 753 | 787 | 804 | 827 |
 | Links      | 674 | 763 | 815 | 848 | 876 |
 
-![creeate_all_3_30](../images/perfomance/query_all_3_30.png)
+![query_all_3_30](../images/perfomance/query_all_3_30.png)
 
 ## Max tree width 5 and height 5
 
@@ -191,6 +276,43 @@ Max tree width and height:
 | width   |  5 |
 |---------|----|
 | height  |  5 |
+
+Example of a query random tree with max width 5, height 5, and variables 3:
+
+```scheme
+Link3(
+ Link4(
+  Link2(
+   VariableNode('$NODE3_VALUE0'))
+  Link4(
+   Node3('Value4')
+   VariableNode('$NODE3_VALUE1')
+   VariableNode('$NODE3_VALUE1'))
+  Link2(
+   Node4('Value0')))
+ Link0(
+  Link3(
+   Node3('Value3'))
+  Link1(
+   Node3('Value4')))
+ Link4(
+  Link0(
+   Node2('Value0')
+   Node2('Value1'))
+  Link4(
+   Node4('Value4')))
+ Link4(
+  Node4('Value3')
+  Node0('Value3')
+  Node2('Value1')
+  Node0('Value2'))
+ Link0(
+  Link4(
+   Node4('Value2'))
+  Link2(
+   Node4('Value1')
+   Node3('Value4'))))
+ ```
 
 Max types and values:
 
