@@ -1,12 +1,35 @@
 # Performance Results
 
-See [RandomTreeModel](/src/main/java/atomspace/performance/tree)
-
-RandomTreeModel has the following base parameters:
+[RandomTreeModel](/src/main/java/atomspace/performance/tree) has the following base parameters:
 * max tree width and height
 * max types and values
 * max variables
-* statements and queries
+* number of statements and queries
+
+Each parameter that has max bound is uniformly created from 1 to its max value.
+
+An example of random tree with max width 3, height 3, types 3, and values 3:
+```scheme
+Link2(
+ Link2(
+  Node1('Value1'))
+ Link0(
+  Node2('Value0')
+  Node2('Value0')))
+```
+Which has Node types from `Node0` to `Node2`, Link types from `Link0` to `Link2`, and Values from `Value0` to `Value2`.
+
+ Max number of nodes depends on number of types and values.
+ Number of nodes is limited to:
+* `number of types * number of values` for atoms creation tests
+* `number of types * 2 * number of values` for atoms querying tests (each value can be substituted to variable)
+
+Max variables value control maximum number of variables in random tree.
+
+Atoms creation tests create random trees which number is equal to `statements` parameter.
+
+Atoms querying tests create fixed number of random trees which number is equal to `statements` parameter and
+make queries which number is controlled by `queries` parameter.
 
 # Create atoms
 
