@@ -6,6 +6,7 @@ RandomTreeModel has the following base parameters:
 * max tree width and height
 * max types and values
 * max variables
+* statements and queries
 
 # Create atoms
 
