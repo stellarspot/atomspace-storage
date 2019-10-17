@@ -4,7 +4,9 @@ import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
+import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -12,6 +14,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static atomspace.storage.util.AtomspaceStorageUtils.getKey;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.addV;
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.unfold;
 
@@ -55,7 +58,36 @@ public class ASGremlinTransaction implements ASTransaction {
 
     @Override
     public ASLink get(String type, ASAtom... atoms) {
-        return null;
+        long[] ids = getIds(atoms);
+
+        GraphTraversal<Vertex, Vertex> iter = g
+                .V()
+                .hasLabel(LABEL_LINK)
+                .has(TYPE, type)
+                .has(IDS, ids);
+
+        Vertex vertex = null;
+        if (iter.hasNext()) {
+            vertex = iter.next();
+        }
+
+        if (vertex == null) {
+            vertex = g
+                    .addV(LABEL_LINK)
+                    .property(KIND, LABEL_LINK)
+                    .property(TYPE, type)
+                    .property(IDS, ids).next();
+
+            // Update incoming set
+            int arity = atoms.length;
+            for (int i = 0; i < arity; i++) {
+                String key = getKey(type, arity, i);
+                Vertex childVertex = g.V(atoms[i].getId()).next();
+                childVertex.addEdge(key, vertex);
+            }
+        }
+
+        return new ASBaseLink(id(vertex), type, atoms);
     }
 
     @Override
@@ -95,5 +127,14 @@ public class ASGremlinTransaction implements ASTransaction {
 
     private static long id(Vertex v) {
         return (long) v.id();
+    }
+
+    private static long[] getIds(ASAtom... atoms) {
+        long[] ids = new long[atoms.length];
+
+        for (int i = 0; i < atoms.length; i++) {
+            ids[i] = atoms[i].getId();
+        }
+        return ids;
     }
 }
