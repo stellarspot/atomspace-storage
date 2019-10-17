@@ -10,7 +10,6 @@ import java.util.Iterator;
 
 public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper {
 
-
     private final AtomspaceJanusGraphStorage storage;
 
     public AtomspaceJanusGraphStorageHelper(AtomspaceJanusGraphStorage storage) {
@@ -32,16 +31,24 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
         ((ASJanusGraphTransaction) tx).printStatistics(msg);
     }
 
-    public static AtomspaceJanusGraphStorage getJanusGraphInMemoryStorage() {
-        JanusGraph graph = JanusGraphFactory.build()
+    public static JanusGraph getInMemoryJanusGraph(boolean customIds) {
+
+        JanusGraphFactory.Builder builder = JanusGraphFactory.build()
                 .set("storage.backend", "inmemory")
-                .set("graph.set-vertex-id", "true")
                 .set("ids.block-size", "10000000")
-                .set("ids.authority.wait-time", "5")
                 //.set("ids.renew-timeout", "50")
                 //.set("query.force-index", true)
-                .open();
-        return new AtomspaceJanusGraphStorage(graph);
+                .set("ids.authority.wait-time", "5");
+
+        if (customIds) {
+            builder = builder.set("graph.set-vertex-id", "true");
+        }
+
+        return builder.open();
+    }
+
+    public static AtomspaceJanusGraphStorage getJanusGraphInMemoryStorage() {
+        return new AtomspaceJanusGraphStorage(getInMemoryJanusGraph(true));
     }
 
     public static AtomspaceJanusGraphStorage getJanusGraphBerkeleyDBStorage(String storageDirectory) {
