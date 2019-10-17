@@ -1,5 +1,7 @@
 package atomspace.performance.runner;
 
+import atomspace.layer.gremlin.AtomspaceGremlinStorage;
+import atomspace.layer.gremlin.AtomspaceGremlinStorageHelper;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;
@@ -114,5 +116,11 @@ public class RunnerStorages {
         AtomspaceJanusGraphStorage storage = getJanusGraphStorage();
         AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(storage);
         return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
+    }
+
+    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix) {
+        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph();
+        AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
+        return new DefaultStorageWrapper(prefix, 5, "GremlinJanusGraph", storage, helper);
     }
 }

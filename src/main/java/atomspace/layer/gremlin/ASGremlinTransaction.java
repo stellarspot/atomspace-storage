@@ -8,6 +8,7 @@ import atomspace.storage.base.ASBaseLink;
 import atomspace.storage.base.ASBaseNode;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
@@ -29,10 +30,12 @@ public class ASGremlinTransaction implements ASTransaction {
     static final String LABEL_NODE = "Node";
     static final String LABEL_LINK = "Link";
 
+    final AtomspaceGremlinStorage.Storage storage;
     final Transaction tx;
     final GraphTraversalSource g;
 
     public ASGremlinTransaction(AtomspaceGremlinStorage.Storage storage) {
+        this.storage = storage;
         AtomspaceGremlinStorage.TransactionWithSource pair = storage.get();
         this.tx = pair.tx();
         this.g = pair.traversal();
@@ -49,6 +52,7 @@ public class ASGremlinTransaction implements ASTransaction {
                 .coalesce(
                         unfold(),
                         addV(LABEL_NODE)
+                                .property(T.id, storage.getNextId())
                                 .property(KIND, LABEL_NODE)
                                 .property(TYPE, type)
                                 .property(VALUE, value))
@@ -61,6 +65,7 @@ public class ASGremlinTransaction implements ASTransaction {
         long[] ids = getIds(atoms);
 
         GraphTraversal<Object, Vertex> addVertex = addV(LABEL_LINK)
+                .property(T.id, storage.getNextId())
                 .property(KIND, LABEL_LINK)
                 .property(TYPE, type)
                 .property(IDS, ids);
@@ -118,6 +123,22 @@ public class ASGremlinTransaction implements ASTransaction {
     public void close() throws IOException {
         tx.close();
     }
+
+    void reset() {
+        g.E().drop().iterate();
+        g.V().drop().iterate();
+    }
+
+    void dump() {
+        System.out.printf("--- No Gremlin Storage Dump ---%n");
+    }
+
+    void printStatistics(String msg) {
+        long nodes = g.V().has(KIND, LABEL_NODE).count().next();
+        long links = g.V().has(KIND, LABEL_LINK).count().next();
+        System.out.printf("%s nodes: %s, links: %s%n", msg, nodes, links);
+    }
+
 
     private static long id(Vertex v) {
         return (long) v.id();

@@ -13,6 +13,7 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
 
     public AtomspaceGremlinStorage(Storage storage) {
         this.storage = storage;
+        storage.makeIndices();
     }
 
     @Override
@@ -26,7 +27,12 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
     }
 
     interface Storage extends Closeable {
+
         TransactionWithSource get();
+
+        void makeIndices();
+
+        long getNextId();
     }
 
     static class TransactionWithSource {
