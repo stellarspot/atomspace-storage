@@ -5,13 +5,15 @@ import atomspace.storage.ASLink;
 import atomspace.storage.ASNode;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.base.ASBaseNode;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.io.IOException;
 import java.util.Iterator;
+
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.addV;
+import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.unfold;
 
 public class ASGremlinTransaction implements ASTransaction {
 
@@ -35,27 +37,20 @@ public class ASGremlinTransaction implements ASTransaction {
 
     @Override
     public ASNode get(String type, String value) {
-        GraphTraversal<Vertex, Vertex> iter = g
+        Vertex v = g
                 .V()
                 .hasLabel(LABEL_NODE)
                 .has(TYPE, type)
-                .has(VALUE, value);
-
-        Vertex vertex = null;
-        if (iter.hasNext()) {
-            vertex = iter.next();
-        }
-
-        if (vertex == null) {
-            vertex = g
-                    .addV(LABEL_NODE)
-                    .property(KIND, LABEL_NODE)
-                    .property(TYPE, type)
-                    .property(VALUE, value)
-                    .next();
-        }
-
-        return new ASBaseNode(id(vertex), type, value);
+                .has(VALUE, value)
+                .fold()
+                .coalesce(
+                        unfold(),
+                        addV(LABEL_NODE)
+                                .property(KIND, LABEL_NODE)
+                                .property(TYPE, type)
+                                .property(VALUE, value))
+                .next();
+        return new ASBaseNode(id(v), type, value);
     }
 
     @Override
