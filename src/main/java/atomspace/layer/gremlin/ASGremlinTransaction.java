@@ -60,34 +60,28 @@ public class ASGremlinTransaction implements ASTransaction {
     public ASLink get(String type, ASAtom... atoms) {
         long[] ids = getIds(atoms);
 
-        GraphTraversal<Vertex, Vertex> iter = g
+        GraphTraversal<Object, Vertex> addVertex = addV(LABEL_LINK)
+                .property(KIND, LABEL_LINK)
+                .property(TYPE, type)
+                .property(IDS, ids);
+
+        int arity = atoms.length;
+        for (int i = 0; i < arity; i++) {
+            String key = getKey(type, arity, i);
+            long id = atoms[i].getId();
+            addVertex = addVertex.addE(key).to(g.V(id)).outV();
+        }
+
+        Vertex v = g
                 .V()
                 .hasLabel(LABEL_LINK)
                 .has(TYPE, type)
-                .has(IDS, ids);
+                .has(IDS, ids)
+                .fold()
+                .coalesce(unfold(), addVertex)
+                .next();
 
-        Vertex vertex = null;
-        if (iter.hasNext()) {
-            vertex = iter.next();
-        }
-
-        if (vertex == null) {
-            vertex = g
-                    .addV(LABEL_LINK)
-                    .property(KIND, LABEL_LINK)
-                    .property(TYPE, type)
-                    .property(IDS, ids).next();
-
-            // Update incoming set
-            int arity = atoms.length;
-            for (int i = 0; i < arity; i++) {
-                String key = getKey(type, arity, i);
-                Vertex childVertex = g.V(atoms[i].getId()).next();
-                childVertex.addEdge(key, vertex);
-            }
-        }
-
-        return new ASBaseLink(id(vertex), type, atoms);
+        return new ASBaseLink(id(v), type, atoms);
     }
 
     @Override
