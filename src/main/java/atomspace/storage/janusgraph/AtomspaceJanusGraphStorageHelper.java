@@ -35,10 +35,11 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
 
         JanusGraphFactory.Builder builder = JanusGraphFactory.build()
                 .set("storage.backend", "inmemory")
-                .set("ids.block-size", "10000000")
-                //.set("ids.renew-timeout", "50")
-                //.set("query.force-index", true)
-                .set("ids.authority.wait-time", "5");
+                .set("ids.authority.wait-time", "5")
+                .set("ids.renew-timeout", "50")
+                .set("ids.block-size", "1000000000")
+                .set("cluster.max-partitions", "2")
+                .set("ids.renew-percentage", "0.2");
 
         if (customIds) {
             builder = builder.set("graph.set-vertex-id", "true");
