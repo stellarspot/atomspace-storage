@@ -35,7 +35,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         return new AtomspaceGremlinStorage(storage);
     }
 
-    static class GremlinJanusGraphStorage implements AtomspaceGremlinStorage.Storage {
+    public static class GremlinJanusGraphStorage implements AtomspaceGremlinStorage.Storage {
 
         private final JanusGraph graph;
         private final IDManager idManager;

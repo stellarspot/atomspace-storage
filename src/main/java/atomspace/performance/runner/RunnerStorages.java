@@ -33,16 +33,6 @@ public class RunnerStorages {
         return new AtomspaceNeo4jStorage(dir);
     }
 
-//    private static AtomspaceJanusGraphStorage getJanusGraphStorage() {
-//        return AtomspaceJanusGraphStorageHelper.getJanusGraphInMemoryStorage();
-//    }
-
-    public static AtomspaceJanusGraphStorage getJanusGraphStorage() {
-        String dir = getTestStorageDir("janusgraph");
-        AtomspaceStorageUtils.removeDirectory(dir);
-        return AtomspaceJanusGraphStorageHelper.getJanusGraphBerkeleyDBStorage(dir);
-    }
-
     private static String getTestStorageDir(String name) {
         return String.format("/tmp/atomspace-storage/performance/%s", name);
     }
@@ -113,7 +103,7 @@ public class RunnerStorages {
     }
 
     public static StorageWrapper getJanusGraphStorageWrapper(String prefix) {
-        AtomspaceJanusGraphStorage storage = getJanusGraphStorage();
+        AtomspaceJanusGraphStorage storage = new AtomspaceJanusGraphStorage(AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(true));
         AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(storage);
         return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
     }
