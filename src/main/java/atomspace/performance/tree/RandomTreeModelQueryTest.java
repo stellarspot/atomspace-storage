@@ -21,7 +21,7 @@ public class RandomTreeModelQueryTest {
                 getMemoryStorageWrapper(prefix),
                 getRelationalDBStorageWrapper(prefix),
                 getNeo4jStorageWrapper(prefix),
-                getJanusGraphStorageWrapper(prefix),
+                getJanusGraphStorageWrapper(prefix, true),
         };
 
         int[] queries = {100, 200, 300, 400, 500};

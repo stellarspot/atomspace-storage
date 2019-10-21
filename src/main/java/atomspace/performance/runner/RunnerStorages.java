@@ -14,6 +14,7 @@ import atomspace.storage.relationaldb.AtomspaceRelationalDBStorage;
 import atomspace.storage.relationaldb.AtomspaceRelationalDBStorageHelper;
 import atomspace.storage.util.AtomspaceStorageHelper;
 import atomspace.storage.util.AtomspaceStorageUtils;
+import org.janusgraph.core.JanusGraph;
 
 public class RunnerStorages {
 
@@ -102,14 +103,15 @@ public class RunnerStorages {
         return new DefaultStorageWrapper(prefix, 3, "Neo4j", storage, helper);
     }
 
-    public static StorageWrapper getJanusGraphStorageWrapper(String prefix) {
-        AtomspaceJanusGraphStorage storage = new AtomspaceJanusGraphStorage(AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(true));
+    public static StorageWrapper getJanusGraphStorageWrapper(String prefix, boolean useCustomIds) {
+        JanusGraph graph = AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(useCustomIds);
+        AtomspaceJanusGraphStorage storage = new AtomspaceJanusGraphStorage(graph, useCustomIds);
         AtomspaceJanusGraphStorageHelper helper = new AtomspaceJanusGraphStorageHelper(storage);
         return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
     }
 
-    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix) {
-        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph();
+    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean useCustomIds) {
+        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds);
         AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
         return new DefaultStorageWrapper(prefix, 5, "GremlinJanusGraph", storage, helper);
     }

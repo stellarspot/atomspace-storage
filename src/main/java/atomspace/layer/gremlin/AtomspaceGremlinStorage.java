@@ -32,6 +32,8 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
 
         void makeIndices();
 
+        boolean useCustomIds();
+
         long getNextId();
     }
 

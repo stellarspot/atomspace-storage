@@ -33,29 +33,34 @@ public class ASGremlinTransaction implements ASTransaction {
     final AtomspaceGremlinStorage.Storage storage;
     final Transaction tx;
     final GraphTraversalSource g;
+    final boolean useCustomIds;
 
     public ASGremlinTransaction(AtomspaceGremlinStorage.Storage storage) {
         this.storage = storage;
         AtomspaceGremlinStorage.TransactionWithSource pair = storage.get();
         this.tx = pair.tx();
         this.g = pair.traversal();
+        this.useCustomIds = storage.useCustomIds();
     }
 
     @Override
     public ASNode get(String type, String value) {
-        Vertex v = g
-                .V()
+
+        GraphTraversal<Object, Vertex> addVertex = addV(LABEL_NODE)
+                .property(KIND, LABEL_NODE)
+                .property(TYPE, type)
+                .property(VALUE, value);
+
+        if (useCustomIds) {
+            addVertex = addVertex.property(T.id, storage.getNextId());
+        }
+
+        Vertex v = g.V()
                 .hasLabel(LABEL_NODE)
                 .has(TYPE, type)
                 .has(VALUE, value)
                 .fold()
-                .coalesce(
-                        unfold(),
-                        addV(LABEL_NODE)
-                                .property(T.id, storage.getNextId())
-                                .property(KIND, LABEL_NODE)
-                                .property(TYPE, type)
-                                .property(VALUE, value))
+                .coalesce(unfold(), addVertex)
                 .next();
         return new ASBaseNode(id(v), type, value);
     }
@@ -65,10 +70,13 @@ public class ASGremlinTransaction implements ASTransaction {
         long[] ids = getIds(atoms);
 
         GraphTraversal<Object, Vertex> addVertex = addV(LABEL_LINK)
-                .property(T.id, storage.getNextId())
                 .property(KIND, LABEL_LINK)
                 .property(TYPE, type)
                 .property(IDS, ids);
+
+        if (useCustomIds) {
+            addVertex = addVertex.property(T.id, storage.getNextId());
+        }
 
         int arity = atoms.length;
         for (int i = 0; i < arity; i++) {

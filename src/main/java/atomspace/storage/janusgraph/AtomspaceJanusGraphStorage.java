@@ -12,9 +12,11 @@ public class AtomspaceJanusGraphStorage implements AtomspaceStorage {
     final JanusGraph graph;
     final IDManager idManager;
     final AtomicLong currentId = new AtomicLong();
+    final boolean useCustomIds;
 
-    public AtomspaceJanusGraphStorage(JanusGraph graph) {
+    public AtomspaceJanusGraphStorage(JanusGraph graph, boolean useCustomIds) {
         this.graph = graph;
+        this.useCustomIds = useCustomIds;
         this.idManager = ((StandardJanusGraph) graph).getIDManager();
         JanusGraphUtils.makeIndices(graph);
     }

@@ -49,7 +49,7 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
     }
 
     public static AtomspaceJanusGraphStorage getJanusGraphInMemoryStorage() {
-        return new AtomspaceJanusGraphStorage(getInMemoryJanusGraph(true));
+        return new AtomspaceJanusGraphStorage(getInMemoryJanusGraph(true), true);
     }
 
     public static AtomspaceJanusGraphStorage getJanusGraphBerkeleyDBStorage(String storageDirectory) {
@@ -64,6 +64,6 @@ public class AtomspaceJanusGraphStorageHelper implements AtomspaceStorageHelper 
                 //.set("ids.renew-timeout", "15")
                 //.set("query.force-index", true)
                 .open();
-        return new AtomspaceJanusGraphStorage(graph);
+        return new AtomspaceJanusGraphStorage(graph, true);
     }
 }

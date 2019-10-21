@@ -39,10 +39,12 @@ public class ASJanusGraphTransaction implements ASTransaction {
     final JanusGraph graph;
     final JanusGraphTransaction tx;
     final GraphTraversalSource g;
+    final boolean useCustomIds;
 
     public ASJanusGraphTransaction(AtomspaceJanusGraphStorage storage) {
         this.storage = storage;
         this.graph = storage.graph;
+        this.useCustomIds = storage.useCustomIds;
         this.tx = graph.newTransaction();
         this.g = tx.traversal();
     }
@@ -62,13 +64,17 @@ public class ASJanusGraphTransaction implements ASTransaction {
         }
 
         if (vertex == null) {
-            vertex = g
+            GraphTraversal<Vertex, Vertex> addVertex = g
                     .addV(LABEL_NODE)
-                    .property(T.id, storage.getNextId())
                     .property(KIND, LABEL_NODE)
                     .property(TYPE, type)
-                    .property(VALUE, value)
-                    .next();
+                    .property(VALUE, value);
+
+            if (useCustomIds) {
+                addVertex = addVertex.property(T.id, storage.getNextId());
+            }
+
+            vertex = addVertex.next();
         }
 
         return new ASBaseNode(id(vertex), type, value);
@@ -91,12 +97,17 @@ public class ASJanusGraphTransaction implements ASTransaction {
         }
 
         if (vertex == null) {
-            vertex = g
+            GraphTraversal<Vertex, Vertex> addVertex = g
                     .addV(LABEL_LINK)
-                    .property(T.id, storage.getNextId())
                     .property(KIND, LABEL_LINK)
                     .property(TYPE, type)
-                    .property(IDS, ids).next();
+                    .property(IDS, ids);
+
+            if (useCustomIds) {
+                addVertex = addVertex.property(T.id, storage.getNextId());
+            }
+
+            vertex = addVertex.next();
 
             // Update incoming set
             int arity = atoms.length;

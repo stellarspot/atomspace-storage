@@ -29,9 +29,9 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         ((ASGremlinTransaction) tx).printStatistics(msg);
     }
 
-    public static AtomspaceGremlinStorage getInMemoryJanusGraph() {
-        JanusGraph graph = AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(true);
-        GremlinJanusGraphStorage storage = new GremlinJanusGraphStorage(graph);
+    public static AtomspaceGremlinStorage getInMemoryJanusGraph(boolean useCustomIds) {
+        JanusGraph graph = AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(useCustomIds);
+        GremlinJanusGraphStorage storage = new GremlinJanusGraphStorage(graph, useCustomIds);
         return new AtomspaceGremlinStorage(storage);
     }
 
@@ -39,10 +39,13 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
         private final JanusGraph graph;
         private final IDManager idManager;
+        private final boolean useCustomIds;
         private final AtomicLong currentId = new AtomicLong();
 
-        public GremlinJanusGraphStorage(JanusGraph graph) {
+
+        public GremlinJanusGraphStorage(JanusGraph graph, boolean useCustomIds) {
             this.graph = graph;
+            this.useCustomIds = useCustomIds;
             this.idManager = ((StandardJanusGraph) graph).getIDManager();
         }
 
@@ -53,18 +56,23 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         }
 
         @Override
-        public void close() {
-            graph.close();
-        }
-
-        @Override
         public void makeIndices() {
             JanusGraphUtils.makeIndices(graph);
         }
 
         @Override
+        public boolean useCustomIds() {
+            return useCustomIds;
+        }
+
+        @Override
         public long getNextId() {
             return JanusGraphUtils.getNextId(idManager, currentId);
+        }
+
+        @Override
+        public void close() {
+            graph.close();
         }
     }
 }

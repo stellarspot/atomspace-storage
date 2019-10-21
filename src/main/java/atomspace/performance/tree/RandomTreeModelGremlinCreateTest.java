@@ -15,9 +15,10 @@ public class RandomTreeModelGremlinCreateTest {
 
         String prefix = "create";
 
+        boolean useCustomIds = false;
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                getJanusGraphStorageWrapper(prefix),
-                getGremlingJanusGraphStorageWrapper(prefix),
+                getJanusGraphStorageWrapper(prefix, useCustomIds),
+                getGremlingJanusGraphStorageWrapper(prefix, useCustomIds),
         };
 
         int[] statements = {100, 200, 300, 400, 500};

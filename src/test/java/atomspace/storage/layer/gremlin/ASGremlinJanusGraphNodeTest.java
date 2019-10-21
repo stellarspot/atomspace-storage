@@ -9,6 +9,6 @@ public class ASGremlinJanusGraphNodeTest extends ASAbstractNodeTest {
 
     @Override
     public AtomspaceStorage getStorage() {
-        return AtomspaceGremlinStorageHelper.getInMemoryJanusGraph();
+        return AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(true);
     }
 }
