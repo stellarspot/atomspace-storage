@@ -14,11 +14,20 @@ public class RandomTreeModelGremlinCreateTest {
     public static void main(String[] args) throws Exception {
 
         String prefix = "create";
+        String host = "localhost";
+        int port = 8182;
+        // Run remote JanusGraph first.
+        // For example using docker:
+        // docker run --rm --name janusgraph-default \
+        //    -e janusgraph.storage.berkeleyje.cache-percentage=80 \
+        //    -e gremlinserver.threadPoolWorker=2 \
+        //    -p 8182:8182 \
+        //    janusgraph/janusgraph:latest
 
         boolean useCustomIds = false;
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                getJanusGraphStorageWrapper(prefix, useCustomIds),
-                getGremlingJanusGraphStorageWrapper(prefix, useCustomIds),
+                getGremlingRemoteStorageWrapper(prefix, host, port, false, useCustomIds),
+                getGremlingRemoteStorageWrapper(prefix, host, port, true, useCustomIds),
         };
 
         int[] statements = {100, 200, 300, 400, 500};

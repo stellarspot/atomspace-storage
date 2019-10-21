@@ -18,7 +18,9 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
 
     @Override
     public ASTransaction getTx() {
-        return new ASGremlinTransaction(storage);
+        return  storage.oneRequest()
+                ? new ASGremlinOneRequestTransaction(storage)
+                : new ASGremlinMultipleRequestTransaction(storage);
     }
 
     @Override
@@ -31,6 +33,8 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
         TransactionWithSource get();
 
         void makeIndices();
+
+        boolean oneRequest();
 
         boolean useCustomIds();
 

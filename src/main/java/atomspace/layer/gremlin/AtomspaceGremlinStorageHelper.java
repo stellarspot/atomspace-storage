@@ -20,21 +20,21 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
     @Override
     public void dump(ASTransaction tx) {
-        ((ASGremlinTransaction) tx).dump();
+        ((ASAbstractGremlinTransaction) tx).dump();
     }
 
     @Override
     public void reset(ASTransaction tx) {
-        ((ASGremlinTransaction) tx).reset();
+        ((ASAbstractGremlinTransaction) tx).reset();
     }
 
     @Override
     public void printStatistics(ASTransaction tx, String msg) {
-        ((ASGremlinTransaction) tx).printStatistics(msg);
+        ((ASAbstractGremlinTransaction) tx).printStatistics(msg);
     }
 
-    public static AtomspaceGremlinStorage getRemoteJanusGraph(String host, int port, boolean useCustomIds) {
-        GremlinRemoteStorage storage = new GremlinRemoteStorage(host, port, useCustomIds);
+    public static AtomspaceGremlinStorage getRemoteJanusGraph(String host, int port, boolean oneRequest, boolean useCustomIds) {
+        GremlinRemoteStorage storage = new GremlinRemoteStorage(host, port, oneRequest, useCustomIds);
         return new AtomspaceGremlinStorage(storage);
     }
 
@@ -47,11 +47,13 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
     public static class GremlinRemoteStorage implements AtomspaceGremlinStorage.Storage {
 
         private final GraphTraversalSource g;
+        private final boolean oneRequestTransaction;
         private final boolean useCustomIds;
         private final AtomicLong currentId = new AtomicLong();
 
 
-        public GremlinRemoteStorage(String host, int port, boolean useCustomIds) {
+        public GremlinRemoteStorage(String host, int port, boolean oneRequestTransaction, boolean useCustomIds) {
+            this.oneRequestTransaction = oneRequestTransaction;
             this.useCustomIds = useCustomIds;
 
             try {
@@ -74,6 +76,11 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
         @Override
         public void makeIndices() {
+        }
+
+        @Override
+        public boolean oneRequest() {
+            return oneRequestTransaction;
         }
 
         @Override
@@ -108,6 +115,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
             config.setProperty(
                     "gremlin.remote.remoteConnectionClass",
                     "org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection");
+            config.setProperty("gremlin.remote.driver.sourceName", "g");
             return config;
         }
     }
@@ -135,6 +143,11 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         @Override
         public void makeIndices() {
             JanusGraphUtils.makeIndices(graph);
+        }
+
+        @Override
+        public boolean oneRequest() {
+            return false;
         }
 
         @Override
