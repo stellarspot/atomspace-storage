@@ -61,9 +61,6 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
                         .open("inmemory")
                         .traversal()
                         .withRemote(getConfig(host, port));
-
-                long count = g.V().count().next();
-                System.out.printf("vertices: %d%n", count);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

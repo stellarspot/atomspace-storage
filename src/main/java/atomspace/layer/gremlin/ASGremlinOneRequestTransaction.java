@@ -17,7 +17,6 @@ public class ASGremlinOneRequestTransaction extends ASAbstractGremlinTransaction
 
     public ASGremlinOneRequestTransaction(AtomspaceGremlinStorage.Storage storage) {
         super(storage);
-        System.out.printf("Create ASGremlinOneRequestTransaction%n");
     }
 
     @Override
