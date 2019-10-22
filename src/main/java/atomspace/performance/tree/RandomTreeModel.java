@@ -44,9 +44,15 @@ public class RandomTreeModel implements PerformanceModel {
         int iterations = 0;
         int commits = 0;
 
+        boolean useRawAtoms = params.useRawAtoms;
+
         for (NodeWithQuery nodeWithQuery : statements) {
-            RawAtom atom = createRawAtom(nodeWithQuery.node);
-            tx.get(atom);
+
+            if (useRawAtoms) {
+                tx.get(createRawAtom(nodeWithQuery.node));
+            } else {
+                createAtom(tx, nodeWithQuery.node);
+            }
 
             if (iterations++ >= params.iterationsBeforeCommit) {
                 tx.commit();

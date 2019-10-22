@@ -25,13 +25,15 @@ public class RandomTreeModelGremlinCreateTest {
         //    janusgraph/janusgraph:latest
 
         boolean useCustomIds = false;
+        boolean useRawAtoms = false;
+
         StorageWrapper[] wrappers = new StorageWrapper[]{
                 getGremlingRemoteStorageWrapper(prefix, host, port, false, useCustomIds),
                 getGremlingRemoteStorageWrapper(prefix, host, port, true, useCustomIds),
         };
 
         int[] statements = {100, 200, 300, 400, 500};
-        ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2);
+        ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2, useRawAtoms);
         WarmupProperties warmup = new WarmupProperties(1, statements[2]);
 
         List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements, warmup);
@@ -48,18 +50,20 @@ public class RandomTreeModelGremlinCreateTest {
         final int randomTreeSize;
         final int maxTypes;
         final int maxVariables;
+        final boolean useRawAtoms;
 
-        public RandomTreeCreateModelRunner(int randomTreeSize, int maxTypes, int maxVariables) {
+        public RandomTreeCreateModelRunner(int randomTreeSize, int maxTypes, int maxVariables, boolean useRawAtoms) {
             this.randomTreeSize = randomTreeSize;
             this.maxTypes = maxTypes;
             this.maxVariables = maxVariables;
+            this.useRawAtoms = useRawAtoms;
         }
 
 
         @Override
         public PerformanceModel getModel(int statements) {
             PerformanceModelConfiguration config = new PerformanceModelConfiguration(maxTypes, maxTypes, maxTypes, true);
-            PerformanceModelParameters params = new PerformanceModelParameters(statements, -1, 10);
+            PerformanceModelParameters params = new PerformanceModelParameters(statements, -1, 10, useRawAtoms);
             RandomTreeModelParameters treeParams = new RandomTreeModelParameters(randomTreeSize, randomTreeSize, maxVariables);
             return new RandomTreeModel(config, params, treeParams);
         }
