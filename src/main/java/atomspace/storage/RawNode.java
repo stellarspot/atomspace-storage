@@ -4,7 +4,7 @@ import java.util.Objects;
 
 final public class RawNode extends RawAtom {
 
-    private final String value;
+    final String value;
 
     public RawNode(String type, String value) {
         super(type);
@@ -20,19 +20,19 @@ final public class RawNode extends RawAtom {
         if (this == o) return true;
         if (o instanceof RawNode) {
             RawNode that = (RawNode) o;
-            return Objects.equals(this.getType(), that.getType())
-                    && Objects.equals(this.getValue(), that.getValue());
+            return Objects.equals(this.type, that.type)
+                    && Objects.equals(this.value, that.value);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getValue());
+        return Objects.hash(type, value);
     }
 
     @Override
     public String toString() {
-        return String.format("%s('%s')", getType(), getValue());
+        return String.format("%s('%s')", type, value);
     }
 }

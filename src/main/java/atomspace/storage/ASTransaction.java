@@ -18,6 +18,27 @@ public interface ASTransaction extends Closeable {
         return get(node.getType(), node.getValue());
     }
 
+    default ASLink get(RawLink link) {
+        int arity = link.getArity();
+        ASAtom[] atoms = new ASAtom[arity];
+
+        for (int i = 0; i < arity; i++) {
+            atoms[i] = get(link.getAtom(i));
+        }
+        return get(link.getType(), atoms);
+    }
+
+    default ASAtom get(RawAtom atom) {
+        if (atom instanceof RawNode) {
+            return get((RawNode) atom);
+        } else if (atom instanceof RawLink) {
+            return get((RawLink) atom);
+        } else {
+            String msg = String.format("Unknown RawAtom class: %s", atom.getClass());
+            throw new RuntimeException(msg);
+        }
+    }
+
     /**
      * Gets or creates Node by given type and value.
      *
