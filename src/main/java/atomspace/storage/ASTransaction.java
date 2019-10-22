@@ -14,6 +14,10 @@ import java.util.Iterator;
  */
 public interface ASTransaction extends Closeable {
 
+    default ASNode get(RawNode node) {
+        return get(node.getType(), node.getValue());
+    }
+
     /**
      * Gets or creates Node by given type and value.
      *
