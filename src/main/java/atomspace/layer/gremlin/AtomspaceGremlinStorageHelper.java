@@ -72,7 +72,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         }
 
         @Override
-        public void makeIndices() {
+        public void initGraph() {
         }
 
         @Override
@@ -138,7 +138,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         }
 
         @Override
-        public void makeIndices() {
+        public void initGraph() {
             JanusGraphUtils.makeIndices(graph);
         }
 

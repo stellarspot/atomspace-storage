@@ -13,7 +13,7 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
 
     public AtomspaceGremlinStorage(Storage storage) {
         this.storage = storage;
-        storage.makeIndices();
+        storage.initGraph();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AtomspaceGremlinStorage implements AtomspaceStorage {
 
         TransactionWithSource get();
 
-        void makeIndices();
+        void initGraph();
 
         boolean oneRequest();
 
