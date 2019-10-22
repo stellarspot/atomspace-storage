@@ -3,7 +3,7 @@ package atomspace.storage;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class RawLink extends RawAtom {
+final public class RawLink extends RawAtom {
 
     final RawAtom[] atoms;
 
