@@ -5,9 +5,7 @@ import atomspace.performance.PerformanceModelParameters;
 import atomspace.query.ASQueryEngine;
 import atomspace.query.ASQueryEngine.ASQueryResult;
 import atomspace.query.basic.ASBasicQueryEngine;
-import atomspace.storage.ASAtom;
-import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.ASTransaction;
+import atomspace.storage.*;
 import atomspace.storage.memory.AtomspaceMemoryStorage;
 import atomspace.performance.PerformanceModel;
 
@@ -47,7 +45,8 @@ public class RandomTreeModel implements PerformanceModel {
         int commits = 0;
 
         for (NodeWithQuery nodeWithQuery : statements) {
-            createAtom(tx, nodeWithQuery.node);
+            RawAtom atom = createRawAtom(nodeWithQuery.node);
+            tx.get(atom);
 
             if (iterations++ >= params.iterationsBeforeCommit) {
                 tx.commit();
@@ -62,6 +61,22 @@ public class RandomTreeModel implements PerformanceModel {
         //System.out.printf("commits: %d%n", commits);
     }
 
+    private RawAtom createRawAtom(RandomNode node) {
+
+        int n = node.children.length;
+
+        if (n == 0) {
+            return new RawNode(node.type, node.value);
+        }
+
+        RawAtom[] atoms = new RawAtom[n];
+        for (int i = 0; i < n; i++) {
+            atoms[i] = createRawAtom(node.children[i]);
+        }
+
+        return new RawLink(node.type, atoms);
+    }
+
     private ASAtom createAtom(ASTransaction tx, RandomNode node) {
 
         int n = node.children.length;
@@ -70,7 +85,7 @@ public class RandomTreeModel implements PerformanceModel {
             return tx.get(node.type, node.value);
         }
 
-        ASAtom[] atoms = new ASAtom[node.children.length];
+        ASAtom[] atoms = new ASAtom[n];
         for (int i = 0; i < n; i++) {
             atoms[i] = createAtom(tx, node.children[i]);
         }
