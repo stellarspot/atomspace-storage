@@ -49,7 +49,7 @@ public class RandomTreeModel implements PerformanceModel {
         for (NodeWithQuery nodeWithQuery : statements) {
 
             if (useRawAtoms) {
-                tx.get(createRawAtom(nodeWithQuery.node));
+                tx.get(nodeWithQuery.rawAtom);
             } else {
                 createAtom(tx, nodeWithQuery.node);
             }
@@ -129,17 +129,18 @@ public class RandomTreeModel implements PerformanceModel {
 
     private final void init() {
 
+        boolean useRawAtoms = params.useRawAtoms;
         loop:
         for (int i = 0; i < params.statements; i++) {
 
             RandomNode node = getNode(treeParams.maxWidth, treeParams.maxDepth - 1);
-
             while (true) {
 
                 QueryItem queryItem = getQuery(node, treeParams.maxVariables);
 
                 if (validQuery(queryItem.node)) {
-                    statements.add(new NodeWithQuery(node, queryItem.node));
+                    RawAtom rawAtom = useRawAtoms ? createRawAtom(node) : null;
+                    statements.add(new NodeWithQuery(node, queryItem.node, rawAtom));
                     continue loop;
                 }
                 node = getNode(treeParams.maxWidth, treeParams.maxDepth - 1);
@@ -270,10 +271,16 @@ public class RandomTreeModel implements PerformanceModel {
     private static class NodeWithQuery {
         final RandomNode node;
         final RandomNode query;
+        final RawAtom rawAtom;
 
         public NodeWithQuery(RandomNode node, RandomNode query) {
+            this(node, query, null);
+        }
+
+        public NodeWithQuery(RandomNode node, RandomNode query, RawAtom rawAtom) {
             this.node = node;
             this.query = query;
+            this.rawAtom = rawAtom;
         }
     }
 
