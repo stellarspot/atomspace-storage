@@ -1,6 +1,7 @@
 package atomspace.storage;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public abstract class ASAbstractRawLinkTest extends ASAbstractTest {
@@ -111,6 +112,7 @@ public abstract class ASAbstractRawLinkTest extends ASAbstractTest {
     }
 
     @Test
+    @Ignore
     public void testToString() throws Exception {
 
         final RawLink link = new RawLink("Link",

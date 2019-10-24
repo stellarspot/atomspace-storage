@@ -7,14 +7,23 @@ import atomspace.storage.janusgraph.JanusGraphUtils;
 import atomspace.storage.util.AtomspaceStorageHelper;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
+import org.janusgraph.core.ConfiguredGraphFactory;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.graphdb.database.StandardJanusGraph;
 import org.janusgraph.graphdb.idmanagement.IDManager;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static atomspace.layer.gremlin.ASAbstractGremlinTransaction.*;
 
 public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
@@ -38,10 +47,27 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         return new AtomspaceGremlinStorage(storage);
     }
 
-    public static AtomspaceGremlinStorage getInMemoryJanusGraph(boolean useCustomIds) {
+    public static AtomspaceGremlinStorage getInMemoryJanusGraph(boolean useCustomIds, boolean useOneRequest) {
         JanusGraph graph = AtomspaceJanusGraphStorageHelper.getInMemoryJanusGraph(useCustomIds);
-        GremlinJanusGraphStorage storage = new GremlinJanusGraphStorage(graph, useCustomIds);
+        GremlinJanusGraphStorage storage = new GremlinJanusGraphStorage(graph, useCustomIds, useOneRequest);
         return new AtomspaceGremlinStorage(storage);
+    }
+
+    public static void dumpStorage(GraphTraversalSource g) {
+        Iterator<Vertex> iter = g.V();
+        while (iter.hasNext()) {
+            Vertex v = iter.next();
+            String kind = v.property(KIND).value().toString();
+            String type = v.property(TYPE).value().toString();
+            Object id = v.id();
+            if (LABEL_NODE.equals(kind)) {
+                String value = v.property(VALUE).value().toString();
+                System.out.printf("%s[%s]: %s(%s)%n", kind, id, type, value);
+            } else {
+                long[] ids = (long[]) v.property(IDS).value();
+                System.out.printf("%s[%s]: %s(%s)%n", kind, id, type, Arrays.toString(ids));
+            }
+        }
     }
 
     public static class GremlinRemoteStorage implements AtomspaceGremlinStorage.Storage {
@@ -101,6 +127,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
         private Configuration getConfig(String host, int port) {
             Configuration config = new BaseConfiguration();
+            config.setProperty("graph.graphname", "atomspace");
             config.setProperty("clusterConfiguration.hosts", host);
             config.setProperty("clusterConfiguration.port", port);
             config.setProperty(
@@ -122,12 +149,14 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         private final JanusGraph graph;
         private final IDManager idManager;
         private final boolean useCustomIds;
+        private final boolean useOneRequest;
         private final AtomicLong currentId = new AtomicLong();
 
 
-        public GremlinJanusGraphStorage(JanusGraph graph, boolean useCustomIds) {
+        public GremlinJanusGraphStorage(JanusGraph graph, boolean useCustomIds, boolean useOneRequest) {
             this.graph = graph;
             this.useCustomIds = useCustomIds;
+            this.useOneRequest = useOneRequest;
             this.idManager = ((StandardJanusGraph) graph).getIDManager();
         }
 
@@ -144,7 +173,7 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 
         @Override
         public boolean oneRequest() {
-            return false;
+            return useOneRequest;
         }
 
         @Override

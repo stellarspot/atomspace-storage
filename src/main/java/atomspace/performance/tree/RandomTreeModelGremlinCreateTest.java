@@ -25,7 +25,6 @@ public class RandomTreeModelGremlinCreateTest {
         //    janusgraph/janusgraph:latest
 
         boolean useCustomIds = false;
-        boolean useRawAtoms = false;
 
         StorageWrapper[] wrappers = new StorageWrapper[]{
                 getGremlingRemoteStorageWrapper(prefix, host, port, false, useCustomIds),
@@ -33,7 +32,7 @@ public class RandomTreeModelGremlinCreateTest {
         };
 
         int[] statements = {100, 200, 300, 400, 500};
-        ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2, useRawAtoms);
+        ModelRunner runner = new RandomTreeCreateModelRunner(3, 3, 2, true);
         WarmupProperties warmup = new WarmupProperties(1, statements[2]);
 
         List<Measurement> results = RunnerUtils.measure(runner, wrappers, statements, warmup);

@@ -111,7 +111,7 @@ public class RunnerStorages {
     }
 
     public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean useCustomIds) {
-        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds);
+        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds, false);
         AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
         return new DefaultStorageWrapper(prefix, 5, "GremlinJanusGraph", storage, helper);
     }

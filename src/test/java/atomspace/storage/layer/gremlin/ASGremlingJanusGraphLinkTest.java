@@ -10,6 +10,6 @@ public class ASGremlingJanusGraphLinkTest extends ASAbstractLinkTest {
 
     @Override
     protected AtomspaceStorage getStorage() {
-        return AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(true);
+        return AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(true, true);
     }
 }

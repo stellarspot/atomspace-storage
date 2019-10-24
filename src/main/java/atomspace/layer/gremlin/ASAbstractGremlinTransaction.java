@@ -8,6 +8,7 @@ import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public abstract class ASAbstractGremlinTransaction implements ASTransaction {
@@ -75,7 +76,9 @@ public abstract class ASAbstractGremlinTransaction implements ASTransaction {
     }
 
     protected void dump() {
-        System.out.printf("--- No Gremlin Storage Dump ---%n");
+        System.out.printf("--- Gremlin Storage Dump ---%n");
+        AtomspaceGremlinStorageHelper.dumpStorage(g);
+        System.out.printf("--- -------------------- ---%n");
     }
 
     protected void printStatistics(String msg) {

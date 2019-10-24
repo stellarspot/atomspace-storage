@@ -1,14 +1,13 @@
 package atomspace.storage.layer.gremlin;
 
 import atomspace.layer.gremlin.AtomspaceGremlinStorageHelper;
-import atomspace.storage.ASAbstractNodeTest;
+import atomspace.storage.ASAbstractRawLinkTest;
 import atomspace.storage.AtomspaceStorage;
-import atomspace.storage.janusgraph.ASJanusGraphTestUtils;
 
-public class ASGremlinJanusGraphNodeTest extends ASAbstractNodeTest {
+public class ASGremlinJanusGraphRawLinkTest extends ASAbstractRawLinkTest {
 
     @Override
-    public AtomspaceStorage getStorage() {
+    protected AtomspaceStorage getStorage() {
         return AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(true, true);
     }
 }
