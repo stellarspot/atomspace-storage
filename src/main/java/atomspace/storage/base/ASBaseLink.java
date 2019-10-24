@@ -3,10 +3,12 @@ package atomspace.storage.base;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASOutgoingList;
+import atomspace.storage.ASTransaction;
 
 /**
  * Basic ASLink implementation which has constructor
  * for eager and lazy outgoing list initialization.
+ *
  * @see ASBaseOutgoingList
  */
 public class ASBaseLink extends ASBaseAtom implements ASLink {
@@ -36,5 +38,25 @@ public class ASBaseLink extends ASBaseAtom implements ASLink {
     @Override
     public String toString() {
         return toString(this);
+    }
+
+    @Override
+    public String toString(ASTransaction tx) {
+        StringBuilder builder = new StringBuilder()
+                .append(getType())
+                .append("(");
+
+        ASOutgoingList outgoingList = getOutgoingList();
+        for (int i = 0; i < outgoingList.getArity(tx); i++) {
+            if (i > 0) {
+                builder.append(',');
+            }
+            ASAtom atom = outgoingList.getAtom(tx, i);
+            builder.append(atom.toString(tx));
+        }
+
+        builder.append(")");
+
+        return builder.toString();
     }
 }

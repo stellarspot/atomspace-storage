@@ -3,12 +3,13 @@ package atomspace.layer.gremlin;
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;
 import atomspace.storage.ASTransaction;
+import atomspace.storage.base.ASBaseLink;
+import atomspace.storage.base.ASBaseNode;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public abstract class ASAbstractGremlinTransaction implements ASTransaction {
@@ -37,12 +38,31 @@ public abstract class ASAbstractGremlinTransaction implements ASTransaction {
 
     @Override
     public ASAtom get(long id) {
-        return null;
+
+        Vertex v = g.V(id).next();
+        String kind = v.property(KIND).value().toString();
+        String type = v.property(TYPE).value().toString();
+
+        switch (kind) {
+            case LABEL_NODE: {
+                String value = v.property(VALUE).value().toString();
+                return new ASBaseNode(id, type, value);
+            }
+            case LABEL_LINK: {
+                long[] ids = (long[]) v.property(IDS).value();
+                return new ASBaseLink(id, type, ids);
+            }
+            default: {
+                String msg = String.format("Unknown atom kind: %s", kind);
+                throw new RuntimeException(msg);
+            }
+        }
     }
 
     @Override
     public long[] getOutgoingListIds(long id) {
-        return new long[0];
+        Vertex v = g.V(id).next();
+        return (long[]) v.property(IDS).value();
     }
 
     @Override

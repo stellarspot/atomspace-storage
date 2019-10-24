@@ -3,6 +3,7 @@ package atomspace.performance.runner;
 import java.util.*;
 
 import atomspace.performance.PerformanceModel;
+import atomspace.performance.tree.RandomTreeModel;
 
 import static atomspace.performance.runner.ResultPlotter.PlotterProperties.toPointList;
 

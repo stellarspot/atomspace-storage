@@ -6,6 +6,10 @@ public interface ASOutgoingList {
 
     ASAtom getAtom(ASTransaction tx, int index);
 
+    default String toString(ASTransaction tx) {
+        return toString();
+    }
+
     default String toString(ASAtom... atoms) {
 
         StringBuilder builder = new StringBuilder();

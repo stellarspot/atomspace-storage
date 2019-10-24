@@ -7,4 +7,6 @@ public interface ASAtom {
     String getType();
 
     ASIncomingSet getIncomingSet();
+
+    String toString(ASTransaction tx);
 }

@@ -1,6 +1,7 @@
 package atomspace.storage.base;
 
 import atomspace.storage.ASNode;
+import atomspace.storage.ASTransaction;
 
 public class ASBaseNode extends ASBaseAtom implements ASNode {
 
@@ -18,6 +19,11 @@ public class ASBaseNode extends ASBaseAtom implements ASNode {
 
     @Override
     public String toString() {
+        return toString(this);
+    }
+
+    @Override
+    public String toString(ASTransaction tx) {
         return toString(this);
     }
 }

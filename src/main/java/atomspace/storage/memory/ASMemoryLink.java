@@ -24,6 +24,11 @@ public class ASMemoryLink extends ASMemoryAtom implements ASLink {
         return toString(this);
     }
 
+    @Override
+    public String toString(ASTransaction tx) {
+        return toString(this);
+    }
+
     static class ASMemoryOutgoingList implements ASOutgoingList {
         final ASAtom[] atoms;
 

@@ -110,10 +110,12 @@ public class RunnerStorages {
         return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
     }
 
-    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean useCustomIds) {
-        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds, false);
+    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean oneRequest, boolean useCustomIds) {
+        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds, oneRequest);
         AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
-        return new DefaultStorageWrapper(prefix, 5, "GremlinJanusGraph", storage, helper);
+        int order = oneRequest ? 6 : 5;
+        String label = oneRequest ? "GremlinOneRequest" : "GremlinMultipleRequests";
+        return new DefaultStorageWrapper(prefix, order, label, storage, helper);
     }
 
     public static StorageWrapper getGremlingRemoteStorageWrapper(String prefix, String host, int port, boolean oneRequest, boolean useCustomIds) {
