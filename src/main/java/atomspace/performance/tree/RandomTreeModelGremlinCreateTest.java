@@ -14,8 +14,8 @@ public class RandomTreeModelGremlinCreateTest {
     public static void main(String[] args) throws Exception {
 
         String prefix = "create";
-        String host = "localhost";
-        int port = 8182;
+        boolean useCustomIds = true;
+
         // Run remote JanusGraph first.
         // For example using docker:
         // docker run --rm --name janusgraph-default \
@@ -24,11 +24,18 @@ public class RandomTreeModelGremlinCreateTest {
         //    -p 8182:8182 \
         //    janusgraph/janusgraph:latest
 
-        boolean useCustomIds = false;
+
+        //  String host = "localhost";
+        //  int port = 8182;
+        //  // Use these tests to test remote JanusGraph
+        //  StorageWrapper[] wrappers = new StorageWrapper[]{
+        //          getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, false),
+        //          getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, true),
+        //  };
 
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, false),
-                getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, true),
+                getGremlingJanusGraphStorageWrapper(prefix, useCustomIds, false),
+                getGremlingJanusGraphStorageWrapper(prefix, useCustomIds, true)
         };
 
         int[] statements = {100, 200, 300, 400, 500};
