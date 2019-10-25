@@ -110,7 +110,7 @@ public class RunnerStorages {
         return new DefaultStorageWrapper(prefix, 4, "JanusGraph", storage, helper);
     }
 
-    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean oneRequest, boolean useCustomIds) {
+    public static StorageWrapper getGremlingJanusGraphStorageWrapper(String prefix, boolean useCustomIds, boolean oneRequest) {
         AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getInMemoryJanusGraph(useCustomIds, oneRequest);
         AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
         int order = oneRequest ? 6 : 5;
@@ -118,8 +118,8 @@ public class RunnerStorages {
         return new DefaultStorageWrapper(prefix, order, label, storage, helper);
     }
 
-    public static StorageWrapper getGremlingRemoteStorageWrapper(String prefix, String host, int port, boolean oneRequest, boolean useCustomIds) {
-        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getRemoteJanusGraph(host, port, oneRequest, useCustomIds);
+    public static StorageWrapper getGremlingRemoteStorageWrapper(String prefix, String host, int port, boolean useCustomIds, boolean oneRequest) {
+        AtomspaceGremlinStorage storage = AtomspaceGremlinStorageHelper.getRemoteJanusGraph(host, port, useCustomIds, oneRequest);
         AtomspaceGremlinStorageHelper helper = new AtomspaceGremlinStorageHelper();
         int order = oneRequest ? 6 : 5;
         String label = oneRequest ? "GremlinOneRequest" : "GremlinMultipleRequests";

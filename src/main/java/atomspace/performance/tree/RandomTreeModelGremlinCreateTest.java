@@ -27,8 +27,8 @@ public class RandomTreeModelGremlinCreateTest {
         boolean useCustomIds = false;
 
         StorageWrapper[] wrappers = new StorageWrapper[]{
-                getGremlingRemoteStorageWrapper(prefix, host, port, false, useCustomIds),
-                getGremlingRemoteStorageWrapper(prefix, host, port, true, useCustomIds),
+                getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, false),
+                getGremlingRemoteStorageWrapper(prefix, host, port, useCustomIds, true),
         };
 
         int[] statements = {100, 200, 300, 400, 500};

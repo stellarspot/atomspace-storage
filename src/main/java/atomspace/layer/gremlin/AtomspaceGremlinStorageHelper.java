@@ -42,8 +42,8 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         ((ASAbstractGremlinTransaction) tx).printStatistics(msg);
     }
 
-    public static AtomspaceGremlinStorage getRemoteJanusGraph(String host, int port, boolean oneRequest, boolean useCustomIds) {
-        GremlinRemoteStorage storage = new GremlinRemoteStorage(host, port, oneRequest, useCustomIds);
+    public static AtomspaceGremlinStorage getRemoteJanusGraph(String host, int port, boolean useCustomIds, boolean oneRequest) {
+        GremlinRemoteStorage storage = new GremlinRemoteStorage(host, port, useCustomIds, oneRequest);
         return new AtomspaceGremlinStorage(storage);
     }
 
@@ -78,9 +78,9 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         private final AtomicLong currentId = new AtomicLong();
 
 
-        public GremlinRemoteStorage(String host, int port, boolean oneRequestTransaction, boolean useCustomIds) {
-            this.oneRequestTransaction = oneRequestTransaction;
+        public GremlinRemoteStorage(String host, int port, boolean useCustomIds, boolean oneRequestTransaction) {
             this.useCustomIds = useCustomIds;
+            this.oneRequestTransaction = oneRequestTransaction;
 
             try {
                 this.g = JanusGraphFactory
@@ -151,7 +151,6 @@ public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
         private final boolean useCustomIds;
         private final boolean useOneRequest;
         private final AtomicLong currentId = new AtomicLong();
-
 
         public GremlinJanusGraphStorage(JanusGraph graph, boolean useCustomIds, boolean useOneRequest) {
             this.graph = graph;
