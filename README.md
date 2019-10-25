@@ -6,6 +6,7 @@ and graph) backing storages.
 Main modules:
 * [Atomspace Storage](src/main/java/atomspace/storage)
 * [Query Engine](src/main/java/atomspace/query)
+* [Performance](src/main/java/atomspace/performance)
 
 # Current status
 
@@ -28,6 +29,8 @@ Supported backing storages:
 * Property Graph
   * [Neo4j](src/main/java/atomspace/storage/neo4j)
   * [JanusGraph](src/main/java/atomspace/storage/janusgraph)
+* Gremlin
+  * [Gremlin layer](src/main/java/atomspace/storage/layer/gremlin)
 
 # Example
 
