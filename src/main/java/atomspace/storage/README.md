@@ -5,7 +5,7 @@ The main idea is that atoms stored in backing storage must be unique.
 
 Each atom can be a node which has type and value or link which has type and list of outgoing atoms.
 
-There are two main types of atoms: RawAtom and ASAtom.
+There are two main types of atoms: `RawAtom` and `ASAtom`.
 
 `RawAtom` is an atom in memory which need not to be unique. It represents a user data which should be
 stored in backing storage.
@@ -51,35 +51,96 @@ Link[2304]: Link1([3072, 4096])
 And indeed there is only one `Node1` with `value1` with id `3328` and both `Link2` and `Link3` point to the same
 node with id `3328`.
 
-## Atoms
+# Atoms
 
-Atom
-* `id`
+## RawAtom
+
+Raw atoms represent user`s data in memory which need to be loaded into the backing storage
+and they are not unique.
+
+Hierarchy of raw atoms:
+
+RawAtom
 * `type`
-* IncomingSet
-  * `getIncomingSetArity(id, type, arity, position): arity`
-  * `getIncomingSet(id, type, arity, position): [id]`
 
-Node extends Atom
+RawNode <- RawAtom
 * `value`
 
-Link extends Atom
-* OutgoingSet
-  * `arity`
-  * `childrenIds`
+RawLink <- RawAtom
+* `atoms` : RawAtom[]
 
-## Storage
+## ASAtom
 
-## Storage Transaction
+AS atoms represent atoms in backing storage and they must be unique.
 
-Atoms retrieving
+Each ASAtom has an unique id that allows to efficiently retrieve the atom from the backing storage.
 
-Get or create node:
-* `get(type, value): id`
+AS atoms have incomingSet which consists of links that points to the given atom.
+Incoming set is used by a query engine to retrieve atoms from the backing storage using atom patterns.
 
-Get or create link:
-* `get(type, [id]): id`
+Hierarchy of AS atoms:
 
-Get Incoming Set:
-* `getIncomingSetArity(id, type, arity, pos): arity`
-* `getIncomingSet(id, type, arity, pos): [id]`
+ASAtom
+* `id`
+* `type`
+* `incomingSet`: ASIncomingSet
+
+ASNode <- ASAtom
+* `value`
+
+ASLink <- ASAtom
+* `outgoingList`: ASOutgoingList
+
+* ASIncomingSet
+  * `getIncomingSetSize(ASTransaction tx, String type, int arity, int position)`: `int`
+  * `getIncomingSet(ASTransaction tx, String type, int arity, int position)`: `[id]`
+
+* ASOutgoingList
+  * `getArity(ASTransaction tx)`: `int`
+  * `getAtom(ASTransaction tx, int index)` : ASAtom
+
+# Backing Storage
+
+## AtomspaceStorage
+
+The AtomspaceStorage interface represents the backing storage where atoms are stored.
+It contains the only method that returns the storage transaction. It is the transaction
+that allows to store into and get atoms from the backing storage.
+
+AtomspaceStorage
+* `getTx()`: ASTransaction
+
+## ASTransaction
+
+ASTransaction allows to store and get atoms from the backing storage and has `commit` and `rallback` methods
+which must be supported or emulated by the underlying backing storage.
+
+ASTransaction has two types of methods: methods which work with `RawAtom`s and methods which work with `ASAtom`s.
+
+Method that take `RawAtom` as argument need to traverse the whole atom tree and are used to initial data
+loading into the backing storage.
+
+Method that take `ASAtom` as argument can use the atom id and directly retrieve the atom and links children
+from the backing storage.
+
+ASTransaction
+* RawAtom
+    * `get(RawNode node)`: RawNode
+    * `get(RawLink link)`: RawLink
+    * `get(RawAtom atom)`: ASAtom
+* ASAtom
+    * `get(String type, String value)`: ASNode
+    * `get(String type, ASAtom... atoms)`: ASLink
+    * `get(long id)`: ASAtom
+    * `getOutgoingListIds(long id)`: long[]
+    * `getIncomingSetSize(long id, String type, int arity, int position)`: int
+    * `getIncomingSet(long id, String type, int arity, int position)`: `Iterator<ASLink>`
+* Get all atoms
+    * `getAtoms()`: `Iterator<ASAtom> `
+* Transaction
+    * `commit()`
+    * `rallback()`
+
+Note that some methods which work with AS atoms are lazy so they do not load the whole link.
+For example the method `get(long id)` loads only type and list of children ids for the link
+and the real children are loaded lazily by demand.
