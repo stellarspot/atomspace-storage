@@ -1,7 +1,7 @@
 package atomspace.performance.runner;
 
-import atomspace.layer.gremlin.AtomspaceGremlinStorage;
-import atomspace.layer.gremlin.AtomspaceGremlinStorageHelper;
+import atomspace.storage.layer.gremlin.AtomspaceGremlinStorage;
+import atomspace.storage.layer.gremlin.AtomspaceGremlinStorageHelper;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.AtomspaceStorage;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorage;

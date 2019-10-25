@@ -1,18 +1,14 @@
-package atomspace.layer.gremlin;
+package atomspace.storage.layer.gremlin;
 
-import atomspace.layer.gremlin.AtomspaceGremlinStorage.TransactionWithSource;
+import atomspace.storage.layer.gremlin.AtomspaceGremlinStorage.TransactionWithSource;
 import atomspace.storage.ASTransaction;
 import atomspace.storage.janusgraph.AtomspaceJanusGraphStorageHelper;
 import atomspace.storage.janusgraph.JanusGraphUtils;
 import atomspace.storage.util.AtomspaceStorageHelper;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
-import org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.util.GraphFactory;
-import org.janusgraph.core.ConfiguredGraphFactory;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.graphdb.database.StandardJanusGraph;
@@ -23,7 +19,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static atomspace.layer.gremlin.ASAbstractGremlinTransaction.*;
+import static atomspace.storage.layer.gremlin.ASAbstractGremlinTransaction.*;
 
 public class AtomspaceGremlinStorageHelper implements AtomspaceStorageHelper {
 

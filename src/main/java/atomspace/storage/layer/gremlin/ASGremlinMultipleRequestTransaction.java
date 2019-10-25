@@ -1,4 +1,4 @@
-package atomspace.layer.gremlin;
+package atomspace.storage.layer.gremlin;
 
 import atomspace.storage.ASAtom;
 import atomspace.storage.ASLink;

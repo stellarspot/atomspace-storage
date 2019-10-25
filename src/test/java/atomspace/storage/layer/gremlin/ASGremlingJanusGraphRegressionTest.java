@@ -1,7 +1,5 @@
 package atomspace.storage.layer.gremlin;
 
-import atomspace.layer.gremlin.AtomspaceGremlinStorageHelper;
-import atomspace.storage.ASAbstractLinkTest;
 import atomspace.storage.ASAbstractRegressionTest;
 import atomspace.storage.AtomspaceStorage;
 import org.junit.Ignore;

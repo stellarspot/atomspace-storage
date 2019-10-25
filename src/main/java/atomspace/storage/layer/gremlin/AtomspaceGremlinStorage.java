@@ -1,4 +1,4 @@
-package atomspace.layer.gremlin;
+package atomspace.storage.layer.gremlin;
 
 import atomspace.storage.ASTransaction;
 import atomspace.storage.AtomspaceStorage;

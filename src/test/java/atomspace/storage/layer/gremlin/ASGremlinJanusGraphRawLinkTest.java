@@ -1,6 +1,5 @@
 package atomspace.storage.layer.gremlin;
 
-import atomspace.layer.gremlin.AtomspaceGremlinStorageHelper;
 import atomspace.storage.ASAbstractRawLinkTest;
 import atomspace.storage.AtomspaceStorage;
 
