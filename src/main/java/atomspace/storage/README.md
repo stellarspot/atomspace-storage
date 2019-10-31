@@ -125,8 +125,8 @@ from the backing storage.
 
 ASTransaction
 * RawAtom
-    * `get(RawNode node)`: RawNode
-    * `get(RawLink link)`: RawLink
+    * `get(RawNode node)`: ASNode
+    * `get(RawLink link)`: ASLink
     * `get(RawAtom atom)`: ASAtom
 * ASAtom
     * `get(String type, String value)`: ASNode
