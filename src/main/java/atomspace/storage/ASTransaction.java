@@ -14,10 +14,30 @@ import java.util.Iterator;
  */
 public interface ASTransaction extends Closeable {
 
+    /**
+     * Returns ASNode which represents the node in the backing storage
+     * for the given raw node.
+     * Storages that allow to check if the node exists or create it otherwise
+     * may override this method to retrieve the node in one request
+     * for more efficiency.
+     *
+     * @param node raw node
+     * @return node in the backing storage
+     */
     default ASNode get(RawNode node) {
         return get(node.getType(), node.getValue());
     }
 
+    /**
+     * Returns ASLink which represents the link in the backing storage
+     * for the given raw link.
+     * Storages that allow to check if the link exists or create it otherwise
+     * in one query may override this method to retrieve the node in one request
+     * for more efficiency.
+     *
+     * @param link raw link
+     * @return link in the backing storage
+     */
     default ASLink get(RawLink link) {
         int arity = link.getArity();
         ASAtom[] atoms = new ASAtom[arity];
@@ -28,6 +48,13 @@ public interface ASTransaction extends Closeable {
         return get(link.getType(), atoms);
     }
 
+    /**
+     * Returns ASAtom which represents the atom in the backing storage
+     * for the given raw link.
+     *
+     * @param atom raw atom
+     * @return atom in the backing storage
+     */
     default ASAtom get(RawAtom atom) {
         if (atom instanceof RawNode) {
             return get((RawNode) atom);
@@ -44,7 +71,7 @@ public interface ASTransaction extends Closeable {
      *
      * @param type  the type of the atom
      * @param value the value of the atom
-     * @return Node
+     * @return node in the backing storage
      */
     ASNode get(String type, String value);
 
@@ -53,7 +80,7 @@ public interface ASTransaction extends Closeable {
      *
      * @param type  the type of the atom
      * @param atoms the outgoing list of the atom
-     * @return List
+     * @return link in the backing storage
      */
     ASLink get(String type, ASAtom... atoms);
 
@@ -61,7 +88,7 @@ public interface ASTransaction extends Closeable {
      * Gets the atom by for the unique identifier.
      *
      * @param id the id of the atom
-     * @return Atom
+     * @return atom in the backing storage
      */
     ASAtom get(long id);
 

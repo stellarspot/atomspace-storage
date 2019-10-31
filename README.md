@@ -120,7 +120,3 @@ Run tests:
 ```bash
 gradle test
 ```
-Run performance tests:
-```bash
-gradle jmh
-```

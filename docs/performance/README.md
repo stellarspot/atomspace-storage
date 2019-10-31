@@ -1,6 +1,6 @@
 # Performance Results
 
-[RandomTreeModel](/src/main/java/atomspace/performance/tree) is used to generate random atoms and has
+[RandomTreeModel](../../src/main/java/atomspace/performance/tree) is used to generate random atoms and has
 the following base parameters:
 * max tree width and height
 * max types and values
